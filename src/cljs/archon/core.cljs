@@ -2,10 +2,11 @@
   (:require
    [reagent.core :as reagent]
    [re-frame.core :as re-frame]
+   [day8.re-frame.http-fx]
    [archon.events :as events]
    [archon.views :as views]
-   [archon.config :as config]
-   ))
+   [archon.config :as config]))
+   
 
 
 (defn dev-setup []
