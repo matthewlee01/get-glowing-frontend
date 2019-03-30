@@ -16,6 +16,16 @@
   {:height (str size "px")
    :width (str size "px")})
 
+(defstyles field-label [font-size]
+  {:font-family "Arial"
+   :padding "15px 15px"
+   :color "#7a7978"
+   :font-size (str font-size + "px")})
+
+(defstyled input-field :input
+  {:padding "14px 14px"
+   :font-size "15px"})
+  
 (defstyled sexy-button :button
   {:background-color "#7a7978"
    :border "none"
@@ -29,16 +39,17 @@
    :font-size "16px"
    :opacity "0.6"
    :cursor "pointer"
+   :font-family "Arial"
    :transition "0.3s"
    :&:hover {:opacity "1"}})
 
 (defn city-input []
   [:div
-    [:label "City"]
-    [:input {:type "text"
-             :auto-focus true
-             :on-blur #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])}]
-    [:button {:on-click #(re-frame/dispatch [::events/submit-city :vendors-panel])} "Enter"]])
+    [:label {:class (field-label 15)}"City"]
+    (input-field {:type "text"
+                  :auto-focus true
+                  :on-blur #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
+    (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city :vendors-panel])} "Enter")])
 
 (defn service-input []
   [:div
@@ -61,8 +72,8 @@
 
 (defn main-panel []
   [:div
-    [:h1 {:class (title 80)
-          :on-click #(js/alert "hi")} @(re-frame/subscribe [::subs/app-name])]
+    [:h1 {:class (title 80)}
+         @(re-frame/subscribe [::subs/app-name])]
     [:div
       (sexy-button "Become a vendor")
       (sexy-button "Help")
