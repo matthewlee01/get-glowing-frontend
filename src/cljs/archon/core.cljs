@@ -23,3 +23,7 @@
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (mount-root))
+
+(defn log-db []
+  "prints the db"
+  (re-frame/dispatch [::events/log-db]))

@@ -21,3 +21,13 @@
   ::city-name
   (fn [db _]
     (:city-name db)))
+
+(re-frame/reg-sub
+  ::current-vendor-id
+  (fn [db _]
+    (:current-vendor-id db)))
+
+(re-frame/reg-sub
+  ::current-vendor-info
+  (fn [db _]
+    (:current-vendor-info db)))

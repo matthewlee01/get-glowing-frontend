@@ -43,6 +43,12 @@
    :transition "0.3s"
    :&:hover {:opacity "1"}})
 
+
+(defn show-vendor-info
+	[id]
+	(do (re-frame/dispatch [::events/request-vendor-info id])
+			(re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
+
 (defn city-input []
   [:div
     [:label {:class (field-label 15)}"City"]
@@ -59,7 +65,7 @@
 
 (defn vendor-card [vendor]
   (let [ {:keys [vendor_id name_first name_last addr_city profile_pic]} vendor]
-    [:div
+    [:div {:on-click #(show-vendor-info vendor_id)}
      [:img {:src profile_pic
             :alt profile_pic
             :class (list-pfp 200)}]
@@ -69,6 +75,20 @@
   [:div
     (let [vendors @(re-frame/subscribe [::subs/vendor-list])]
       (map vendor-card vendors))])
+
+(defn service-card [service-info]
+	(let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
+			[:p (str s_type " " s_name " " s_duration " " s_price " " s_description)]))
+
+
+
+(defn vendor-info-panel []
+	(let [{:keys [vendor_id name_first services]} @(re-frame/subscribe [::subs/current-vendor-info])]
+	[:div 
+		[:p vendor_id]
+		[:p name_first]
+		(map service-card services)
+		]))
 
 (defn main-panel []
   [:div
@@ -81,6 +101,6 @@
       (sexy-button "Sign Up")]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendors-panel [vendors-panel]
-      :city-input [city-input])])
+      :city-input [city-input]
+      :vendor-info-panel [vendor-info-panel])])
       
-
