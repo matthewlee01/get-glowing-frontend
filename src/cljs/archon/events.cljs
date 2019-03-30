@@ -5,6 +5,11 @@
    [ajax.core :as ajax]
    [archon.db :as db]))
    
+(re-frame/reg-event-db
+ ::log-db
+ (fn [db _]
+ 	 (print db)))
+
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -38,6 +43,21 @@
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::good-http-result]
                   :on-failure [::bad-http-result]}}))
+
+(re-frame/reg-event-fx
+	::request-vendor-info
+	(fn [_world [_ vendor_id]]
+		{:http-xhrio {:method  :post
+                  :uri     "http://localhost:8888/graphql"
+                  :params {:query "query vendor_by_id($id:String!){vendor_by_id (id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
+                           :variables {:id vendor_id}} 
+                  :timeout 3000
+                  :format (ajax/json-request-format)
+                  :response-format (ajax/json-response-format {:keywords? true})
+                  :on-success [::good-http-result]
+                  :on-failure [::bad-http-result]}}))
+
+
 
 (re-frame/reg-event-db
   ::good-http-result
