@@ -22,7 +22,7 @@
     (js/alert (str "_world:" _world " val:" val))
     (js/alert {:http-xhrio {:method  :post}
                           :uri     "http://localhost:8888/graphql"
-                          :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last }}"
+                          :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
                                    :variables {:city (:city-name (:db _world))}} 
                           :timeout 3000
                           :format (ajax/json-request-format)
@@ -31,7 +31,7 @@
                           :on-failure [::bad-http-result]})
     {:http-xhrio {:method  :post
                   :uri     "http://localhost:8888/graphql"
-                  :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last }}"
+                  :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
                            :variables {:city (:city-name (:db _world))}} 
                   :timeout 3000
                   :format (ajax/json-request-format)
