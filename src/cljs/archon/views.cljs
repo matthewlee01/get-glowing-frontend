@@ -26,8 +26,10 @@
              :auto-focus true}]])
 
 (defn vendor-card [vendor]
-  (let [ {:keys [vendor_id name_first name_last addr_city]} vendor]
+  (let [ {:keys [vendor_id name_first name_last addr_city profile_pic]} vendor]
     [:div {:on-click #(show-vendor-info vendor_id)}
+     [:img {:src profile_pic
+            :alt profile_pic}]
      [:p (str vendor_id " " name_first " " name_last " " addr_city)]]))
 
 (defn vendors-panel []
