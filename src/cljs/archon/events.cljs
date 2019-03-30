@@ -10,7 +10,6 @@
  (fn [db _]
  	 (print db)))
 
-
 (re-frame/reg-event-db
  ::initialize-db
  (fn [_ _]
@@ -21,19 +20,15 @@
   (fn [db [_ value]]
     (assoc db :active-panel value)))
 
+(re-frame/reg-event-db
+  ::set-current-vendor-id
+  (fn [db [_ value]]
+  	(do (print value)
+  	    (assoc db :current-vendor-id value))))
+
 (re-frame/reg-event-fx
   ::submit-city
   (fn [_world  [_ val]]
-    (js/alert (str "_world:" _world " val:" val))
-    (js/alert {:http-xhrio {:method  :post}
-                          :uri     "http://localhost:8888/graphql"
-                          :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last }}"
-                                   :variables {:city (:city-name (:db _world))}} 
-                          :timeout 3000
-                          :format (ajax/json-request-format)
-                          :response-format (ajax/json-response-format {:keywords? true})
-                          :on-success [::good-http-result]
-                          :on-failure [::bad-http-result]})
     {:http-xhrio {:method  :post
                   :uri     "http://localhost:8888/graphql"
                   :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last }}"
@@ -49,14 +44,19 @@
 	(fn [_world [_ vendor_id]]
 		{:http-xhrio {:method  :post
                   :uri     "http://localhost:8888/graphql"
-                  :params {:query "query vendor_by_id($id:String!){vendor_by_id (id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
+                  :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
                            :variables {:id vendor_id}} 
                   :timeout 3000
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::good-http-result]
+                  :on-success [::good-vendor-info-request]
                   :on-failure [::bad-http-result]}}))
 
+(re-frame/reg-event-db
+  ::good-vendor-info-request
+  (fn [db [_ {:keys [data errors] :as payload}]]
+    (js/alert (str "data: --> " data))
+    (assoc db :current-vendor-info data)))
 
 
 (re-frame/reg-event-db

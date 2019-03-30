@@ -5,6 +5,13 @@
    [archon.events :as events]))
    
 
+
+(defn show-vendor-info
+	[id]
+	(do (re-frame/dispatch [::events/set-current-vendor-id id])
+			(re-frame/dispatch [::events/request-vendor-info id])
+			(re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
+
 (defn city-input []
   [:div
     [:label "City"]
@@ -18,15 +25,31 @@
     [:label "Service"]
     [:input {:type "text"
              :auto-focus true}]])
+
 (defn vendor-card [vendor]
   (let [ {:keys [vendor_id name_first name_last addr_city]} vendor]
-    [:div
+    [:div {:on-click #(show-vendor-info vendor_id)}
      [:p (str vendor_id " " name_first " " name_last " " addr_city)]]))
 
 (defn vendors-panel []
   [:div
     (let [vendors @(re-frame/subscribe [::subs/vendor-list])]
       (map vendor-card vendors))])
+
+(defn service-card [service-info]
+	(let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
+			(print [:p (str s_type " " s_name " " s_duration " " s_price " " s_description)])
+			[:p (str s_type " " s_name " " s_duration " " s_price " " s_description)]))
+
+
+
+(defn vendor-info-panel []
+	(let [{:keys [vendor_id name_first services]} (:vendor_by_id @(re-frame/subscribe [::subs/current-vendor-info]))]
+	[:div 
+		[:p vendor_id]
+		[:p name_first]
+		(map service-card services)
+		]))
 
 (defn main-panel []
   [:div
@@ -38,6 +61,6 @@
       [:button "Sign Up"]]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendors-panel [vendors-panel]
-      :city-input [city-input])])
+      :city-input [city-input]
+      :vendor-info-panel [vendor-info-panel])])
       
-
