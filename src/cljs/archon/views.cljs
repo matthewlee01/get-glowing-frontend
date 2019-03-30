@@ -8,8 +8,7 @@
 
 (defn show-vendor-info
 	[id]
-	(do (re-frame/dispatch [::events/set-current-vendor-id id])
-			(re-frame/dispatch [::events/request-vendor-info id])
+	(do (re-frame/dispatch [::events/request-vendor-info id])
 			(re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
 
 (defn city-input []
@@ -38,13 +37,12 @@
 
 (defn service-card [service-info]
 	(let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
-			(print [:p (str s_type " " s_name " " s_duration " " s_price " " s_description)])
 			[:p (str s_type " " s_name " " s_duration " " s_price " " s_description)]))
 
 
 
 (defn vendor-info-panel []
-	(let [{:keys [vendor_id name_first services]} (:vendor_by_id @(re-frame/subscribe [::subs/current-vendor-info]))]
+	(let [{:keys [vendor_id name_first services]} @(re-frame/subscribe [::subs/current-vendor-info])]
 	[:div 
 		[:p vendor_id]
 		[:p name_first]

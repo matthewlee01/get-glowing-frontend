@@ -20,11 +20,6 @@
   (fn [db [_ value]]
     (assoc db :active-panel value)))
 
-(re-frame/reg-event-db
-  ::set-current-vendor-id
-  (fn [db [_ value]]
-  	(do (print value)
-  	    (assoc db :current-vendor-id value))))
 
 (re-frame/reg-event-fx
   ::submit-city
@@ -56,7 +51,7 @@
   ::good-vendor-info-request
   (fn [db [_ {:keys [data errors] :as payload}]]
     (js/alert (str "data: --> " data))
-    (assoc db :current-vendor-info data)))
+    (assoc db :current-vendor-info (:vendor_by_id data))))
 
 
 (re-frame/reg-event-db
