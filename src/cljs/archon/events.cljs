@@ -4,7 +4,12 @@
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
    [archon.db :as db]))
-   
+
+(def hostname "localhost")
+;;(def hostname "archon.j3mc.ca")
+
+(def URI (str "http://" hostname ":8888/graphql"))
+
 (re-frame/reg-event-db
  ::log-db
  (fn [db _]
@@ -24,8 +29,9 @@
 (re-frame/reg-event-fx
   ::submit-city
   (fn [_world  [_ val]]
+    (js/alert (str "data: " URI))
     {:http-xhrio {:method  :post
-                  :uri     "http://localhost:8888/graphql"
+                  :uri     URI
                   :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
                            :variables {:city (:city-name (:db _world))}} 
                   :timeout 3000
@@ -38,7 +44,7 @@
 	::request-vendor-info
 	(fn [_world [_ vendor_id]]
 		{:http-xhrio {:method  :post
-                  :uri     "http://localhost:8888/graphql"
+                  :uri    URI 
                   :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
                            :variables {:id vendor_id}} 
                   :timeout 3000
