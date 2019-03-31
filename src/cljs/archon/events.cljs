@@ -3,17 +3,19 @@
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
-   [archon.db :as db]))
+   [archon.db :as db]
+   [archon.config :as config]))
 
-(def hostname "localhost")
-;;(def hostname "archon.j3mc.ca")
 
-(def URI (str "http://" hostname ":8888/graphql"))
+(defn api-endpoint-url []
+  (if config/debug?
+    "http://localhost:8888/graphql"
+    "http://archon.j3mc.ca:8888/graphql"))
 
 (re-frame/reg-event-db
  ::log-db
  (fn [db _]
- 	 (print db)))
+    (print db)))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -29,9 +31,9 @@
 (re-frame/reg-event-fx
   ::submit-city
   (fn [_world  [_ val]]
-    (js/alert (str "data: " URI))
+    (js/alert (str "data: " (api-endpoint-url)))
     {:http-xhrio {:method  :post
-                  :uri     URI
+                  :uri    (api-endpoint-url)
                   :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
                            :variables {:city (:city-name (:db _world))}} 
                   :timeout 3000
@@ -41,29 +43,27 @@
                   :on-failure [::bad-http-result]}}))
 
 (re-frame/reg-event-fx
-	::request-vendor-info
-	(fn [_world [_ vendor_id]]
-		{:http-xhrio {:method  :post
-                  :uri    URI 
-                  :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
-                           :variables {:id vendor_id}} 
-                  :timeout 3000
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::good-vendor-info-request]
-                  :on-failure [::bad-http-result]}}))
+  ::request-vendor-info
+  (fn [_world [_ vendor_id]]
+     {:http-xhrio {:method  :post
+                     :uri    (api-endpoint-url)
+                     :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
+                              :variables {:id vendor_id}}
+                     :timeout 3000
+                     :format (ajax/json-request-format)
+                     :response-format (ajax/json-response-format {:keywords? true})
+                     :on-success [::good-vendor-info-request]
+                     :on-failure [::bad-http-result]}}))
 
 (re-frame/reg-event-db
   ::good-vendor-info-request
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (js/alert (str "data: --> " data))
     (assoc db :current-vendor-info (:vendor_by_id data))))
 
 
 (re-frame/reg-event-db
   ::good-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (js/alert (str "data: --> " data))
     (assoc db :active-panel :vendors-panel :vendor-list (:vendor_list data))))
 
 (re-frame/reg-event-db
