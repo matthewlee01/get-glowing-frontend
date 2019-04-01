@@ -30,7 +30,7 @@
 
 (re-frame/reg-event-fx
   ::submit-city
-  (fn [_world  [_ val]]
+  (fn [_world _]
     (js/alert (str "data: " (api-endpoint-url)))
     {:http-xhrio {:method  :post
                   :uri    (api-endpoint-url)
@@ -76,3 +76,24 @@
   ::city-name-change
   (fn [db [_  city-name]]
     (assoc db :city-name city-name)))
+
+(re-frame/reg-event-db
+  ::show-vendor-email-form
+  (fn [db _]
+    (assoc db :active-panel :vendor-signup-panel :prev-state db)))
+
+(re-frame/reg-event-db
+  ::vendor-email-change
+  (fn [db [_ vendor-email]]
+    (assoc db :vendor-email vendor-email)))
+
+(re-frame/reg-event-db
+  ::submit-vendor-email
+  (fn [db _]
+;; actually what should happen here is a xml-http request, but save that for later
+    (assoc db :active-panel :thanks-for-registering-panel)))
+
+(re-frame/reg-event-db
+  ::take-me-back
+  (fn [db _]
+    (:prev-state db)))

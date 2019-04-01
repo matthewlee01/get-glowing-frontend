@@ -15,7 +15,7 @@
 (defstyles main-nav []
   {:width "auto"})
    
-(defstyles city-input-class []
+(defstyles input-class []
   {:margin "50px"})
 
 (defstyles list-pfp [size]
@@ -59,13 +59,22 @@
     (do (re-frame/dispatch [::events/request-vendor-info id])
         (re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
 
-(defn city-input []
-  [:div {:class (city-input-class)}
-    [:label {:class (field-label 15)}"City"]
-    (input-field {:type "text"
-                  :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
-    (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city :vendors-panel])} "Enter")])
+(defn city-form []
+  [:div {:class (input-class)}
+     [:label {:class (field-label 15)} "What city are you interested in:"]
+     (input-field {:type "text"
+                   :auto-focus true
+                   :value @(re-frame/subscribe [::subs/city-name])
+                   :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
+     (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city])} "Enter")])
+
+(defn ven_email_form []
+  [:div {:class (input-class)}
+   [:label {:class (field-label 15)} "Enter your email address:"]
+   (input-field{:type "text"
+                :auto-focus true
+                :on-blur #(re-frame/dispatch [::events/vendor-email-change (-> % .-target .-value)])})
+   (sexy-button {:on-click #(re-frame/dispatch [::events/submit-vendor-email])} "Enter")])
 
 (defn service-input []
   [:div
@@ -97,18 +106,23 @@
            [:p name_first]
            (map service-card services)]))
     
+(defn thanks-panel []
+  [:div
+    [:p "Thanks for registering.  Check your inbox for an email we've sent to verify your email address.  This email will contain a link to confirm and continue your registration process."]
+    [:button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return"]])
 
 (defn main-panel []
   [:div
     [:h1 {:class (title 80)}
          @(re-frame/subscribe [::subs/app-name])]
     [:div {:class (main-nav)}
-      (sexy-button "Become a vendor")
+      (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor")
       (sexy-button "Help")
       (sexy-button "Login")
       (sexy-button "Sign Up")]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendors-panel [vendors-panel]
-      :city-input [city-input]
-      :vendor-info-panel [vendor-info-panel])])
-      
+      :city-input-panel [city-form]
+      :vendor-info-panel [vendor-info-panel]
+      :vendor-signup-panel [ven_email_form]
+      :thanks-for-registering-panel [thanks-panel])]) 
