@@ -6,11 +6,17 @@
    [cljss.core :as css :refer-macros [defstyles defkeyframes]]
    [cljss.reagent :refer-macros [defstyled]])
   (:require-macros [cljss.core]))
- 
+     
 (defstyles title [font-size]
   {:font-size (str font-size "px")
-   :color "#FFC0CB"
+   :color "#FFB6C1"
    :margin "10px 10px"})
+
+(defstyles main-nav []
+  {:width "auto"})
+   
+(defstyles city-input-class []
+  {:margin "50px"})
 
 (defstyles list-pfp [size]
   {:height (str size "px")
@@ -20,37 +26,41 @@
   {:font-family "Arial"
    :padding "15px 15px"
    :color "#7a7978"
-   :font-size (str font-size + "px")})
+   :font-size (str font-size "px")})
 
 (defstyled input-field :input
   {:padding "14px 14px"
-   :font-size "15px"})
+   :font-size "18px"})
   
 (defstyled sexy-button :button
   {:background-color "#7a7978"
-   :border "none"
+   :border "1px"
    :border-radius "4px"
+   :box-sizing "border-box"
    :color "white"
-   :margin "10px"
-   :padding "15px 32px"
+   :margin "5px"
+   :padding "2px 12px"
    :text-align "center"
    :text-decoration "none"
    :display "inline-block"
    :font-size "16px"
-   :opacity "0.6"
    :cursor "pointer"
    :font-family "Arial"
    :transition "0.3s"
-   :&:hover {:opacity "1"}})
+   :width "22%"
+   :max-width "120px"
+   :height "62px"
+   :vertical-align "top"
+   :&:hover {:opacity "0.8"}})
 
 
 (defn show-vendor-info
-	[id]
-	(do (re-frame/dispatch [::events/request-vendor-info id])
-			(re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
+    [id]
+    (do (re-frame/dispatch [::events/request-vendor-info id])
+        (re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
 
 (defn city-input []
-  [:div
+  [:div {:class (city-input-class)}
     [:label {:class (field-label 15)}"City"]
     (input-field {:type "text"
                   :auto-focus true
@@ -77,24 +87,22 @@
       (map vendor-card vendors))])
 
 (defn service-card [service-info]
-	(let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
-			[:p (str s_type " " s_name " " s_duration " " s_price " " s_description)]))
-
-
+    (let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
+      [:p (str s_type " " s_name " " s_duration " " s_price " " s_description)]))
 
 (defn vendor-info-panel []
-	(let [{:keys [vendor_id name_first services]} @(re-frame/subscribe [::subs/current-vendor-info])]
-	[:div 
-		[:p vendor_id]
-		[:p name_first]
-		(map service-card services)
-		]))
+    (let [{:keys [vendor_id name_first services]} @(re-frame/subscribe [::subs/current-vendor-info])]
+     [:div 
+           [:p vendor_id]
+           [:p name_first]
+           (map service-card services)]))
+    
 
 (defn main-panel []
   [:div
     [:h1 {:class (title 80)}
          @(re-frame/subscribe [::subs/app-name])]
-    [:div
+    [:div {:class (main-nav)}
       (sexy-button "Become a vendor")
       (sexy-button "Help")
       (sexy-button "Login")
