@@ -75,32 +75,32 @@
      [:label {:class (field-label 15)} "Enter your email address:"]
      (input-field{:type "text"
                   :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vendor-email-change (-> % .-target .-value)])})]
+                  :on-blur #(re-frame/dispatch [::events/vr-email-change (-> % .-target .-value)])})]
    [:div
      [:label {:class (field-label 15)} "Enter your password:"]
      (input-field{:type "text"
                   :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vendor-pwd-change (-> % .-target .-value)])})]
+                  :on-blur #(re-frame/dispatch [::events/vr-pwd-change (-> % .-target .-value)])})]
    [:div
      [:label {:class (field-label 15)} "Confirm your password:"]
      (input-field{:type "text"
                   :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vendor-conf-pwd-change (-> % .-target .-value)])})]
+                  :on-blur #(re-frame/dispatch [::events/vr-conf-pwd-change (-> % .-target .-value)])})]
    [:div
     [:label {:class (field-label 15)} "First Name:"]
     (input-field{:type "text"
                  :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vendor-first-name-change (-> % .-target .-value)])})]
+                 :on-blur #(re-frame/dispatch [::events/vr-first-name-change (-> % .-target .-value)])})]
    [:div
     [:label {:class (field-label 15)} "Last Name:"]
     (input-field{:type "text"
                  :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vendor-last-name-change (-> % .-target .-value)])})]
+                 :on-blur #(re-frame/dispatch [::events/vr-last-name-change (-> % .-target .-value)])})]
    [:div
     [:label {:class (field-label 15)} "Phone:"]
     (input-field{:type "text"
                  :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vendor-phone-change (-> % .-target .-value)])})]
+                 :on-blur #(re-frame/dispatch [::events/vr-phone-change (-> % .-target .-value)])})]
 
    (sexy-button {:on-click #(re-frame/dispatch [::events/submit-vendor-form])} "Enter")])
 

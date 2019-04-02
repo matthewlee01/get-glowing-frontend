@@ -83,34 +83,34 @@
     (assoc db :active-panel :vendor-signup-panel :prev-state db)))
 
 (re-frame/reg-event-db
-  ::vendor-email-change
+  ::vr-email-change
   (fn [db [_ vendor-email]]
-    (assoc db :vendor-email vendor-email)))
+    (assoc db :vr-email vendor-email)))
 
 (re-frame/reg-event-db
-  ::vendor-pwd-change
+  ::vr-pwd-change
   (fn [db [_ vendor-pwd]]
-    (assoc db :vendor-pwd vendor-pwd)))
+    (assoc db :vr-pwd vendor-pwd)))
 
 (re-frame/reg-event-db
-  ::vendor-conf-pwd-change
+  ::vr-conf-pwd-change
   (fn [db [_ vendor-conf-pwd]]
-    (assoc db :vendor-conf-pwd vendor-conf-pwd)))
+    (assoc db :vr-conf-pwd vendor-conf-pwd)))
 
 (re-frame/reg-event-db
-  ::vendor-first-name-change
+  ::vr-first-name-change
   (fn [db [_ vendor-first-name]]
-    (assoc db ::vendor-first-name-change vendor-first-name)))
+    (assoc db :vr-first-name vendor-first-name)))
 
 (re-frame/reg-event-db
-  ::vendor-last-name-change
+  ::vr-last-name-change
   (fn [db [_ vendor-last-name]]
-    (assoc db ::vendor-last-name-change vendor-last-name)))
+    (assoc db :vr-last-name vendor-last-name)))
 
 (re-frame/reg-event-db
-  ::vendor-phone-change
+  ::vr-phone-change
   (fn [db [_ vendor-phone]]
-    (assoc db ::vendor-phone-change vendor-phone)))
+    (assoc db :vr-phone vendor-phone)))
 
 (re-frame/reg-event-db
   ::submit-vendor-form
