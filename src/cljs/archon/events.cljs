@@ -83,12 +83,37 @@
     (assoc db :active-panel :vendor-signup-panel :prev-state db)))
 
 (re-frame/reg-event-db
-  ::vendor-email-change
+  ::vr-email-change
   (fn [db [_ vendor-email]]
-    (assoc db :vendor-email vendor-email)))
+    (assoc db :vr-email vendor-email)))
 
 (re-frame/reg-event-db
-  ::submit-vendor-email
+  ::vr-pwd-change
+  (fn [db [_ vendor-pwd]]
+    (assoc db :vr-pwd vendor-pwd)))
+
+(re-frame/reg-event-db
+  ::vr-conf-pwd-change
+  (fn [db [_ vendor-conf-pwd]]
+    (assoc db :vr-conf-pwd vendor-conf-pwd)))
+
+(re-frame/reg-event-db
+  ::vr-first-name-change
+  (fn [db [_ vendor-first-name]]
+    (assoc db :vr-first-name vendor-first-name)))
+
+(re-frame/reg-event-db
+  ::vr-last-name-change
+  (fn [db [_ vendor-last-name]]
+    (assoc db :vr-last-name vendor-last-name)))
+
+(re-frame/reg-event-db
+  ::vr-phone-change
+  (fn [db [_ vendor-phone]]
+    (assoc db :vr-phone vendor-phone)))
+
+(re-frame/reg-event-db
+  ::submit-vendor-form
   (fn [db _]
 ;; actually what should happen here is a xml-http request, but save that for later
     (assoc db :active-panel :thanks-for-registering-panel)))
