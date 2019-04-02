@@ -68,13 +68,41 @@
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city])} "Enter")])
 
-(defn ven_email_form []
+
+(defn ven-reg-form []
   [:div {:class (input-class)}
-   [:label {:class (field-label 15)} "Enter your email address:"]
-   (input-field{:type "text"
-                :auto-focus true
-                :on-blur #(re-frame/dispatch [::events/vendor-email-change (-> % .-target .-value)])})
-   (sexy-button {:on-click #(re-frame/dispatch [::events/submit-vendor-email])} "Enter")])
+   [:div
+     [:label {:class (field-label 15)} "Enter your email address:"]
+     (input-field{:type "text"
+                  :auto-focus true
+                  :on-blur #(re-frame/dispatch [::events/vendor-email-change (-> % .-target .-value)])})]
+   [:div
+     [:label {:class (field-label 15)} "Enter your password:"]
+     (input-field{:type "text"
+                  :auto-focus true
+                  :on-blur #(re-frame/dispatch [::events/vendor-pwd-change (-> % .-target .-value)])})]
+   [:div
+     [:label {:class (field-label 15)} "Confirm your password:"]
+     (input-field{:type "text"
+                  :auto-focus true
+                  :on-blur #(re-frame/dispatch [::events/vendor-conf-pwd-change (-> % .-target .-value)])})]
+   [:div
+    [:label {:class (field-label 15)} "First Name:"]
+    (input-field{:type "text"
+                 :auto-focus true
+                 :on-blur #(re-frame/dispatch [::events/vendor-first-name-change (-> % .-target .-value)])})]
+   [:div
+    [:label {:class (field-label 15)} "Last Name:"]
+    (input-field{:type "text"
+                 :auto-focus true
+                 :on-blur #(re-frame/dispatch [::events/vendor-last-name-change (-> % .-target .-value)])})]
+   [:div
+    [:label {:class (field-label 15)} "Phone:"]
+    (input-field{:type "text"
+                 :auto-focus true
+                 :on-blur #(re-frame/dispatch [::events/vendor-phone-change (-> % .-target .-value)])})]
+
+   (sexy-button {:on-click #(re-frame/dispatch [::events/submit-vendor-form])} "Enter")])
 
 (defn service-input []
   [:div
@@ -108,7 +136,9 @@
     
 (defn thanks-panel []
   [:div
-    [:p "Thanks for registering.  Check your inbox for an email we've sent to verify your email address.  This email will contain a link to confirm and continue your registration process."]
+    [:p "Thanks for registering.  Check your inbox for an email we've sent to verify your email address.
+    This email will contain a link to confirm and activate your account.  If you don't get this email
+    in a few minutes, check your spam folder in case it's been mis-directed there."]
     [:button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return"]])
 
 (defn main-panel []
@@ -124,5 +154,5 @@
       :vendors-panel [vendors-panel]
       :city-input-panel [city-form]
       :vendor-info-panel [vendor-info-panel]
-      :vendor-signup-panel [ven_email_form]
+      :vendor-signup-panel [ven-reg-form]
       :thanks-for-registering-panel [thanks-panel])]) 
