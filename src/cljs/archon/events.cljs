@@ -4,13 +4,8 @@
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
    [archon.db :as db]
-   [archon.config :as config]))
+   [archon.config :refer [api-endpoint-url debug-out]]))
 
-
-(defn api-endpoint-url []
-  (if config/debug?
-    "http://localhost:8888/graphql"
-    "http://archon.j3mc.ca:8888/graphql"))
 
 (re-frame/reg-event-db
  ::log-db
@@ -31,7 +26,7 @@
 (re-frame/reg-event-fx
   ::submit-city
   (fn [_world _]
-    (js/alert (str "data: " (api-endpoint-url)))
+    (debug-out (str "data: " (api-endpoint-url)))
     {:http-xhrio {:method  :post
                   :uri    (api-endpoint-url)
                   :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
@@ -69,7 +64,7 @@
 (re-frame/reg-event-db
   ::bad-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (js/alert (str "BAD data: " payload))
+    (debug-out (str "BAD data: " payload))
     (assoc db :active-panel :services-panel)))
 
 (re-frame/reg-event-db
