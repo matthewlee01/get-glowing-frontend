@@ -7,7 +7,7 @@
 (rf/reg-event-db
   ::vr-email-change
   (fn [db [_ vendor-email]]
-    (assoc-in db [:vendor-reg :vr-email] vendor-email))
+    (assoc-in db [:vendor-reg :vr-email] vendor-email)))
 
 (rf/reg-event-db
   ::vr-pwd-change
