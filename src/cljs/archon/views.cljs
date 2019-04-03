@@ -1,10 +1,11 @@
 (ns archon.views
   (:require
-   [re-frame.core :as re-frame]
-   [archon.subs :as subs]
-   [archon.events :as events]
-   [cljss.core :as css :refer-macros [defstyles defkeyframes]]
-   [cljss.reagent :refer-macros [defstyled]])
+    [re-frame.core :as re-frame]
+    [archon.subs :as subs]
+    [archon.events :as events]
+    [cljss.core :as css :refer-macros [defstyles defkeyframes]]
+    [cljss.reagent :refer-macros [defstyled]]
+    [archon.ven-reg.views :as ven-reg])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -68,42 +69,6 @@
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city])} "Enter")])
 
-
-(defn ven-reg-form []
-  [:div {:class (input-class)}
-   [:div
-     [:label {:class (field-label 15)} "Enter your email address:"]
-     (input-field{:type "text"
-                  :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vr-email-change (-> % .-target .-value)])})]
-   [:div
-     [:label {:class (field-label 15)} "Enter your password:"]
-     (input-field{:type "text"
-                  :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vr-pwd-change (-> % .-target .-value)])})]
-   [:div
-     [:label {:class (field-label 15)} "Confirm your password:"]
-     (input-field{:type "text"
-                  :auto-focus true
-                  :on-blur #(re-frame/dispatch [::events/vr-conf-pwd-change (-> % .-target .-value)])})]
-   [:div
-    [:label {:class (field-label 15)} "First Name:"]
-    (input-field{:type "text"
-                 :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vr-first-name-change (-> % .-target .-value)])})]
-   [:div
-    [:label {:class (field-label 15)} "Last Name:"]
-    (input-field{:type "text"
-                 :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vr-last-name-change (-> % .-target .-value)])})]
-   [:div
-    [:label {:class (field-label 15)} "Phone:"]
-    (input-field{:type "text"
-                 :auto-focus true
-                 :on-blur #(re-frame/dispatch [::events/vr-phone-change (-> % .-target .-value)])})]
-
-   (sexy-button {:on-click #(re-frame/dispatch [::events/submit-vendor-form])} "Enter")])
-
 (defn service-input []
   [:div
     [:label "Service"]
@@ -154,5 +119,5 @@
       :vendors-panel [vendors-panel]
       :city-input-panel [city-form]
       :vendor-info-panel [vendor-info-panel]
-      :vendor-signup-panel [ven-reg-form]
+      :vendor-signup-panel (ven-reg/panel)
       :thanks-for-registering-panel [thanks-panel])]) 
