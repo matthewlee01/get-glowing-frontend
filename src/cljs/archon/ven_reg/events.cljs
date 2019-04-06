@@ -34,3 +34,7 @@
   (fn [db [_ vendor-phone]]
     (assoc-in db [:vendor-reg :vr-phone] vendor-phone)))
 
+(rf/reg-event-db
+  ::submit-vendor-form
+  (fn [db _]
+    (assoc db :active-panel :thanks-for-registering-panel)))
