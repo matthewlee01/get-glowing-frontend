@@ -12,4 +12,6 @@
   (when debug?
     (js/alert params)))
 
-
+(def auth0 
+  {:client-id  "eIs2pJl4IoThsi1AdesFoagdyKktR1JB"
+   :domain  "myxomatosis.auth0.com"})

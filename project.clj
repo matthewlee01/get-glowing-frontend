@@ -5,7 +5,8 @@
                  [re-frame "0.10.6"]
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.8.0"]
-                 [clj-commons/cljss "1.6.4"]]
+                 [clj-commons/cljss "1.6.4"]
+                 [cljsjs/auth0-lock "11.8.0-0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
