@@ -11,5 +11,10 @@
      :vr-conf-pwd nil                  ;; the confirmed password for vendor reg
      :vr-first-name nil                ;; vendor first name
      :vr-last-name nil                 ;; vendor last name
+     :vr-addr-str-num nil              ;; vendor street number
+     :vr-addr-str-name nil             ;; vendor street name
+     :vr-addr-city nil                 ;; vendor city
+     :vr-addr-state nil                ;; vendor state
+     :vr-addr-postal nil               ;; vendor postal code
      :vr-phone nil}                    ;; vendor phone number
    :prev-state {}})                  ;; holds the spot we want to jump back to after registration email sent

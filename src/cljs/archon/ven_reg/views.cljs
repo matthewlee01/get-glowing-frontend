@@ -45,6 +45,26 @@
                    :auto-focus true
                    :on-blur #(rf/dispatch [::es/vr-last-name-change (-> % .-target .-value)])})]
     [:div
+      [:label {:class (field-label 15)} "Address:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-address-change (-> % .-target .-value)])})]
+    [:div
+      [:label {:class (field-label 15)} "City:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-city-change (-> % .-target .-value)])})]
+    [:div
+      [:label {:class (field-label 15)} "State:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])})]
+    [:div
+      [:label {:class (field-label 15)} "Postal Code:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-postal-change (-> % .-target .-value)])})]
+    [:div
       [:label {:class (field-label 15)} "Phone:"]
       (input-field{:type "text"
                    :auto-focus true
