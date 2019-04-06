@@ -64,7 +64,7 @@
      [:label {:class (field-label 15)} "What city are you interested in:"]
      (input-field {:type "text"
                    :auto-focus true
-                   :on-key-press #(if (= 13 (.-charCode %))
+                   :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
                                     (re-frame/dispatch [::events/submit-city]))
                    :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
