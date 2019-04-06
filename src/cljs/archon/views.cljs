@@ -54,7 +54,6 @@
    :vertical-align "top"
    :&:hover {:opacity "0.8"}})
 
-
 (defn show-vendor-info
     [id]
     (do (re-frame/dispatch [::events/request-vendor-info id])
@@ -65,7 +64,9 @@
      [:label {:class (field-label 15)} "What city are you interested in:"]
      (input-field {:type "text"
                    :auto-focus true
-                   :value @(re-frame/subscribe [::subs/city-name])
+                   :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
+                                    (re-frame/dispatch [::events/submit-city]))
+                   :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city])} "Enter")])
 
