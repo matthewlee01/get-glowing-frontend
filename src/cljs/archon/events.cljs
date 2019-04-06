@@ -80,7 +80,7 @@
 
 (re-frame/reg-event-db
   ::vr-email-change
-  (fn [db [_ vendor-email]]
+  (fn [db  vendor-email]
     (assoc db :vr-email vendor-email)))
 
 (re-frame/reg-event-db
@@ -118,3 +118,15 @@
   ::take-me-back
   (fn [db _]
     (:prev-state db)))
+
+(re-frame/reg-event-db 
+  ::set-auth-result
+  (fn [db [_ auth-result]]
+    (assoc-in db [:user :auth-result] auth-result)))
+
+(re-frame/reg-event-db 
+  ::set-profile
+  (fn [db [_ profile]]
+    (assoc-in db [:user :profile] profile)))
+
+
