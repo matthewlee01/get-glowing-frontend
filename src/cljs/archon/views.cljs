@@ -102,8 +102,7 @@
      [:img {:src profile_pic
             :alt profile_pic
             :class (list-pfp 200)}]
-     [:p {:style {:font-family "Arial"}} 
-      (str vendor_id " " name_first " " name_last " " addr_city)]]))
+     [:p (str vendor_id " " name_first " " name_last " " addr_city)]]))
 
 (defn vendors-panel []
   [:div
