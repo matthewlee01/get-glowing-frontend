@@ -80,7 +80,7 @@
 
 (re-frame/reg-event-db
   ::vr-email-change
-  (fn [db  vendor-email]
+  (fn [db [_ vendor-email]]
     (assoc db :vr-email vendor-email)))
 
 (re-frame/reg-event-db
