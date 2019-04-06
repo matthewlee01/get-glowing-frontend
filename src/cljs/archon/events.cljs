@@ -35,7 +35,8 @@
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::good-http-result]
-                  :on-failure [::bad-http-result]}}))
+                  :on-failure [::bad-http-result]}
+     :db (assoc (_world :db) :prev-state (_world :db))}))
 
 (re-frame/reg-event-fx
   ::request-vendor-info

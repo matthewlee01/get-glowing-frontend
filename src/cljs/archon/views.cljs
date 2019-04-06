@@ -85,7 +85,9 @@
      [:label {:class (field-label 15)} "What city are you interested in:"]
      (input-field {:type "text"
                    :auto-focus true
-                   :value @(re-frame/subscribe [::subs/city-name])
+                   :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
+                                    (re-frame/dispatch [::events/submit-city]))
+                   :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (submit-button {:on-click #(re-frame/dispatch [::events/submit-city])}
                   "Enter")])
@@ -107,7 +109,10 @@
 (defn vendors-panel []
   [:div
     (let [vendors @(re-frame/subscribe [::subs/vendor-list])]
-      (map vendor-card vendors))])
+      (if (empty? vendors)
+        [:p "Sorry, your search yielded no results in our database. Please try again!"]
+        (map vendor-card vendors)))
+    (sexy-button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return")])
 
 (defn service-card [service-info]
     (let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
