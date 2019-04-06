@@ -31,7 +31,8 @@
 
 (defstyled input-field :input
   {:padding "14px 14px"
-   :font-size "18px"})
+   :font-size "18px"
+   :vertical-align "center"})
   
 (defstyled sexy-button :button
   {:background-color "#7a7978"
@@ -54,6 +55,26 @@
    :vertical-align "top"
    :&:hover {:opacity "0.8"}})
 
+(defstyled submit-button :button
+  {:background-color "#FFB6C1"
+   :border "1px"
+   :border-radius "50px"
+   :box-sizing "border-box"
+   :color "#7a7978"
+   :margin "5px"
+   :padding "4px 4px"
+   :text-align "center"
+   :text-decoration "none"
+   :display "inline-block"
+   :font-size "16px"
+   :cursor "pointer"
+   :font-family "Arial"
+   :transition "0.3s"
+   :width "22%"
+   :max-width "120px"
+   :height "58px"
+   :vertical-align "middle"
+   :&:hover {:opacity "0.9"}})
 (defn show-vendor-info
     [id]
     (do (re-frame/dispatch [::events/request-vendor-info id])
@@ -68,7 +89,8 @@
                                     (re-frame/dispatch [::events/submit-city]))
                    :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
-     (sexy-button {:on-click #(re-frame/dispatch [::events/submit-city])} "Enter")])
+     (submit-button {:on-click #(re-frame/dispatch [::events/submit-city])}
+                  "Enter")])
 
 (defn service-input []
   [:div
