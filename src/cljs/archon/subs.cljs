@@ -31,3 +31,13 @@
   ::current-vendor-info
   (fn [db _]
     (:current-vendor-info db)))
+
+(re-frame/reg-sub
+  ::profile
+  (fn [db _]
+    (get-in db [:user :profile])))
+
+(re-frame/reg-sub 
+  ::auth-result
+  (fn [db _]
+    (get-in db [:user :auth-result])))
