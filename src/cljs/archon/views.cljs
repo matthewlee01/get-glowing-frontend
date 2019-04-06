@@ -3,6 +3,7 @@
     [re-frame.core :as re-frame]
     [archon.subs :as subs]
     [archon.events :as events]
+    [archon.auth0 :as auth0]
     [cljss.core :as css :refer-macros [defstyles defkeyframes]]
     [cljss.reagent :refer-macros [defstyled]]
     [archon.ven-reg.views :as ven-reg])
@@ -17,7 +18,7 @@
   {:width "auto"})
    
 (defstyles input-class []
-  {:margin "50px"})
+  {:margin "10px"})
 
 (defstyles list-pfp [size]
   {:height (str size "px")
@@ -139,7 +140,7 @@
     [:div {:class (main-nav)}
       (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor")
       (sexy-button "Help")
-      (sexy-button "Login")
+      (sexy-button {:on-click #(.show auth0/lock)} "Login")
       (sexy-button "Sign Up")]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendors-panel [vendors-panel]
