@@ -45,6 +45,34 @@
                    :auto-focus true
                    :on-blur #(rf/dispatch [::es/vr-last-name-change (-> % .-target .-value)])})]
     [:div
+      [:label {:class (field-label 15)} "Address:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-address-change (-> % .-target .-value)])})]
+    [:div
+      [:label {:class (field-label 15)} "City:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-city-change (-> % .-target .-value)])})]
+    [:div
+      [:label {:class (field-label 15)} "State:"]
+      [:select {:on-change #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])}
+        [:option "Alberta"]
+        [:option {:selected true} "British Columbia"]
+        [:option "Manitoba"]
+        [:option "New Brunswick"]
+        [:option "Newfoundland and Labrador"]
+        [:option "Nova Scotia"]
+        [:option "Ontario"]
+        [:option "PEI"]
+        [:option "Quebec"]
+        [:option "Saskatchewan"]]]
+    [:div
+      [:label {:class (field-label 15)} "Postal Code:"]
+      (input-field{:type "text"
+                   :auto-focus true
+                   :on-blur #(rf/dispatch [::es/vr-postal-change (-> % .-target .-value)])})]
+    [:div
       [:label {:class (field-label 15)} "Phone:"]
       (input-field{:type "text"
                    :auto-focus true
