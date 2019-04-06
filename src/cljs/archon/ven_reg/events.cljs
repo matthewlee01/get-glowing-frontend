@@ -2,7 +2,22 @@
   (:require
     [re-frame.core :as rf]
     [archon.db :as db]
-    [archon.config :as config]))
+    [archon.config :as config]
+    [clojure.spec.alpha :as s]))
+
+(def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$")
+
+(s/def ::email-type (s/and string? #(re-matches email-regex %)))
+
+(defn valid-email
+  [email]
+  (let [checked-email (s/conform ::email-type email)]
+    (if (= checked-email ::s/invalid)
+      (do (js/alert "oops! bad email")
+        false)
+      (do (js/alert "good email!")
+        checked-email))))
+
 
 (rf/reg-event-db
   ::vr-email-change
@@ -33,4 +48,11 @@
   ::vr-phone-change
   (fn [db [_ vendor-phone]]
     (assoc-in db [:vendor-reg :vr-phone] vendor-phone)))
+
+(rf/reg-event-db
+  ::submit-vendor-form
+  (fn [db _]
+    (if (valid-email (-> db :vendor-reg :vr-email))
+      (assoc db :active-panel :thanks-for-registering-panel)
+      db)))
 
