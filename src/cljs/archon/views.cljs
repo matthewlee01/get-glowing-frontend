@@ -96,6 +96,12 @@
    :vertical-align "middle"
    :&:hover {:opacity "0.9"}})
 
+(defn check-auth
+  "probably change this later"
+  []
+  (and (not-empty @(re-frame/subscribe [::subs/auth-result]))
+       (not-empty @(re-frame/subscribe [::subs/profile]))))
+
 (defn show-vendor-info
     [id]
     (do (re-frame/dispatch [::events/request-vendor-info id])
@@ -179,15 +185,27 @@
     in a few minutes, check your spam folder in case it's been mis-directed there."]
     [:button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return"]])
 
+(defn on-sign-out []
+  (do (re-frame/dispatch [::events/set-auth-result {}])
+      (re-frame/dispatch [::events/set-profile {}])
+      (if (= @(re-frame/subscribe [::subs/active-panel]) :vendor-signup-panel)
+        (re-frame/dispatch [::events/set-active-panel :city-input-panel]))))
+
+(defn nav-buttons []
+  [:div {:class (main-nav)}
+      (if (check-auth) 
+        (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor"))
+      (sexy-button "Help")
+      (if (check-auth)
+        (sexy-button {:on-click on-sign-out} "Sign out" )
+        (sexy-button {:on-click #(.show auth0/lock)} "Login/Sign up"))]
+  )
+
 (defn main-panel []
   [:div
     [:h1 {:class (title 80)}
          @(re-frame/subscribe [::subs/app-name])]
-    [:div {:class (main-nav)}
-      (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor")
-      (sexy-button "Help")
-      (sexy-button {:on-click #(.show auth0/lock)} "Login")
-      (sexy-button "Sign Up")]
+    (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendors-panel [vendors-panel]
       :city-input-panel [city-form]
