@@ -43,7 +43,7 @@
   (fn [_world [_ vendor_id]]
      {:http-xhrio {:method  :post
                      :uri    (api-endpoint-url)
-                     :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first services {s_description s_duration s_name s_price s_type}}}"
+                     :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first profile_pic services{s_description s_duration s_name s_price s_type}}}"
                               :variables {:id vendor_id}}
                      :timeout 3000
                      :format (ajax/json-request-format)
