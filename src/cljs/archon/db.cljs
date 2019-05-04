@@ -17,7 +17,7 @@
      :vr-addr-state nil                ;; vendor state
      :vr-addr-postal nil               ;; vendor postal code
      :vr-phone nil}                    ;; vendor phone number
-   :prev-state {}})                ;; holds the spot we want to jump back to after registration email sent
+   :prev-state {}                ;; holds the spot we want to jump back to after registration email sent
                                    ;; holds the spot we want to jump back to after registration email sent
    :user {
           :profile {}                  ;; holds the auth0 user profile data structure
