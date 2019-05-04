@@ -38,16 +38,16 @@
    })
 
 (defstyles service-card-box []
-  {:height "80px"
+  {;:height "80px"
    :width "290px"
-   :padding "10px"
+   :padding "5px"
    :border "5px solid pink"})
 
 (defstyles service-card-column []
   {:float "left"
    :width "100%"
-   ::css/media {[:only :screen :and [:min-width "1100px"]]
-                {:width "30%"}}})
+   ::css/media {[:only :screen :and [:min-width "665px"]]
+                {:width "330px"}}})
 
 (defstyled input-field :input
   {:padding "14px 14px"
@@ -203,7 +203,7 @@
 
 (defn main-panel []
   [:div
-    [:h1 {:class (title 80)}
+    [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel :city-input-panel])}
          @(re-frame/subscribe [::subs/app-name])]
     (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
