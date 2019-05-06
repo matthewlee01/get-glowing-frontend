@@ -3,7 +3,7 @@
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
-   [archon.db :as db]
+;;   [archon.db :as db]
    [archon.config :refer [api-endpoint-url debug-out]]))
 
 
@@ -22,40 +22,22 @@
   (fn [db [_ value]]
     (assoc db :active-panel value)))
 
-
 (re-frame/reg-event-fx
   ::submit-city
   (fn [_world _]
-    (debug-out (str "data: " (api-endpoint-url)))
     {:http-xhrio {:method  :post
                   :uri    (api-endpoint-url)
-                  :params {:query "query vendor_list($city:String!){vendor_list (addr_city: $city) { vendor_id addr_city name_first name_last profile_pic}}"
-                           :variables {:city (:city-name (:db _world))}} 
+                  :params {:query (str "query vendor_list($city:String!)"
+                                       "{vendor_list (addr_city: $city) "
+                                       "{vendor_id addr_city name_first name_last profile_pic"
+                                       " services_summary {count min max}}}")
+                           :variables {:city (:city-name (:db _world))}}
                   :timeout 3000
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
                   :on-success [::good-http-result]
                   :on-failure [::bad-http-result]}
      :db (assoc (_world :db) :prev-state (_world :db))}))
-
-(re-frame/reg-event-fx
-  ::request-vendor-info
-  (fn [_world [_ vendor_id]]
-     {:http-xhrio {:method  :post
-                     :uri    (api-endpoint-url)
-                     :params {:query "query vendor_by_id($id:Int!){vendor_by_id (vendor_id: $id) { vendor_id name_first profile_pic services{s_description s_duration s_name s_price s_type}}}"
-                              :variables {:id vendor_id}}
-                     :timeout 3000
-                     :format (ajax/json-request-format)
-                     :response-format (ajax/json-response-format {:keywords? true})
-                     :on-success [::good-vendor-info-request]
-                     :on-failure [::bad-http-result]}}))
-
-(re-frame/reg-event-db
-  ::good-vendor-info-request
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (assoc db :current-vendor-info (:vendor_by_id data))))
-
 
 (re-frame/reg-event-db
   ::good-http-result

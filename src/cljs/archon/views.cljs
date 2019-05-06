@@ -6,7 +6,8 @@
     [archon.auth0 :as auth0]
     [cljss.core :as css :refer-macros [defstyles defkeyframes]]
     [cljss.reagent :refer-macros [defstyled]]
-    [archon.ven-reg.views :as ven-reg])
+    [archon.ven-reg.views :as ven-reg]
+    [archon.ven-list.views :as ven-list])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -102,11 +103,6 @@
   (and (not-empty @(re-frame/subscribe [::subs/auth-result]))
        (not-empty @(re-frame/subscribe [::subs/profile]))))
 
-(defn show-vendor-info
-    [id]
-    (do (re-frame/dispatch [::events/request-vendor-info id])
-        (re-frame/dispatch [::events/set-active-panel :vendor-info-panel])))
-
 (defn city-form []
   [:div {:class (input-class)}
      [:label {:class (field-label 15)} "What city are you interested in:"]
@@ -125,21 +121,7 @@
     [:input {:type "text"
              :auto-focus true}]])
 
-(defn vendor-card [vendor]
-  (let [ {:keys [vendor_id name_first name_last addr_city profile_pic]} vendor]
-    [:div {:on-click #(show-vendor-info vendor_id)}
-     [:img {:src profile_pic
-            :alt profile_pic
-            :class (list-pfp 200)}]
-     [:p (str vendor_id " " name_first " " name_last " " addr_city)]]))
 
-(defn vendors-panel []
-  [:div
-    (let [vendors @(re-frame/subscribe [::subs/vendor-list])]
-      (if (empty? vendors)
-        [:p "Sorry, your search yielded no results in our database. Please try again!"]
-        (map vendor-card vendors)))
-    (sexy-button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return")])
 
 (defn make-service-card-div [index service-info]
   "makes a vector with a index number and the div for the service card;
@@ -207,7 +189,7 @@
          @(re-frame/subscribe [::subs/app-name])]
     (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
-      :vendors-panel [vendors-panel]
+      :vendors-panel [ven-list/panel]
       :city-input-panel [city-form]
       :vendor-info-panel [vendor-info-panel]
       :vendor-signup-panel (ven-reg/panel)
