@@ -12,7 +12,8 @@
                   :params {:query (str "query vendor_list($city:String!)"
                                        "{vendor_list (addr_city: $city) "
                                        "{vendor_id addr_city name_first name_last profile_pic"
-                                       " services_summary {count min max}}}")
+                                       " services_summary {count min max}"
+                                       " rating_summary {count average}}}")
                            :variables {:city (:city-name (:db _world))}}
                   :timeout 3000
                   :format (ajax/json-request-format)

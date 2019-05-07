@@ -64,13 +64,13 @@
             :font-family "FontAwesome"
             :font-size "18px"
             :&::before {:content "\f31b \f31b \f31b \f31b \f31b"}})
-(defstyled filled-stars :div
+(defstyles filled-stars [percent-filled]
            {:position "absolute"
             :top "0"
             :left "0"
             :white-space "nowrap"
             :overflow "hidden"
-            :width "0%"
+            :width (str percent-filled "%")
             :&::before {:content "\f318 \f318 \f318 \f318 \f318"
                         :color "#e2246a"}})
 
@@ -79,10 +79,18 @@
   (do (rf/dispatch [::vle/request-vendor-info id])
       (rf/dispatch [::events/set-active-panel :vendor-info-panel])))
 
+(defn percentage [rating]
+  (->> (/ rating 5.0)
+       (* 100)
+       Math/floor
+       int))
 
 (defn vendor-card [vendor]
-  (let [{:keys [vendor_id name_first name_last addr_city profile_pic services_summary]} vendor
-        {:keys [count min max]} services_summary
+  (let [{:keys [vendor_id name_first name_last addr_city profile_pic
+                services_summary rating_summary]} vendor
+        {:keys [min max]} services_summary
+        {:keys [count average]} rating_summary
+        rating% (percentage average)
         min$ (/ min 100)
         max$ (/ max 100)]
     (vendor-card-div {:on-click #(show-vendor-info vendor_id)}
@@ -91,8 +99,9 @@
       [:div
         (title (str  name_first " " name_last))
         (price-stats (str  "$" min$ " - $" max$))
-        (empty-stars (filled-stars))
-        [:div [:span addr_city]]])))
+        (empty-stars
+          [:div {:class (filled-stars rating%)}])
+        [:div [:div addr_city]]])))
 
 (defn panel []
   [:div
