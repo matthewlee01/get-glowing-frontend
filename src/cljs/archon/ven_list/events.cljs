@@ -5,22 +5,29 @@
     [ajax.core :as ajax]))
 
 (rf/reg-event-fx
-  ::request-vendor-info
-  (fn [_world [_ vendor_id]]
+  ::get-vendor-list
+  (fn [_world _]
     {:http-xhrio {:method  :post
                   :uri    (config/api-endpoint-url)
-                  :params {:query (str "query vendor_by_id($id:Int!)"
-                                    "{vendor_by_id (vendor_id: $id)"
-                                    "{vendor_id name_first profile_pic"
-                                    " services{s_description s_duration s_name s_price s_type}}}")
-                           :variables {:id vendor_id}}
+                  :params {:query (str "query vendor_list($city:String!)"
+                                       "{vendor_list (addr_city: $city) "
+                                       "{vendor_id addr_city name_first name_last profile_pic"
+                                       " services_summary {count min max}}}")
+                           :variables {:city (:city-name (:db _world))}}
                   :timeout 3000
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::good-vendor-info-request]
-                  :on-failure [::bad-http-result]}}))
+                  :on-success [::good-http-result]
+                  :on-failure [::bad-http-result]}
+     :db (assoc (_world :db) :prev-state (_world :db))}))
 
 (rf/reg-event-db
-  ::good-vendor-info-request
+  ::good-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (assoc db :current-vendor-info (:vendor_by_id data))))
+    (assoc db :active-panel :vendor-list-panel :vendor-list (:vendor_list data))))
+
+(rf/reg-event-db
+  ::bad-http-result
+  (fn [db [_ {:keys [data errors] :as payload}]]
+    (debug-out (str "BAD data: " payload))
+    (assoc db :active-panel :services-panel)))

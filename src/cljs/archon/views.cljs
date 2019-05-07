@@ -7,7 +7,8 @@
     [cljss.core :as css :refer-macros [defstyles defkeyframes]]
     [cljss.reagent :refer-macros [defstyled]]
     [archon.ven-reg.views :as ven-reg]
-    [archon.ven-list.views :as ven-list])
+    [archon.ven-list.views :as ven-list]
+    [archon.ven-list.events :as ven-list-events])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -109,10 +110,10 @@
      (input-field {:type "text"
                    :auto-focus true
                    :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
-                                    (re-frame/dispatch [::events/submit-city]))
+                                    (re-frame/dispatch [::events/get-vendor-list]))
                    :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
-     (submit-button {:on-click #(re-frame/dispatch [::events/submit-city])}
+     (submit-button {:on-click #(re-frame/dispatch [::ven-list-events/get-vendor-list])}
                   "Enter")])
 
 (defn service-input []
@@ -189,7 +190,7 @@
          @(re-frame/subscribe [::subs/app-name])]
     (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
-      :vendors-panel [ven-list/panel]
+      :vendor-list-panel [ven-list/panel]
       :city-input-panel [city-form]
       :vendor-info-panel [vendor-info-panel]
       :vendor-signup-panel (ven-reg/panel)

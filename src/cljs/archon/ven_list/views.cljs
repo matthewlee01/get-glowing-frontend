@@ -34,28 +34,45 @@
            {:background-color "#e2c7d1"
             :display "inline-block"
             :width "300px"
-            :height "300px"
+            :height "340px"
             :margin "10px"
+            :text-align "center"
             :box-shadow "4px 4px 8px 0 #686868"})
 
 (defstyled profile-pic :img
            {:display "block"
             :margin-left "auto"
             :margin-right "auto"
+            :margin-top "10px"
+            :margin-bottom "20px"
             :object-fit "cover"
-            :width "200px"
+            :width "260px"
             :height "200px"})
 
 (defstyled title :p
            {:font-size "16pt"
-            :text-align "center"
             :font-family "Arial"
             :margin "5px"})
 
-(defstyled stats :p
+(defstyled price-stats :p
            {:font-size "12pt"
-            :text-align "center"
             :margin "0px"})
+
+(defstyled empty-stars :div
+           {:display "inline-block"
+            :position "relative"
+            :font-family "FontAwesome"
+            :font-size "18px"
+            :&::before {:content "\f31b \f31b \f31b \f31b \f31b"}})
+(defstyled filled-stars :div
+           {:position "absolute"
+            :top "0"
+            :left "0"
+            :white-space "nowrap"
+            :overflow "hidden"
+            :width "0%"
+            :&::before {:content "\f318 \f318 \f318 \f318 \f318"
+                        :color "#e2246a"}})
 
 (defn show-vendor-info
   [id]
@@ -73,8 +90,9 @@
                     :alt profile_pic})
       [:div
         (title (str  name_first " " name_last))
-        (stats (str  "$" min$ " - $" max$))
-        [:p addr_city]])))
+        (price-stats (str  "$" min$ " - $" max$))
+        (empty-stars (filled-stars))
+        [:div [:span addr_city]]])))
 
 (defn panel []
   [:div
