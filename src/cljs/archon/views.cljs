@@ -113,6 +113,7 @@
                    :auto-focus true
                    :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
                                     (re-frame/dispatch [::ven-list-events/get-vendor-list]))
+                   :placeholder "Enter city name..."
                    :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (submit-button {:on-click #(re-frame/dispatch [::ven-list-events/get-vendor-list])}

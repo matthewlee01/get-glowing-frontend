@@ -3,7 +3,7 @@
 (def default-db
   {:name "glow"
    :active-panel :city-input-panel   ;; the active view to show
-   :city-name "city"                 ;; the city we want to limit our vendor search to
+   :city-name ""                 ;; the city we want to limit our vendor search to
    :current-vendor-info {}           ;; information for the vendor currently being examined
    :vendor-reg {                     ;; a map of all the information collected on the vendor reg panel
      :vr-email "email address"         ;; the email address we will send a registration invite email to
@@ -18,7 +18,6 @@
      :vr-addr-postal nil               ;; vendor postal code
      :vr-phone nil}                    ;; vendor phone number
    :prev-state {}                ;; holds the spot we want to jump back to after registration email sent
-                                   ;; holds the spot we want to jump back to after registration email sent
    :user {
           :profile {}                  ;; holds the auth0 user profile data structure
           :auth-result {}}})           ;; holds the auth0 authentication result
