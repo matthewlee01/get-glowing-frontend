@@ -3,6 +3,7 @@
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
+   [archon.db :as db]
    [archon.config :refer [api-endpoint-url debug-out]]))
 
 
@@ -14,7 +15,7 @@
 (re-frame/reg-event-db
  ::initialize-db
  (fn [_ _]
-   archon.db/default-db))
+   db/default-db))
 
 (re-frame/reg-event-db
   ::set-active-panel
