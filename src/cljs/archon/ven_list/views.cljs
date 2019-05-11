@@ -4,7 +4,7 @@
     [archon.events :as events]
     [archon.subs :as subs]
     [re-frame.core :as rf]
-    [cljss.core :refer-macros [defstyles]]
+    [cljss.core :as css :refer-macros [defstyles]]
     [cljss.reagent :refer-macros [defstyled]]))
 
 
@@ -64,6 +64,7 @@
             :font-family "FontAwesome"
             :font-size "18px"
             :&::before {:content "\f31b \f31b \f31b \f31b \f31b"}})
+
 (defstyles filled-stars [percent-filled]
            {:position "absolute"
             :top "0"
@@ -74,9 +75,17 @@
             :&::before {:content "\f318 \f318 \f318 \f318 \f318"
                         :color "#e2246a"}})
 
+(defstyles vendor-card-flex []
+           {:display "flex"
+            :flex-wrap "wrap"
+            :&:after {:clear "both"}
+            ::css/media {[:only :screen :and [:min-width "800px"]] {:width "700px"}
+   	                     [:only :screen :and [:min-width "1000px"]] {:width "990px"}
+                }})
+
 (defn show-vendor-info
   [id]
-  (do (rf/dispatch [::vle/request-vendor-info id])
+  (do (rf/dispatch [::events/request-vendor-info id])
       (rf/dispatch [::events/set-active-panel :vendor-info-panel])))
 
 (defn percentage [rating]
@@ -106,7 +115,7 @@
 (defn panel []
   [:div
    (let [vendors @(rf/subscribe [::subs/vendor-list])]
-     (if (empty? vendors)
+    (if (empty? vendors)
        [:p "Sorry, your search yielded no results in our database. Please try again!"]
-       (map vendor-card vendors)))
+       [:div {:class (vendor-card-flex)} (map vendor-card vendors)]))
    (big-button {:on-click #(rf/dispatch [::events/take-me-back])} "Return")])

@@ -40,16 +40,18 @@
    })
 
 (defstyles service-card-box []
-  {;:height "80px"
+  {:height "90px"
    :width "290px"
-   :padding "5px"
-   :border "5px solid pink"})
+   :padding "10px"
+   :margin "0px 10px"
+   :border "5px solid #FFB6C1"})
 
-(defstyles service-card-column []
-  {:float "left"
-   :width "100%"
-   ::css/media {[:only :screen :and [:min-width "665px"]]
-                {:width "330px"}}})
+(defstyles service-card-array []
+  {:display "flex"
+   :flex-wrap "wrap"
+   :&:after {:clear "both"}
+   ::css/media {[:only :screen :and [:min-width "700px"]] {:width "700px"}
+   	            [:only :screen :and [:min-width "1050px"]] {:width "1050px"}}})
 
 (defstyled input-field :input
   {:padding "14px 14px"
@@ -110,7 +112,7 @@
      (input-field {:type "text"
                    :auto-focus true
                    :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
-                                    (re-frame/dispatch [::events/get-vendor-list]))
+                                    (re-frame/dispatch [::ven-list-events/get-vendor-list]))
                    :default-value @(re-frame/subscribe [::subs/city-name])
                    :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
      (submit-button {:on-click #(re-frame/dispatch [::ven-list-events/get-vendor-list])}
@@ -123,33 +125,18 @@
              :auto-focus true}]])
 
 
-
-(defn make-service-card-div [index service-info]
+(defn make-service-card-div [service-info]
   "makes a vector with a index number and the div for the service card;
    used with map-indexed to group services into columns"
   (let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
-    [index
      [:div [:div {:class (service-card-title 16)} s_name]
            [:div {:class (service-card-box)}
              [:div s_type]
              [:div s_duration]
              [:div s_price]
              [:div s_description]]
-    ]]))
+    ]))
 
-(defn group-service-cards [[even odd] [parity service-card-div]]
-  "takes numbered service cards and distributes them into vectors for the two columns based on the number"
-  (if (odd? parity)
-    [even (conj odd service-card-div)]
-    [(conj even service-card-div) odd])
-  )
-
-(defn service-array [service-list]
-  "takes a list of service information, creates service cards and distributes them into the two columns"
-  (let [service-cards (map-indexed make-service-card-div service-list)
-       [odd even] (reduce group-service-cards [[:div {:class (service-card-column)}] [:div {:class (service-card-column)}]] service-cards)]
-    [:div odd even]
-  ))
 
 (defn vendor-info-panel []
     (let [{:keys [vendor_id name_first services profile_pic]} @(re-frame/subscribe [::subs/current-vendor-info])]
@@ -159,7 +146,7 @@
            [:p vendor_id]
            [:p name_first]
            [:br]
-           (service-array services)]))
+           [:div {:class (service-card-array)} (map make-service-card-div services)]]))
     
 (defn thanks-panel []
   [:div

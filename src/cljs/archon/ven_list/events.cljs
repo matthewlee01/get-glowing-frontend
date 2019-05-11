@@ -30,5 +30,5 @@
 (rf/reg-event-db
   ::bad-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (debug-out (str "BAD data: " payload))
+    (config/debug-out (str "BAD data: " payload))
     (assoc db :active-panel :services-panel)))
