@@ -7,7 +7,7 @@
                  [cljs-ajax "0.8.0"]
                  [clj-commons/cljss "1.6.4"]
                  [cljsjs/auth0-lock "11.8.0-0"]
-                 [bidi "2.1.6"]
+                 [metosin/reitit "0.3.1"]
                  [kibu/pushy "0.3.8"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]

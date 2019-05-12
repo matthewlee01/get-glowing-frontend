@@ -26,9 +26,11 @@
 (rf/reg-event-db
   ::good-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (routes/set-history (str (routes/url-for :vendor-list) "/" (:city-name db)))
-;;    (assoc db :active-panel :vendor-list-panel :vendor-list (:vendor_list data))
-    (assoc db :vendor-list (:vendor_list data))))
+    (let [city (:city-name db)
+          match (routes/url-for ::routes/vendor-list-panel {:city city})
+          url-string (:path match)]
+      (routes/set-history url-string)
+      (assoc db :vendor-list (:vendor_list data)))))
 
 (rf/reg-event-db
   ::bad-http-result

@@ -39,7 +39,7 @@
             :text-align "center"
             :box-shadow "4px 4px 8px 0 #686868"})
 
-(defstyled profile-pic :img
+(defstyled profile-img :img
            {:display "block"
             :margin-left "auto"
             :margin-right "auto"
@@ -101,10 +101,13 @@
         {:keys [count average]} rating_summary
         rating% (percentage average)
         min$ (/ min 100)
-        max$ (/ max 100)]
+        max$ (/ max 100)
+        prof_pic (str "/" profile_pic)]  ;; TODO - this hack actually needs a fix
+                                         ;; on the server to send an absolute path
+                                         ;; for now hack the path to be absolute
     (vendor-card-div {:on-click #(show-vendor-info vendor_id)}
-      (profile-pic {:src profile_pic
-                    :alt profile_pic})
+      (profile-img {:src prof_pic
+                    :alt prof_pic})
       [:div
         (title (str  name_first " " name_last))
         (price-stats (str  "$" min$ " - $" max$))

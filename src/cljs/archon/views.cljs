@@ -9,7 +9,8 @@
     [archon.ven-reg.views :as ven-reg]
     [archon.ven-list.views :as ven-list]
     [archon.ven-list.events :as ven-list-events]
-    [archon.city.views :as city])
+    [archon.city.views :as city]
+    [archon.routes :as routes])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -151,9 +152,12 @@
 
 
 (defn vendor-info-panel []
-    (let [{:keys [vendor_id name_first services profile_pic]} @(re-frame/subscribe [::subs/current-vendor-info])]
-     [:div [:img {:src profile_pic
-                  :alt profile_pic
+    (let [{:keys [vendor_id name_first services profile_pic]} @(re-frame/subscribe [::subs/current-vendor-info])
+          prof-pic (str "/" profile_pic)]    ;; TODO - this hack actually needs a fix 
+                                             ;; on the server to send an absolute path
+                                             ;; for now hack the path to be absolute
+     [:div [:img {:src prof-pic
+                  :alt prof-pic
                   :class (list-pfp 200)}]
            [:p vendor_id]
            [:p name_first]
@@ -172,7 +176,7 @@
   (do (re-frame/dispatch [::events/set-auth-result {}])
       (re-frame/dispatch [::events/set-profile {}])
       (if (= @(re-frame/subscribe [::subs/active-panel]) :vendor-signup-panel)
-        (re-frame/dispatch [::events/set-active-panel :city-input-panel]))))
+        (re-frame/dispatch [::events/set-active-panel ::routes/city-panel]))))
 
 (defn generate-displayed-times
   "generates an array of time-slots given a start time, slot count, and increment,
@@ -283,12 +287,12 @@
   
 (defn main-panel []
   [:div
-    [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel :city-input-panel])}
+    [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}
          @(re-frame/subscribe [::subs/app-name])]
     (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
-      :vendor-list-panel [ven-list/panel]
-      :city-input-panel [city/panel]
+      ::routes/vendor-list-panel [ven-list/panel]
+      ::routes/city-panel [city/panel]
       :vendor-info-panel [vendor-info-panel]
       :vendor-signup-panel (ven-reg/panel)
       :thanks-for-registering-panel [thanks-panel]

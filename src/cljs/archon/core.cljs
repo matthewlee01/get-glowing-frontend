@@ -24,6 +24,7 @@
 (defn ^:export init []
   (routes/install-pushstate-handlers)
   (re-frame/dispatch-sync [::events/initialize-db])
+  (re-frame/dispatch-sync [::events/set-active-panel ::routes/city-panel])
   (dev-setup)
   (mount-root))
 
