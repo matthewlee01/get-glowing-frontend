@@ -53,6 +53,53 @@
    ::css/media {[:only :screen :and [:min-width "700px"]] {:width "700px"}
    	            [:only :screen :and [:min-width "1050px"]] {:width "1050px"}}})
 
+(defstyles calendar-day-box []
+  {:display "flex"
+   :padding "12px"
+   :width "100%"})
+
+
+(defstyles time-slot-class [color]
+  {:background-color color
+   :width "90%"
+   :margin "1px"
+   :padding "2px 12px"
+   :text-align "center"
+   :display "inline-block"
+   :height "50px"
+   :line-height "50px"
+   :vertical-align "middle"
+   :color "white"
+   :box-sizing "border-box"
+   :font-size "16px"
+   :font-family "Arial"})
+
+(defstyles calendar-column []
+  {:width "375px"
+   :height "100%"
+   :vertical-align "middle"
+   :margin "2px"})
+
+(defstyles centre-day-box []
+  {:display "flex"
+   :height "100%"})
+
+(defstyles outer-day-box []
+  {:display "flex"
+   :height "100%"
+   ::css/media {[:only :screen :and [:max-width "1050px"]] {:display "none"}}})
+
+(defstyles time-label-box []
+  {:display "flex"
+   :height "100%"
+   :width "100px"})
+
+(defstyles side-time-label []
+  {:width "100%"
+   :vertical-align "33px"
+   :height "50px"
+   :display "inline-block"})
+
 (defstyled input-field :input
   {:padding "14px 14px"
    :font-size "18px"
@@ -142,13 +189,14 @@
 (defn vendor-info-panel []
     (let [{:keys [vendor_id name_first services profile_pic]} @(re-frame/subscribe [::subs/current-vendor-info])]
      [:div [:img {:src profile_pic
-            :alt profile_pic
-            :class (list-pfp 200)}]
+                  :alt profile_pic
+                  :class (list-pfp 200)}]
            [:p vendor_id]
            [:p name_first]
            [:br]
-           [:div {:class (service-card-array)} (map make-service-card-div services)]]))
-    
+           [:div {:class (service-card-array)} (map make-service-card-div services)]
+           (sexy-button {:on-click #(re-frame/dispatch [::events/set-active-panel :calendar-panel])} "View Calendar")]))
+   
 (defn thanks-panel []
   [:div
     [:p "Thanks for registering.  Check your inbox for an email we've sent to verify your email address.
@@ -162,16 +210,113 @@
       (if (= @(re-frame/subscribe [::subs/active-panel]) :vendor-signup-panel)
         (re-frame/dispatch [::events/set-active-panel :city-input-panel]))))
 
+(defn generate-displayed-times
+  "generates an array of time-slots given a start time, slot count, and increment,
+  ex// [0, 2, 60] would return [[0 59] [60 119]]. used for generating the
+  vector for the displayed hours on each calendar day"
+  [start-time slot-count increment]
+  (->> (range slot-count)
+       (map (fn [slot]
+              (+ (* slot increment) start-time)))
+       (map (fn [start]
+              [start (+ start (- increment 1))]))
+       (vec)))
+              
+(defn minute-int-to-time-string
+  "takes a minute count (i.e. 90) and converts it to a time string ('1:30 AM')"
+  [minute-int]
+  (let [hours (quot minute-int 60)
+        mins (mod minute-int 60)]
+    (str
+      (if (> hours 12)
+        (- hours 12)
+        (if (= hours 0) ;; hour 0 is a special case between 24 and 12 hour time
+          12
+          hours))
+      ":"
+      (if (= 0 mins)
+        "00"
+        mins)
+      (if (> hours 11)
+        " PM"
+        " AM"))))
+
+(def sample-available [[0 599]])
+(def sample-booked1 [[300 359] [420 479]])
+(def sample-booked2 [])
+(def sample-booked3 [[360 429] [720 779] [840 900]])
+(def sample-date1 "May 1")
+(def sample-date2 "May 2")
+(def sample-date3 "May 3")
+(def DISPLAYED_TIMES (generate-displayed-times 180 13 30)) 
+  
+(defn time-label
+  [time-int]
+  [:label {:class (side-time-label)} (minute-int-to-time-string time-int)])
+  
+(defn available-slot
+  [[start-time _]]
+  [:div {:class (time-slot-class "#FFB6C1")
+         :on-click #(js/alert (str "this is time-slot " start-time))} (str (minute-int-to-time-string start-time) " - Available")])
+
+(defn unavailable-slot
+  [[start-time _]]
+  [:div {:class (time-slot-class "#7a7978")
+         :on-click #(js/alert (str "this is time-slot " start-time))} (str (minute-int-to-time-string start-time) " - Unavailable")])
+
+(defn time-within-chunk?
+  "checks whether a time-slot is contained within a time-chunk"
+  [time-slot time-chunk]
+  (and (>= (first time-slot) (first time-chunk))
+       (<= (second time-slot) (second time-chunk))))
+  
+(defn time-within-coll?
+  "checks to see if the time slot is contained anywhere within
+  the collection of time-chunks"
+  [time-slot time-coll]
+  (->> time-coll
+       (map (fn [time-chunk] (time-within-chunk? time-slot time-chunk)))
+       (every? false?)        
+       (not)))
+
+(defn calendar-day-column
+  "creates a column of time slots based on the available times"
+  [date displayed-times available-time booked-time]
+  (->> [:div {:class (calendar-column)}
+        [date]
+        (map (fn [time-slot]
+               (if (and (time-within-coll? time-slot available-time)
+                        (not (time-within-coll? time-slot booked-time)))
+                 (available-slot time-slot)
+                 (unavailable-slot time-slot))) displayed-times)]
+       (mapcat #(if (sequential? %) % [%])) ;; flattens the elements created in the map into the parent div
+       (vec)))
+
+(defn time-label-column
+  "creates a column of time labels based on the displayed times"
+  [displayed-times]
+  (->> [:div {:class (calendar-column)}
+        (map (fn [[start-time _]] (time-label start-time)) displayed-times)]
+       (mapcat #(if (sequential? %) % [%])) ;; flattens the elements created in the map into the parent div
+       (vec)))
+
+(defn calendar-panel
+  []
+  [:div {:class (calendar-day-box)}
+   [:div {:class (time-label-box)} (time-label-column DISPLAYED_TIMES)]
+   [:div {:class (outer-day-box)} (calendar-day-column sample-date1 DISPLAYED_TIMES sample-available sample-booked1)]
+   [:div {:class (centre-day-box)} (calendar-day-column sample-date2 DISPLAYED_TIMES sample-available sample-booked2)]
+   [:div {:class (outer-day-box)} (calendar-day-column sample-date3 DISPLAYED_TIMES sample-available sample-booked3)]])
+
 (defn nav-buttons []
   [:div {:class (main-nav)}
       (if (check-auth) 
         (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor"))
       (sexy-button "Help")
       (if (check-auth)
-        (sexy-button {:on-click on-sign-out} "Sign out" )
-        (sexy-button {:on-click #(.show auth0/lock)} "Login/Sign up"))]
-  )
-
+        (sexy-button {:on-click on-sign-out} "Sign out")
+        (sexy-button {:on-click #(.show auth0/lock)} "Login/Sign up"))])
+  
 (defn main-panel []
   [:div
     [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel :city-input-panel])}
@@ -182,4 +327,7 @@
       :city-input-panel [city-form]
       :vendor-info-panel [vendor-info-panel]
       :vendor-signup-panel (ven-reg/panel)
-      :thanks-for-registering-panel [thanks-panel])]) 
+      :thanks-for-registering-panel [thanks-panel]
+      :calendar-panel [calendar-panel])]) 
+
+
