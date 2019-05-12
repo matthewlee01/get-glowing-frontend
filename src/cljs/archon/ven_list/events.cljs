@@ -2,7 +2,8 @@
   (:require
     [re-frame.core :as rf]
     [archon.config :as config]
-    [ajax.core :as ajax]))
+    [ajax.core :as ajax]
+    [archon.routes :as routes]))
 
 (rf/reg-event-fx
   ::get-vendor-list
@@ -25,10 +26,13 @@
 (rf/reg-event-db
   ::good-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (assoc db :active-panel :vendor-list-panel :vendor-list (:vendor_list data))))
+    (routes/set-history (str (routes/url-for :vendor-list) "/" (:city-name db)))
+;;    (assoc db :active-panel :vendor-list-panel :vendor-list (:vendor_list data))
+    (assoc db :vendor-list (:vendor_list data))))
 
 (rf/reg-event-db
   ::bad-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
     (config/debug-out (str "BAD data: " payload))
     (assoc db :active-panel :services-panel)))
+

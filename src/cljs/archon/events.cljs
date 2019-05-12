@@ -10,7 +10,8 @@
 (re-frame/reg-event-db
  ::log-db
  (fn [db _]
-    (print db)))
+   (cljs.pprint/pprint db)
+   db))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -55,10 +56,10 @@
     (debug-out (str "BAD data: " payload))
     (assoc db :active-panel :services-panel)))
 
-(re-frame/reg-event-db
-  ::city-name-change
-  (fn [db [_  city-name]]
-    (assoc db :city-name city-name)))
+;;(re-frame/reg-event-db
+;;  ::city-name-change
+;;  (fn [db [_  city-name]]
+;;    (assoc db :city-name city-name)))
 
 (re-frame/reg-event-db
   ::show-vendor-email-form

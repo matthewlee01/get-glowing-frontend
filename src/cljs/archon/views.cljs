@@ -8,7 +8,8 @@
     [cljss.reagent :refer-macros [defstyled]]
     [archon.ven-reg.views :as ven-reg]
     [archon.ven-list.views :as ven-list]
-    [archon.ven-list.events :as ven-list-events])
+    [archon.ven-list.events :as ven-list-events]
+    [archon.city.views :as city])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -100,10 +101,6 @@
    :height "50px"
    :display "inline-block"})
 
-(defstyled input-field :input
-  {:padding "14px 14px"
-   :font-size "18px"
-   :vertical-align "center"})
   
 (defstyled sexy-button :button
   {:background-color "#7a7978"
@@ -126,45 +123,12 @@
    :vertical-align "top"
    :&:hover {:opacity "0.8"}})
 
-(defstyled submit-button :button
-  {:background-color "#FFB6C1"
-   :border "1px"
-   :border-radius "50px"
-   :box-sizing "border-box"
-   :color "#7a7978"
-   :margin "5px"
-   :padding "4px 4px"
-   :text-align "center"
-   :text-decoration "none"
-   :display "inline-block"
-   :font-size "16px"
-   :cursor "pointer"
-   :font-family "Arial"
-   :transition "0.3s"
-   :width "22%"
-   :max-width "120px"
-   :height "58px"
-   :vertical-align "middle"
-   :&:hover {:opacity "0.9"}})
-
 (defn check-auth
   "probably change this later"
   []
   (and (not-empty @(re-frame/subscribe [::subs/auth-result]))
        (not-empty @(re-frame/subscribe [::subs/profile]))))
 
-(defn city-form []
-  [:div {:class (input-class)}
-     [:label {:class (field-label 15)} "What city are you interested in:"]
-     (input-field {:type "text"
-                   :auto-focus true
-                   :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
-                                    (re-frame/dispatch [::ven-list-events/get-vendor-list]))
-                   :placeholder "Enter city name..."
-                   :default-value @(re-frame/subscribe [::subs/city-name])
-                   :on-input #(re-frame/dispatch [::events/city-name-change (-> % .-target .-value)])})
-     (submit-button {:on-click #(re-frame/dispatch [::ven-list-events/get-vendor-list])}
-                  "Enter")])
 
 (defn service-input []
   [:div
@@ -324,7 +288,7 @@
     (nav-buttons)
     (condp = @(re-frame/subscribe [::subs/active-panel])
       :vendor-list-panel [ven-list/panel]
-      :city-input-panel [city-form]
+      :city-input-panel [city/panel]
       :vendor-info-panel [vendor-info-panel]
       :vendor-signup-panel (ven-reg/panel)
       :thanks-for-registering-panel [thanks-panel]

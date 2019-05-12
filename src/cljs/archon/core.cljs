@@ -5,7 +5,8 @@
    [day8.re-frame.http-fx]
    [archon.events :as events]
    [archon.views :as views]
-   [archon.config :as config]))
+   [archon.config :as config]
+   [archon.routes :as routes]))
    
 
 
@@ -16,10 +17,12 @@
 
 (defn mount-root []
   (re-frame/clear-subscription-cache!)
+
   (reagent/render [views/main-panel]
                   (.getElementById js/document "app")))
 
 (defn ^:export init []
+  (routes/install-pushstate-handlers)
   (re-frame/dispatch-sync [::events/initialize-db])
   (dev-setup)
   (mount-root))
