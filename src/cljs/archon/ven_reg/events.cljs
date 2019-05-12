@@ -89,8 +89,8 @@
 (rf/reg-event-db
   ::submit-vendor-form
   (fn [db _]
-    (if (and (valid-email (-> db :vendor-reg :vr-email))
-             (valid-num (-> db :vendor-reg :vr-addr-num)))
-      (assoc db :active-panel :thanks-for-registering-panel)
-      db)))
+    (if (and (-> db :vendor-reg :vr-email (valid-email))
+             (-> db :vendor-reg :vr-addr-num (valid-num)))
+        (assoc db :active-panel :thanks-for-registering-panel))
+      db))
 
