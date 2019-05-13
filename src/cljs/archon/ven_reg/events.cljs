@@ -3,8 +3,10 @@
     [re-frame.core :as rf]
     [archon.db :as db]
     [archon.config :as config]
+    [archon.routes :as routes]
     [clojure.spec.alpha :as s]
     [clojure.string :as str]))
+    
 
 (def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$") ; some characters + @ + some characters + 2-63 letters
 
@@ -31,6 +33,22 @@
         false)
       (do (js/alert "good address number!")
         checked-num))))
+
+(rf/reg-event-db
+  ::show-vendor-email-form
+  (fn [db _]
+    ;; this is where we push the new URL onto the browser history 
+    ;; to start the navigation to the registration form
+    (let [match (routes/url-for ::routes/vendor-signup-panel)
+          url-string (:path match)]
+      (routes/set-history url-string)
+
+      ;; this is also where pre-population of the signup fields should be
+      ;; assigned from the auth0 token
+
+      ;; save the page we are leaving so that we can return to the
+      ;; same place after the registration is complete
+      (assoc db :prev-state db))))
 
 (rf/reg-event-db
   ::vr-email-change
@@ -91,6 +109,5 @@
   (fn [db _]
     (if (and (-> db :vendor-reg :vr-email (valid-email))
              (-> db :vendor-reg :vr-addr-num (valid-num)))
-        (assoc db :active-panel :thanks-for-registering-panel))
-      db))
-
+        (assoc db :active-panel :thanks-for-registering-panel)
+      db)))

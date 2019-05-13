@@ -28,9 +28,9 @@
     (:current-vendor-id db)))
 
 (re-frame/reg-sub
-  ::current-vendor-info
+  ::vendor-details
   (fn [db _]
-    (:current-vendor-info db)))
+    (:vendor-details db)))
 
 (re-frame/reg-sub
   ::profile
