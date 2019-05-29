@@ -1,4 +1,5 @@
 (ns archon.ven-list.events
+  "this namespace contains all of the events that are generated from the vendor-list view"
   (:require
     [re-frame.core :as rf]
     [archon.config :as config]

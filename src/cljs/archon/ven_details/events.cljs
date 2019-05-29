@@ -13,7 +13,7 @@
     {:http-xhrio {:method  :post
                   :uri    graphql-url
                   :params {:query (str "query vendor_by_id($id:Int!)"
-                                       "{vendor_by_id (vendor_id: $id)"
+                                       "{vendor_by_id (id: $id)"
                                        "{vendor_id name_first profile_pic"
                                        " services{s_description s_duration s_name s_price s_type}}}")
                            :variables {:id vendor_id}}
@@ -30,7 +30,6 @@
           ven-id (:vendor_id ven-details)
           match (routes/url-for ::routes/vendor-details-panel {:vendor-id ven-id})
           url-string (:path match)]
-
       ;; set the new URL so that the view is updated
       (routes/set-history url-string)
       (assoc db :vendor-details ven-details))))
