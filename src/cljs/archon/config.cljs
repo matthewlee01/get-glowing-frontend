@@ -6,7 +6,7 @@
 (defn globar-root []
   (if debug?
     "http://localhost:8888/"
-    "http://archon.j3mc.ca:8888/"))
+    "http://getglowing.ca:8888/"))
 
 (def root-url (globar-root))
 
