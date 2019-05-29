@@ -7,13 +7,14 @@
     [cljss.core :as css :refer-macros [defstyles defkeyframes]]
     [cljss.reagent :refer-macros [defstyled]]
     [archon.ven-reg.views :as ven-reg]
+    [archon.ven-reg.events :as vre]
     [archon.ven-list.views :as ven-list]
     [archon.ven-list.events :as ven-list-events]
     [archon.city.views :as city]
     [archon.calendar.views :as calendar]
     [archon.ven-details.views :as ven-details]
     [archon.routes :as routes]
-    [archon.common-css :refer [sexy-button]])
+    [archon.common-css :refer [nav-button]])
   (:require-macros [cljss.core]))
      
 (defstyles title [font-size]
@@ -37,9 +38,9 @@
 (defn check-auth
   "probably change this later"
   []
-  (and (not-empty @(re-frame/subscribe [::subs/auth-result]))
-       (not-empty @(re-frame/subscribe [::subs/profile]))))
-
+;;  (and (not-empty @(re-frame/subscribe [::subs/auth-result]))
+;;       (not-empty @(re-frame/subscribe [::subs/profile]))])
+  false)
 
 (defn service-input []
   [:div
@@ -53,21 +54,16 @@
     [:p "Thanks for registering."]
     [:button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return"]])
 
-(defn on-sign-out []
-  (do (re-frame/dispatch [::events/set-auth-result {}])
-      (re-frame/dispatch [::events/set-profile {}])
-      (if (= @(re-frame/subscribe [::subs/active-panel]) :vendor-signup-panel)
-        (re-frame/dispatch [::events/set-active-panel ::routes/city-panel]))))
-
 (defn nav-buttons []
   [:div {:class (main-nav)}
-      (if (check-auth) 
-        (sexy-button {:on-click #(re-frame/dispatch [::events/show-vendor-email-form])}"Become a vendor"))
-      (sexy-button "Help")
-      (if (check-auth)
-        (sexy-button {:on-click on-sign-out} "Sign out")
-        (sexy-button {:on-click #(.show auth0/lock)} "Login/Sign up"))])
+    (nav-button "Help")
+    (if @(re-frame/subscribe [::subs/access-token])
+      [:span 
+        (nav-button {:id "two" :on-click #(re-frame/dispatch [::vre/show-vendor-signup-form])}"Become a vendor")
+        (nav-button {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out")]
+      (nav-button {:on-click #(.show auth0/lock)} "Login/Sign up"))])
   
+
 (defn main-panel []
   [:div
     [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}

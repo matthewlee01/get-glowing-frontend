@@ -40,6 +40,6 @@
            [:p name_first]
            [:br]
            [:div {:class (vd-css/service-card-array)} (map make-service-card-div services)]
-           (common-css/sexy-button {:on-click #(rf/dispatch [::cev/get-calendar vendor_id])} 
+           (common-css/nav-button {:on-click #(rf/dispatch [::cev/get-calendar vendor_id])} 
                         "View Calendar")]))
    

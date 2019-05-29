@@ -5,6 +5,7 @@
             [archon.events :as events]
             [archon.city.events :as c-events]
             [archon.city.css :as css]
+            [archon.common-css :as common-css]
             [archon.ven-list.events :as vl-events]))
 
 (defn panel []
@@ -17,5 +18,5 @@
                            (rf/dispatch [::vl-events/get-vendor-list]))
         :default-value @(rf/subscribe [::subs/city-name])
         :on-change #(rf/dispatch [::c-events/city-name-change (-> % .-target .-value)])})
-     (css/submit-button {:on-click #(rf/dispatch [::vl-events/get-vendor-list])}
+     (common-css/submit-button {:on-click #(rf/dispatch [::vl-events/get-vendor-list])}
                   "Enter")])

@@ -3,7 +3,7 @@
     [re-frame.core :as rf]
     [day8.re-frame.http-fx]
     [archon.routes :as routes]
-    [archon.config :refer [debug-out api-endpoint-url]]
+    [archon.config :refer [debug-out graphql-url]]
     [ajax.core :as ajax :refer [json-request-format 
                                 json-response-format]]))
 
@@ -11,7 +11,7 @@
   ::request-vendor-details
   (fn [_world [_ vendor_id]]
     {:http-xhrio {:method  :post
-                  :uri    (api-endpoint-url)
+                  :uri    graphql-url
                   :params {:query (str "query vendor_by_id($id:Int!)"
                                        "{vendor_by_id (vendor_id: $id)"
                                        "{vendor_id name_first profile_pic"
