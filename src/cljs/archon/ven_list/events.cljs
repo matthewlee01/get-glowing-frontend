@@ -9,7 +9,7 @@
   ::get-vendor-list
   (fn [_world _]
     {:http-xhrio {:method  :post
-                  :uri    (config/api-endpoint-url)
+                  :uri    config/graphql-url
                   :params {:query (str "query vendor_list($city:String!)"
                                        "{vendor_list (addr_city: $city) "
                                        "{vendor_id addr_city name_first name_last profile_pic"

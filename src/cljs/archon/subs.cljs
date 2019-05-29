@@ -41,3 +41,8 @@
   ::auth-result
   (fn [db _]
     (get-in db [:user :auth-result])))
+
+(re-frame/reg-sub
+  ::access-token
+  (fn [db _]
+    (:access-token db)))
