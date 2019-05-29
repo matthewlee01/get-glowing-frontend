@@ -9,12 +9,6 @@
                                json-response-format
                                raw-response-format]]))
 (re-frame/reg-event-db
- ::log-db
- (fn [db _]
-   (cljs.pprint/pprint db)
-   db))
-
-(re-frame/reg-event-db
  ::initialize-db
  (fn [_ _]
    db/default-db))
