@@ -101,7 +101,7 @@
         prof_pic (str "/" profile_pic)]  ;; TODO - this hack actually needs a fix
                                          ;; on the server to send an absolute path
                                          ;; for now hack the path to be absolute
-
+    ^{:key vendor_id}
     (vendor-card-div {:on-click #(rf/dispatch [::vde/request-vendor-details vendor_id])}
       (profile-img {:src prof_pic
                     :alt prof_pic})

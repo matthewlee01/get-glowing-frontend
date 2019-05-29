@@ -15,6 +15,7 @@
   "makes a vector with a index number and the div for the service card;
    used with map-indexed to group services into columns"
   (let [ {:keys [s_description s_duration s_name s_price s_type]} service-info]
+    ^{:key service-info}
      [:div [:div {:class (vd-css/service-card-title 16)} s_name]
            [:div {:class (vd-css/service-card-box)}
              [:div s_type]
