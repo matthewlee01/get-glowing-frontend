@@ -46,3 +46,29 @@
    :vertical-align "middle"
    :&:hover {:opacity "0.8"}})
 
+(defstyled label :div
+  {:display "inline-block"
+;   :background-color "#ABC"
+   :font-size "16px"
+   :font-family "Arial"
+   :vertical-align "middle"
+   :padding "6px 0px"})
+
+(defstyles avatar [sz]
+  {:display "inline-block"
+   :border-radius "50%"
+   :width (str sz "px")
+   :height (str sz "px")})
+
+(defstyles faux-avatar [sz]
+  {:display "inline-block"
+;   :background-color "#CFC"
+   :float "right"
+   :width (str sz "px")
+   :height (str sz "px")})
+
+(defstyles header [sz]
+  {:width "100%"
+   :height "50px"
+   :background-color "#DBC"
+   :display "block"})

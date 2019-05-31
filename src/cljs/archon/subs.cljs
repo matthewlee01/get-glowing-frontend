@@ -43,6 +43,6 @@
     (get-in db [:user :auth-result])))
 
 (re-frame/reg-sub
-  ::access-token
+  ::user-info
   (fn [db _]
-    (:access-token db)))
+    (:user-info db)))
