@@ -43,6 +43,17 @@
     (get-in db [:user :auth-result])))
 
 (re-frame/reg-sub
+  ::available-times
+  (fn [db _]
+    (:available-times db)))
+
+(re-frame/reg-sub
+  ::booked-times
+  (fn [db _]
+    (:booked-times db)))
+
+(re-frame/reg-sub
   ::user-info
   (fn [db _]
     (:user-info db)))
+
