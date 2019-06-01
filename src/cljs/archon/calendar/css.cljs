@@ -46,7 +46,7 @@
 
 (defstyles side-time-label []
   {:width "100%"
-   :vertical-align "33px"
+   :vertical-align "34px"
    :height "50px"
    :display "inline-block"})
 
