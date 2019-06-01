@@ -2,11 +2,9 @@
 (ns archon.city.views
   (:require [re-frame.core :as rf]
             [archon.subs :as subs]
-            [archon.events :as events]
             [archon.city.events :as c-events]
             [archon.city.css :as css]
-            [archon.common-css :as common-css]
-            [archon.ven-list.events :as vl-events]))
+            [archon.common-css :as common-css]))
 
 (defn panel []
   [:div {:class (css/input-class)}
@@ -15,8 +13,8 @@
        {:type "text"
         :auto-focus true
         :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
-                           (rf/dispatch [::vl-events/get-vendor-list]))
+                           (rf/dispatch [::c-events/get-vendor-list]))
         :default-value @(rf/subscribe [::subs/city-name])
         :on-change #(rf/dispatch [::c-events/city-name-change (-> % .-target .-value)])})
-     (common-css/submit-button {:on-click #(rf/dispatch [::vl-events/get-vendor-list])}
+     (common-css/submit-button {:on-click #(rf/dispatch [::c-events/get-vendor-list])}
                   "Enter")])

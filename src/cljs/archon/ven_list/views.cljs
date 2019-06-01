@@ -2,7 +2,6 @@
   (:require
     [archon.ven-list.events :as vle]  ;; vendor list events
     [archon.events :as events]
-    [archon.ven-details.events :as vde] ;; vendor details events
     [archon.subs :as subs]
     [re-frame.core :as rf]
     [cljss.core :as css :refer-macros [defstyles]]
@@ -60,8 +59,7 @@
    :margin "0px"})
 
 (defstyled empty-stars :div
-  {:display "inline-block"
-   :position "relative"
+  {:display "inline-block" :position "relative"
    :font-family "FontAwesome"
    :font-size "18px"
    :&::before {:content "\f31b \f31b \f31b \f31b \f31b"}})
@@ -102,15 +100,16 @@
                                          ;; on the server to send an absolute path
                                          ;; for now hack the path to be absolute
     ^{:key vendor_id}
-    (vendor-card-div {:on-click #(rf/dispatch [::vde/request-vendor-details vendor_id])}
-      (profile-img {:src prof_pic
-                    :alt prof_pic})
-      [:div
-        (title (str  name_first " " name_last))
-        (price-stats (str  "$" min$ " - $" max$))
-        (empty-stars
-          [:div {:class (filled-stars rating%)}])
-        [:div [:div addr_city]]])))
+    [:div
+      (vendor-card-div {:on-click #(rf/dispatch [::vle/request-vendor-details vendor_id])}
+        (profile-img {:src prof_pic
+                      :alt prof_pic})
+        [:div
+          (title (str  name_first " " name_last))
+          (price-stats (str  "$" min$ " - $" max$))
+          (empty-stars
+            [:div {:class (filled-stars rating%)}])
+          [:div [:div addr_city]]])]))
 
 (defn panel []
   [:div
