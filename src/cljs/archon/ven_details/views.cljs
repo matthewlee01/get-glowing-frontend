@@ -6,7 +6,7 @@
     [archon.subs :as subs]
     [archon.calendar.events :as cev]
     [archon.ven-details.css :as vd-css]
-    [archon.common-css :as common-css]))
+    [archon.common-css :as css]))
 
 
 (defn make-service-card-div [service-info]
@@ -39,6 +39,6 @@
            [:p name_first]
            [:br]
            [:div {:class (vd-css/service-card-array)} (map make-service-card-div services)]
-           (common-css/nav-button {:on-click #(rf/dispatch [::cev/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
-                          "View Calendar")]))
-  
+           (css/NavBarElement {:on-click #(rf/dispatch [::cev/get-calendar vendor_id])}
+                        "View Calendar")]))
+   

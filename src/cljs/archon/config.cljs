@@ -17,7 +17,7 @@
 
 (defn debug-out [params]
   (when debug?
-    (js/alert params)))
+    (console.log params)))
 
 ;; stores the id and domain for the auth0 client
 (def auth0 
