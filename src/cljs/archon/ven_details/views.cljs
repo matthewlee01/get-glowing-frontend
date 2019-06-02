@@ -43,6 +43,6 @@
            [:br]
            [:div {:class (vd-css/service-card-array)}
             (map make-service-card-div services)
-            (css/NavBarElement {:on-click #(rf/dispatch [::cev/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
+            (css/NavBarElement {:on-click #(rf/dispatch [::vde/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
                            "View Calendar")]]))
   
