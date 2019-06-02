@@ -15,7 +15,7 @@
                   :uri    config/graphql-url
                   :params {:query (str "query vendor_by_id($id:Int!)"
                                        "{vendor_by_id (id: $id)"
-                                       "{vendor_id name_first profile_pic"
+                                       "{vendor_id name name_first name_last summary profile_pic"
                                        " services{s_description s_duration s_name s_price s_type}}}")
                            :variables {:id vendor_id}}
                   :timeout 3000
