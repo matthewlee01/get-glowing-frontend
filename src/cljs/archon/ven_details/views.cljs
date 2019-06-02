@@ -24,21 +24,25 @@
 
 (defn panel[]
     (let [{:keys [vendor_id 
-                  name_first 
+                  name
+                  name_first
+                  name_last
+                  summary
                   services 
                   profile_pic]} 
           @(rf/subscribe [::subs/vendor-details])
-
+          first-last-name (str name_first " " name_last)
+          fullname (if name name first-last-name)
           prof-pic (str "/" profile_pic)]    ;; TODO - this hack actually needs a fix 
                                              ;; on the server to send an absolute path
                                              ;; for now hack the path to be absolute
-     [:div [:img {:src prof-pic
-                  :alt prof-pic
-                  :class (vd-css/list-pfp 200)}]
-           [:p vendor_id]
-           [:p name_first]
+     [:div [vd-css/profile-img {:src prof-pic
+                                :alt prof-pic}]
+           [vd-css/profile-title fullname]
+           [vd-css/profile-summary summary]
            [:br]
-           [:div {:class (vd-css/service-card-array)} (map make-service-card-div services)]
-           (css/NavBarElement {:on-click #(rf/dispatch [::cev/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
-                          "View Calendar")]))
+           [:div {:class (vd-css/service-card-array)}
+            (map make-service-card-div services)
+            (css/NavBarElement {:on-click #(rf/dispatch [::cev/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
+                           "View Calendar")]]))
   
