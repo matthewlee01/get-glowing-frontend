@@ -27,8 +27,10 @@
                                                          :date date})
           url-string (:path match)]
        (routes/set-history url-string)
-       (assoc db :available-times (:available payload)
-                 :booked-times (:booked payload)))))
+       (assoc db :vendor-calendar {:available (:available payload)
+                                   :booked (:booked payload)
+                                   :template (:template payload)
+                                   :date (:date payload)}))))
 
 (rf/reg-event-db
   ::bad-result

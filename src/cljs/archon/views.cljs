@@ -76,7 +76,6 @@
 
 (defn main-panel []
   [:div
-
     [welcome-message 50]
     [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}
          @(re-frame/subscribe [::subs/app-name])]
