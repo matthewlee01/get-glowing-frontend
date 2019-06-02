@@ -14,20 +14,22 @@
 (rf/reg-event-fx
   ::get-vendor-list
   (fn [_world _]
-    {:http-xhrio {:method  :post
-                  :uri    config/graphql-url
-                  :params {:query (str "query vendor_list($city:String!)"
-                                       "{vendor_list (addr_city: $city) "
-                                       "{vendor_id addr_city name_first name_last profile_pic"
-                                       " services_summary {count min max}"
-                                       " rating_summary {count average}}}")
-                           :variables {:city (:city-name (:db _world))}}
-                  :timeout 3000
-                  :format (ajax/json-request-format)
-                  :response-format (ajax/json-response-format {:keywords? true})
-                  :on-success [::good-http-result]
-                  :on-failure [::bad-http-result]}
-     :db (assoc (_world :db) :prev-state (_world :db))}))
+    (let [db (:db _world)
+          clean-prev-state (dissoc db :prev-state)]
+      {:http-xhrio {:method  :post
+                    :uri    config/graphql-url
+                    :params {:query (str "query vendor_list($city:String!)"
+                                         "{vendor_list (addr_city: $city) "
+                                         "{vendor_id addr_city name_first name_last profile_pic"
+                                         " services_summary {count min max}"
+                                         " rating_summary {count average}}}")
+                             :variables {:city (:city-name (:db _world))}}
+                    :timeout 3000
+                    :format (ajax/json-request-format)
+                    :response-format (ajax/json-response-format {:keywords? true})
+                    :on-success [::good-http-result]
+                    :on-failure [::bad-http-result]}
+       :db (assoc db :prev-state clean-prev-state)})))
 
 (rf/reg-event-db
   ::good-http-result

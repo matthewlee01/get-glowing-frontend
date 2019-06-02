@@ -75,7 +75,8 @@
     ;; this is where we push the new URL onto the browser history 
     ;; to start the navigation to the registration form
     (let [match (routes/url-for ::routes/vendor-signup-panel)
-          url-string (:path match)]
+          url-string (:path match)
+          clean-prev-state (dissoc db :prev-state)] ; don't want nested prev states
       (println url-string)
       (routes/set-history url-string)
 
@@ -84,7 +85,7 @@
 
       ;; save the page we are leaving so that we can return to the
       ;; same place after the registration is complete
-      (assoc db :prev-state db))))
+      (assoc db :prev-state clean-prev-state))))
 
 (rf/reg-event-db
   ::vr-email-change
