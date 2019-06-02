@@ -4,8 +4,7 @@
     [archon.subs :as subs]
     [archon.events :as events]
     [archon.auth0 :as auth0]
-    [cljss.core  :refer-macros [defstyles]]
-    [cljss.reagent :refer-macros [defstyled]]
+    [cljss.core  :refer-macros [inject-global]]
     [archon.ven-reg.views :as ven-reg]
     [archon.ven-reg.events :as vre]
     [archon.ven-list.views :as ven-list]
@@ -16,22 +15,7 @@
     [archon.common-css :as css])
   (:require-macros [cljss.core]))
      
-(defstyles title [font-size]
-  {:font-size (str font-size "px")
-   :color "#FFB6C1"
-   :margin "10px 10px"})
-
-(defstyles main-nav []
-  {:width "auto"})
-   
-(defstyles input-class []
-  {:margin "10px"})
-
-(defstyles field-label [font-size]
-  {:font-family "Arial"
-   :padding "15px 15px"
-   :color "#7a7978"
-   :font-size (str font-size "px")})
+(inject-global {:body {:font-family "Arial, Verdana, sans-serif"}})
 
 (defn service-input []
   [:div
@@ -45,14 +29,14 @@
     [:button {:on-click #(re-frame/dispatch [::events/take-me-back])} "Return"]])
 
 (defn nav-buttons []
-  [:div
+  [:div {:class (css/main-nav)}
    ;[:div {:class (main-nav)}
-     (css/nav-button "Help")
+     (css/NavBarElement "Help")
      (if @(re-frame/subscribe [::subs/user-info])
        [:span
-         (css/nav-button {:id "two" :on-click #(re-frame/dispatch [::vre/show-vendor-signup-form])}"Become a vendor")
-         (css/nav-button {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out")]
-       (css/nav-button {:on-click #(.show auth0/lock)} "Login/Sign up"))])
+         (css/NavBarElement {:id "two" :on-click #(re-frame/dispatch [::vre/show-vendor-signup-form])}"Become a vendor")
+         (css/NavBarElement {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out")]
+       (css/NavBarElement {:on-click #(.show auth0/lock)} "Login/Sign up"))])
 
 (defn logged-in-welcome [sz user]
   [:span {:style {:float "right"}}
@@ -77,7 +61,7 @@
 (defn main-panel []
   [:div
     [welcome-message 50]
-    [:h1 {:class (title 80) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}
+    [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}
          @(re-frame/subscribe [::subs/app-name])]
     [nav-buttons]
     (condp = @(re-frame/subscribe [::subs/active-panel])

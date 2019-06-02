@@ -3,12 +3,11 @@
   (:require [re-frame.core :as rf]
             [archon.subs :as subs]
             [archon.city.events :as c-events]
-            [archon.city.css :as css]
-            [archon.common-css :as common-css]))
+            [archon.common-css :as css]))
 
 (defn panel []
   [:div {:class (css/input-class)}
-     (css/input-field
+     (css/TextInputField
        {:type "text"
         :placeholder "City Name"
         :auto-focus true
@@ -16,5 +15,5 @@
                            (rf/dispatch [::c-events/get-vendor-list]))
         :default-value @(rf/subscribe [::subs/city-name])
         :on-change #(rf/dispatch [::c-events/city-name-change (-> % .-target .-value)])})
-     (common-css/submit-button {:on-click #(rf/dispatch [::c-events/get-vendor-list])}
+     (css/SubmitButton {:on-click #(rf/dispatch [::c-events/get-vendor-list])}
                   "Enter")])
