@@ -2,13 +2,15 @@
 (ns archon.city.views
   (:require [re-frame.core :as rf]
             [archon.subs :as subs]
+            [archon.events :as events]
+            [archon.common-css :as css]
             [archon.city.events :as c-events]
-            [archon.city.css :as css]
-            [archon.common-css :as common-css]))
+            [archon.ven-list.events :as vl-events]))
 
 (defn panel []
   [:div {:class (css/input-class)}
-     (css/input-field
+     [css/InputLabel "What city are you interested in:"]
+     (css/TextInputField
        {:type "text"
         :placeholder "City Name"
         :auto-focus true
@@ -16,5 +18,5 @@
                            (rf/dispatch [::c-events/get-vendor-list]))
         :default-value @(rf/subscribe [::subs/city-name])
         :on-change #(rf/dispatch [::c-events/city-name-change (-> % .-target .-value)])})
-     (common-css/submit-button {:on-click #(rf/dispatch [::c-events/get-vendor-list])}
+     (css/SubmitButton {:on-click #(rf/dispatch [::vl-events/get-vendor-list])}
                   "Enter")])
