@@ -8,9 +8,9 @@
 
 (defn panel []
   [:div {:class (css/input-class)}
-     [css/field-label "What city are you interested in:"]
-     (css/input-field 
+     (css/input-field
        {:type "text"
+        :placeholder "City Name"
         :auto-focus true
         :on-key-press #(if (= 13 (.-charCode %)) ;; 13 is code for enter key
                            (rf/dispatch [::c-events/get-vendor-list]))
