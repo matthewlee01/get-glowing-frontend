@@ -4,7 +4,7 @@
     [cljss.core :refer-macros [defstyles]]
     [cljss.reagent :refer-macros [defstyled]]
     [archon.subs :as subs]
-    [archon.calendar.events :as cev]
+    [archon.ven-details.events :as vde]
     [archon.ven-details.css :as vd-css]
     [archon.common-css :as css]))
 

@@ -84,8 +84,8 @@
   
 (defn calendar-day-column
   "creates a column of time slots based on the available times"
-  [vendor-calendar]
-  (let [{:keys [available booked template date]} vendor-calendar]
+  [vendor-calendar date]
+  (let [{:keys [available booked template]} vendor-calendar]
    (->> [:div {:class (cal-css/calendar-column)}
          [date]
          (map (partial construct-time-slot available booked template) DISPLAYED_TIMES)]
@@ -103,9 +103,19 @@
 ;;the prev day and next day cols will just hold sample data for now, need to and functionality for other days in the future
 (defn panel
   []
-  [:div {:class (cal-css/calendar-day-box)}
-   [:div {:class (cal-css/time-label-box)} (time-label-column)]
-   [:div {:class (cal-css/outer-day-box)} (calendar-day-column sample-calendar1)] 
-   [:div {:class (cal-css/centre-day-box)} (calendar-day-column @(rf/subscribe [::subs/vendor-calendar]))]
-   [:div {:class (cal-css/outer-day-box)} (calendar-day-column sample-calendar2)]])
+  (let [calendar @(rf/subscribe [::subs/vendor-calendar])]
+    [:div {:class (cal-css/calendar-day-box)}
+     [:div {:class (cal-css/time-label-box)} (time-label-column)]
+
+     [:div {:class (cal-css/outer-day-box)}
+      (calendar-day-column (get-in calendar [:day-before :calendar])
+                           (get-in calendar [:day-before :date]))]
+
+     [:div {:class (cal-css/centre-day-box)}
+      (calendar-day-column (get-in calendar [:day-of :calendar])
+                           (get-in calendar [:day-of :date]))]
+
+     [:div {:class (cal-css/outer-day-box)}
+      (calendar-day-column (get-in calendar [:day-after :calendar])
+                           (get-in calendar [:day-after :date]))]]))
 
