@@ -1,15 +1,33 @@
 (ns archon.ven-list.views
   (:require
-    [archon.common-css :as css]
+    [archon.ven-list.events :as vle]  ;; vendor list events
     [archon.events :as events]
     [archon.subs :as subs]
-
-    [archon.ven-list.events :as vle]  ;; vendor list events
-    [archon.ven-details.events :as vde] ;; vendor details events
-
     [re-frame.core :as rf]
-    [cljss.core :as cljss :refer-macros [defstyles]]
+    [cljss.core :as css :refer-macros [defstyles]]
     [cljss.reagent :refer-macros [defstyled]]))
+
+
+(defstyled big-button :button
+  {:background-color "#7a7978"
+   :border "1px"
+   :border-radius "4px"
+   :box-sizing "border-box"
+   :color "white"
+   :margin "5px"
+   :padding "2px 12px"
+   :text-align "center"
+   :text-decoration "none"
+   :display "inline-block"
+   :font-size "16px"
+   :cursor "pointer"
+   :font-family "Arial"
+   :transition "0.3s"
+   :width "22%"
+   :max-width "120px"
+   :height "62px"
+   :vertical-align "top"
+   :&:hover {:opacity "0.8"}})
 
 (defstyled vendor-card-div :div
 ;;           {:background-color "#efa2bf"
@@ -60,7 +78,7 @@
   {:display "flex"
    :flex-wrap "wrap"
    ::&:after {:clear "both"}
-   ::cljss/media {[:only :screen :and [:min-width "800px"]] {:width "700px"}
+   ::css/media {[:only :screen :and [:min-width "800px"]] {:width "700px"}
                 [:only :screen :and [:min-width "1000px"]] {:width "990px"}}})
      
 
@@ -99,4 +117,4 @@
     (if (empty? vendors)
        [:p "Sorry, your search yielded no results in our database. Please try again!"]
        [:div {:class (vendor-card-flex)} (map vendor-card vendors)]))
-   (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back])} "Return")])
+   (big-button {:on-click #(rf/dispatch [::events/take-me-back])} "Return")])
