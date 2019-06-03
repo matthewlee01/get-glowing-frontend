@@ -3,6 +3,7 @@
     [archon.ven-list.events :as vle]  ;; vendor list events
     [archon.events :as events]
     [archon.subs :as subs]
+    [archon.routes :as routes]
     [archon.common-css :as css]
     [re-frame.core :as rf]
     [cljss.core :as cljss :refer-macros [defstyles]]
@@ -97,4 +98,4 @@
     (if (empty? vendors)
        [:p "Sorry, your search yielded no results in our database. Please try again!"]
        [:div {:class (vendor-card-flex)} (map vendor-card vendors)]))
-   (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back])} "Return")])
+   (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back (:path (routes/url-for ::routes/city-panel))])} "Return")])

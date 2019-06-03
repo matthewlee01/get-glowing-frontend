@@ -22,7 +22,8 @@
 
 (re-frame/reg-event-db
   ::take-me-back
-  (fn [db _]
+  (fn [db [_ url]]
+    (archon.routes/set-history url)
     (:prev-state db)))
 
 (re-frame/reg-event-db 
