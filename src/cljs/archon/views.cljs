@@ -69,7 +69,7 @@
       ::routes/city-panel [city/panel]
       ::routes/vendor-details-panel [ven-details/panel]
       ::routes/vendor-signup-panel [ven-reg/panel]
-      :thanks-for-registering-panel [thanks-panel]
+      ::routes/thanks-panel [thanks-panel]
       ::routes/calendar-panel [calendar/panel])]) 
 
 

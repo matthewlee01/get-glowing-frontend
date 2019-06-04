@@ -6,7 +6,7 @@
             [cljss.reagent :refer-macros [defstyled]]))
 
 (defn panel []
-  (let [{:keys [given_name family_name email] :or {given_name "" family_name "" email ""}} @(rf/subscribe [::subs/profile])]
+  (let [{:keys [name-first name-last email] :or {name-first "" name-last "" email ""}} @(rf/subscribe [::subs/user-info])]
     [:div {:class (css/input-class)}
      [:h1 "Vendor Registration Form"]
      [:div
@@ -18,17 +18,17 @@
                           :on-blur #(rf/dispatch [::es/vr-email-change (-> % .-target .-value)])})]
      [:div
       (css/TextInputField{:type "text"
-                          :default-value given_name
+                          :default-value name-first
                           :placeholder "First name"
                           :auto-focus true
-                          :on-load #(rf/dispatch [::es/vr-first-name-change given_name])
+                          :on-load #(rf/dispatch [::es/vr-first-name-change name-first])
                           :on-blur #(rf/dispatch [::es/vr-first-name-change (-> % .-target .-value)])})]
      [:div
       (css/TextInputField{:type "text"
-                          :default-value family_name
+                          :default-value name-last
                           :placeholder "Last name"
                           :auto-focus true
-                          :on-load #(rf/dispatch [::es/vr-last-name-change family_name])
+                          :on-load #(rf/dispatch [::es/vr-last-name-change name-last])
                           :on-blur #(rf/dispatch [::es/vr-last-name-change (-> % .-target .-value)])})]
      [:div
       (css/TextInputField{:type "text"
@@ -42,9 +42,10 @@
                           :auto-focus true
                           :on-blur #(rf/dispatch [::es/vr-city-change (-> % .-target .-value)])})]
      [:div
-      (css/SelectInput{:on-change #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])}
+      (css/SelectInput{:placeholder "Province"
+                       :on-change #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])}
                      [:option "Alberta"]
-                     [:option {:selected true} "British Columbia"]
+                     [:option "British Columbia"]
                      [:option "Manitoba"]
                      [:option "New Brunswick"]
                      [:option "Newfoundland and Labrador"]
@@ -67,5 +68,5 @@
                           :auto-focus true
                           :on-blur #(rf/dispatch [::es/vr-phone-change (-> % .-target .-value)])})]
 
-     [css/SubmitButton {:on-click #(rf/dispatch [::es/submit-vendor-form])} "Enter"]]))
+     [css/SubmitButton {:on-click #(rf/dispatch [::es/submit-vendor-registration])} "Enter"]]))
 

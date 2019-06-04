@@ -33,11 +33,6 @@
     (:vendor-details db)))
 
 (re-frame/reg-sub
-  ::profile
-  (fn [db _]
-    (get-in db [:user :profile])))
-
-(re-frame/reg-sub 
   ::auth-result
   (fn [db _]
     (get-in db [:user :auth-result])))

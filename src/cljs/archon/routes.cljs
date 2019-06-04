@@ -9,6 +9,7 @@
 
 ;; this is the client routing table data
 (def client-routes [["/" ::city-panel]
+                    ["/thanks" ::thanks-panel]
                     ["/vendor-list/:city" ::vendor-list-panel]
                     ["/vendor-details/:vendor-id" ::vendor-details-panel]
                     ["/calendar/:vendor-id/:date" ::calendar-panel]

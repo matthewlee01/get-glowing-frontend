@@ -6,36 +6,49 @@
     [archon.routes :as routes]
     [clojure.spec.alpha :as s]
     [clojure.string :as str]
-    [ajax.core :as ajax :refer [json-request-format 
+    [ajax.core :as ajax :refer [json-request-format
                                 json-response-format]]))
 
 (rf/reg-event-fx
   ::submit-vendor-registration
-  (fn [_world [_ vendor_id]]
-    {:http-xhrio {:method  :post
-                  :uri    config/ven-reg-url
-                  :params {:query (str "query vendor_by_id($id:Int!)"
-                                       "{vendor_by_id (vendor_id: $id)"
-                                       "{vendor_id name_first profile_pic"
-                                       " services{s_description s_duration s_name s_price s_type}}}")
-                           :variables {:id vendor_id}}
-                  :timeout 3000
-                  :format (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success [::good-result]
-                  :on-failure [::bad-result]}}))
+  (fn [world _]
+    (let [db (:db world)
+          vendor-info (:vendor-reg db)
+          {:keys [vr-email
+                  vr-first-name
+                  vr-last-name
+                  vr-addr-num
+                  vr-addr-name
+                  vr-addr-city
+                  vr-addr-state
+                  vr-phone]} vendor-info
+          user-id (get-in db [:user-info :user-id])
+          vendor {:user-id user-id
+                  :name_first vr-first-name
+                  :name_last vr-last-name
+                  :email vr-email
+                  :addr_str_num vr-addr-num
+                  :addr_str_name vr-addr-name
+                  :addr_city vr-addr-city
+                  :addr_state vr-addr-state
+                  :phone vr-phone}]
+      {:http-xhrio {:method  :post
+                    :uri    config/ven-reg-url
+                    :params vendor
+                    :timeout 3000
+                    :format (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success [::good-result]
+                    :on-failure [::bad-result]}})))
 
 (rf/reg-event-db
   ::good-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (let [ven-details (:vendor_by_id data)
-          ven-id (:vendor_id ven-details)
-          match (routes/url-for ::routes/vendor-details-panel {:vendor-id ven-id})
+    (let [match (routes/url-for ::routes/thanks-panel)
           url-string (:path match)]
 
       ;; set the new URL so that the view is updated
-      (routes/set-history url-string)
-      (assoc db :vendor-details ven-details))))
+      (routes/set-history url-string))))
 
 (rf/reg-event-db
   ::bad-result
@@ -103,11 +116,6 @@
     (assoc-in db [:vendor-reg :vr-last-name] vendor-last-name)))
 
 (rf/reg-event-db
-  ::vr-phone-change
-  (fn [db [_ vendor-phone]]
-    (assoc-in db [:vendor-reg :vr-phone] vendor-phone)))
-
-(rf/reg-event-db
   ::vr-address-change
   (fn [db [_ vendor-address]]
     (let [[num name] (str/split vendor-address #" " 2)]
@@ -121,14 +129,19 @@
     (assoc-in db [:vendor-reg :vr-addr-city] vendor-city)))
 
 (rf/reg-event-db
-  ::vr-province-change
+  ::vr-state-change
   (fn [db [_ vendor-state]]
     (assoc-in db [:vendor-reg :vr-addr-state] vendor-state)))
 
 (rf/reg-event-db
   ::vr-postal-change
   (fn [db [_ vendor-postal]]
-    (assoc-in db [:vendor-reg :vr-addr-phone] vendor-postal)))
+    (assoc-in db [:vendor-reg :vr-addr-postal-code] vendor-postal)))
+
+(rf/reg-event-db
+  ::vr-phone-change
+  (fn [db [_ vendor-phone]]
+    (assoc-in db [:vendor-reg :vr-phone] vendor-phone)))
 
 (rf/reg-event-db
   ::submit-vendor-form
