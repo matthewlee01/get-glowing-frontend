@@ -41,14 +41,11 @@
                     :on-success [::good-result]
                     :on-failure [::bad-result]}})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::good-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (let [match (routes/url-for ::routes/thanks-panel)
-          url-string (:path match)]
-
-      ;; set the new URL so that the view is updated
-      (routes/set-history url-string))))
+  (fn [_  _]
+    (let [url-string (routes/name-to-url ::routes/thanks-panel)]
+      {:navigate url-string})))
 
 (rf/reg-event-db
   ::bad-result
@@ -82,23 +79,17 @@
       (do (js/alert "good address number!")
         checked-num))))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::show-vendor-signup-form
-  (fn [db _]
+  (fn [world _]
     ;; this is where we push the new URL onto the browser history 
     ;; to start the navigation to the registration form
-    (let [match (routes/url-for ::routes/vendor-signup-panel)
-          url-string (:path match)
-          clean-prev-state (dissoc db :prev-state)] ; don't want nested prev states
-      (println url-string)
-      (routes/set-history url-string)
+    (let [db (:db world)
+          clean-prev-state (dissoc db :prev-state) ; don't want nested prev states
+          url-string (routes/name-to-url ::routes/vendor-signup-panel)]
 
-      ;; this is also where pre-population of the signup fields should be
-      ;; assigned from the auth0 token
-
-      ;; save the page we are leaving so that we can return to the
-      ;; same place after the registration is complete
-      (assoc db :prev-state clean-prev-state))))
+      {:db (assoc db :prev-state clean-prev-state)
+       :navigate url-string})))
 
 (rf/reg-event-db
   ::vr-email-change

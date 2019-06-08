@@ -18,16 +18,16 @@
                     :on-success [::good-result]
                     :on-failure [::bad-result]}})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::good-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (let [ven-id (:vendor_id (:vendor-details db))
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    (let [db (:db world)
+          ven-id (:vendor_id (:vendor-details db))
           date (get-in payload [:day-of :date])
-          match (routes/url-for ::routes/calendar-panel {:vendor-id ven-id
-                                                         :date date})
-          url-string (:path match)]
-      (routes/set-history url-string)
-      (assoc db :vendor-calendar payload))))
+          url-string (routes/name-to-url ::routes/calendar-panel {:vendor-id ven-id
+                                                                  :date date})]
+      {:db (assoc db :vendor-calendar payload)
+       :navigate url-string})))
 
 (rf/reg-event-db
   ::bad-result

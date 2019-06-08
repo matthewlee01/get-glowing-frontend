@@ -31,14 +31,15 @@
                     :on-failure [::bad-http-result]}
        :db (assoc db :prev-state clean-prev-state)})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::good-http-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (let [city (:city-name db)
-          match (routes/url-for ::routes/vendor-list-panel {:city city})
-          url-string (:path match)]
-      (routes/set-history url-string)
-      (assoc db :vendor-list (:vendor_list data)))))
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    (let [db (:db world)
+          city (:city-name db)
+          url-string (routes/name-to-url ::routes/vendor-list-panel {:city city})]
+
+      {:db (assoc db :vendor-list (:vendor_list data))
+       :navigate url-string})))
 
 (rf/reg-event-db
   ::bad-http-result

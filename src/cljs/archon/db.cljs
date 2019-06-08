@@ -1,5 +1,6 @@
-(ns archon.db)
+(ns archon.db
+  (:require [archon.routes :as routes]))
 
 (def default-db
   {:name "get glowing!"
-   :city-name ""});; the city we want to limit our vendor search to
+   :active-panel (routes/name-to-url :routes/city-panel)})
