@@ -4,6 +4,7 @@
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
    [archon.db :as db]
+   [archon.routes :as routes]
    [archon.config :refer [debug-out login-url]]
    [ajax.core :as ajax :refer [json-request-format 
                                json-response-format
@@ -19,12 +20,26 @@
   (fn [db [_ value]]
     (assoc db :active-panel value)))
 
+(re-frame/reg-event-fx
+  ::navigate-to-url
+  (fn [_ [_ url]]
+    {:navigate url}))
+
+;; this is our custom effect handler to handle the :navigate effect
+;; passed from -fx event handlers
+(re-frame/reg-fx
+  :navigate     ; make this a global keyword as are the other plugins
+  (fn [url]
+    (routes/navigate-to! url)))
 
 (re-frame/reg-event-db
   ::take-me-back
-  (fn [db [_ url]]
-    (archon.routes/set-history url)
-    (:prev-state db)))
+  (fn [db _]
+    (let [prev-state (:prev-state db)
+          prev-active-panel (:active-panel prev-state)
+          prev-url (routes/match-to-url prev-active-panel)]
+      (routes/navigate-to! prev-url)
+      prev-state)))
 
 (re-frame/reg-event-db 
   ::set-auth-result

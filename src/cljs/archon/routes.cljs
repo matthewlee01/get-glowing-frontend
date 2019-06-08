@@ -3,9 +3,7 @@
 (ns archon.routes
   (:require [pushy.core :as pushy]
             [reitit.core :as reitit]
-            [re-frame.core :as rf]
-            [archon.events :as events]
-            [archon.config :as config]))
+            [re-frame.core :as rf]))
 
 ;; this is the client routing table data
 (def client-routes [["/" ::city-panel]
@@ -18,8 +16,22 @@
 ;; this is the global router variable used by some of the following fns
 (def router (reitit/router client-routes))
 
-;; utility function to lookup a URL by name
-(def url-for (partial reitit/match-by-name router))
+(def match-for (partial reitit/match-by-name router))
+
+(defn name-to-url [& args]
+  "a helper function that takes a keyword name and optional parameters
+  and returns a corresponding url"
+  (:path (apply match-for args)))
+
+(defn match-to-name [match]
+  "a helper function to pull the keyword name from
+  a match entry from the routing table"
+  (get-in match [:data :name]))
+
+(defn match-to-url [match]
+  "a helper function to pull the url path from
+  a match entry from the routing table"
+  (:path match))
 
 (defn- parse-url
   "turn a URL into a data structure representing it"
@@ -30,8 +42,7 @@
   "takes a data structure representing a route, and makes it happen.  used
   by pushy as a handler when the back button is used, or a browser reload."
   [matched-route]
-  (let [panel-name (get-in matched-route [:data :name])]
-    (rf/dispatch [::events/set-active-panel panel-name])))
+  (rf/dispatch [:archon.events/set-active-panel matched-route]))
 
 ;; create a map to hold the above two functions
 (def history
@@ -44,6 +55,6 @@
   (pushy/start! history))
 
 ;; navigate to a new URL
-(defn set-history [url-string] 
+(defn navigate-to! [url-string]
   (pushy/set-token! history url-string))
 

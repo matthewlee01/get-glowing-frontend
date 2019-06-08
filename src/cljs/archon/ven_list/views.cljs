@@ -98,4 +98,4 @@
     (if (empty? vendors)
        [:p "Sorry, your search yielded no results in our database. Please try again!"]
        [:div {:class (vendor-card-flex)} (map vendor-card vendors)]))
-   (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back (:path (routes/url-for ::routes/city-panel))])} "Return")])
+   (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back (routes/name-to-url ::routes/city-panel)])} "Return")])

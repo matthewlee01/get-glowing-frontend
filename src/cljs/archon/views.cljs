@@ -61,7 +61,7 @@
 (defn main-panel []
   [:div
     [welcome-message 50]
-    [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/set-active-panel ::routes/city-panel])}
+    [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/navigate-to-url (routes/name-to-url ::routes/city-panel)])}
          @(re-frame/subscribe [::subs/app-name])]
     [nav-buttons]
     (condp = @(re-frame/subscribe [::subs/active-panel])
@@ -70,6 +70,7 @@
       ::routes/vendor-details-panel [ven-details/panel]
       ::routes/vendor-signup-panel [ven-reg/panel]
       ::routes/thanks-panel [thanks-panel]
-      ::routes/calendar-panel [calendar/panel])]) 
+      ::routes/calendar-panel [calendar/panel]
+      nil)])  ;; normally the path should match one of the above, except at first startup.
 
 

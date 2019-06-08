@@ -1,6 +1,7 @@
 (ns archon.subs
   (:require
-   [re-frame.core :as re-frame]))
+   [re-frame.core :as re-frame]
+   [archon.routes :as routes]))
 
 (re-frame/reg-sub
  ::app-name
@@ -10,7 +11,10 @@
 (re-frame/reg-sub
   ::active-panel
   (fn [db _]
-    (:active-panel db)))
+    ;; get the matched-route obj saved in the db
+    (let [route (:active-panel db)]
+      ;; return the name associated with the route
+      (routes/match-to-name route))))
 
 (re-frame/reg-sub
   ::vendor-list

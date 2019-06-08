@@ -24,16 +24,16 @@
                   :on-success [::good-result]
                   :on-failure [::bad-result]}}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::good-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (let [ven-details (:vendor_by_id data)
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    (let [db (:db world)
+          ven-details (:vendor_by_id data)
           ven-id (:vendor_id ven-details)
-          match (routes/url-for ::routes/vendor-details-panel {:vendor-id ven-id})
-          url-string (:path match)]
-      ;; set the new URL so that the view is updated
-      (routes/set-history url-string)
-      (assoc db :vendor-details ven-details))))
+          url-string (routes/name-to-url ::routes/vendor-details-panel {:vendor-id ven-id})]
+
+      {:db (assoc db :vendor-details ven-details)
+       :navigate url-string})))
 
 (rf/reg-event-db
   ::bad-result
