@@ -1,0 +1,5 @@
+.idea/*
+resources/*
+target/*
+figwheel_server.log
+
