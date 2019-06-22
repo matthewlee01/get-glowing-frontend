@@ -1,4 +1,3 @@
-
 (ns archon.city.views
   (:require [re-frame.core :as rf]
             [archon.subs :as subs]

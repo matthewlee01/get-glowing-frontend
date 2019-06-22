@@ -4,6 +4,7 @@
     [archon.db :as db]
     [archon.config :as config]
     [archon.routes :as routes]
+    [archon.events :as events]
     [clojure.spec.alpha :as s]
     [clojure.string :as str]
     [ajax.core :as ajax :refer [json-request-format
@@ -47,11 +48,9 @@
     (let [url-string (routes/name-to-url ::routes/thanks-panel)]
       {:navigate url-string})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::bad-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (config/debug-out (str "BAD data: " payload))
-    (assoc db :active-panel :services-panel)))
+  events/show-error)
 
 (def email-regex #"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$") ; some characters + @ + some characters + 2-63 letters
 

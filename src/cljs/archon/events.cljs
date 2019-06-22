@@ -6,7 +6,7 @@
    [archon.auth0 :as auth0]
    [archon.db :as db]
    [archon.routes :as routes]
-   [archon.config :refer [debug-out login-url]]
+   [archon.config :as config :refer [debug-out login-url]]
    [ajax.core :as ajax :refer [json-request-format 
                                json-response-format
                                raw-response-format]]))
@@ -59,12 +59,17 @@
                   :on-success [::backend-login-successful access-token]
                   :on-failure [::bad-http-result]}}))
 
+(defn show-error [world [_ {:keys [data errors] :as payload}]]
+    (config/debug-out (str "BAD data: " payload))
+    {:db (assoc (:db world) :last-error-payload payload)
+    	:navigate (routes/name-to-url ::routes/error-panel)})
 
-(re-frame/reg-event-db
+(re-frame/reg-event-fx
   ::bad-http-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (debug-out (str "ERROR sending access token to backend for validation: " payload))
-    (dissoc db :access-token)))
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    (debug-out "ERROR sending access token to backend for validation")
+    (-> (show-error world [_ payload])
+        (update-in [:db] dissoc :access-token))))
 
 (re-frame/reg-event-db
   ::backend-login-successful

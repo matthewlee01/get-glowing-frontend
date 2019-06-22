@@ -3,6 +3,7 @@
     [re-frame.core :as rf]
     [day8.re-frame.http-fx]
     [archon.routes :as routes]
+    [archon.events :as events]
     [archon.config :refer [debug-out graphql-url calendar-url]]
     [ajax.core :as ajax :refer [json-request-format 
                                 json-response-format]]))
@@ -29,9 +30,7 @@
       {:db (assoc db :vendor-calendar payload)
        :navigate url-string})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::bad-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (debug-out (str "BAD data: " payload))
-    (assoc db :active-panel :services-panel)))
+  events/show-error)
 
