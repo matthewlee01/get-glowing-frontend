@@ -3,14 +3,14 @@
     [re-frame.core :as rf]
     [day8.re-frame.http-fx]
     [archon.routes :as routes]
-    [archon.config :refer [debug-out graphql-url]]
+    [archon.config :refer [debug-out graphql-url calendar-url]]
     [ajax.core :as ajax :refer [json-request-format 
                                 json-response-format]]))
 
 (rf/reg-event-fx
   ::get-calendar
   (fn [_world [_ vendor_id date]]
-    (let [uri (str "http://localhost:8888/calendar/" vendor_id "/" date)]
+    (let [uri (str calendar-url "/" vendor_id "/" date)]
       {:http-xhrio {:method :get
                     :uri    uri
                     :timeout 3000
