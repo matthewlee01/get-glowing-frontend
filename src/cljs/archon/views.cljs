@@ -3,7 +3,6 @@
     [re-frame.core :as re-frame]
     [archon.subs :as subs]
     [archon.events :as events]
-    [archon.auth0 :as auth0]
     [cljss.core  :refer-macros [inject-global]]
     [archon.ven-reg.views :as ven-reg]
     [archon.ven-reg.events :as vre]
@@ -36,7 +35,7 @@
        [:span
          (css/NavBarElement {:id "two" :on-click #(re-frame/dispatch [::vre/show-vendor-signup-form])}"Become a vendor")
          (css/NavBarElement {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out")]
-       (css/NavBarElement {:on-click #(.show auth0/lock)} "Login/Sign up"))])
+       (css/NavBarElement {:on-click #(re-frame/dispatch [::events/login-initiated])} "Login/Sign up"))])
 
 (defn logged-in-welcome [sz user]
   [:span {:style {:float "right"}}

@@ -8,6 +8,11 @@
     "http://localhost:8888/"
     "http://getglowing.ca:8888/"))
 
+(defn archon-root []
+  (if debug?
+    "http://localhost:3449"
+    "http://getglowing.ca"))
+
 (def root-url (globar-root))
 
 (def graphql-url (str root-url "graphql"))

@@ -6,7 +6,7 @@
                  [day8.re-frame/http-fx "0.1.6"]
                  [cljs-ajax "0.8.0"]
                  [clj-commons/cljss "1.6.4"]
-                 [cljsjs/auth0-lock "11.8.0-0"]
+                 [cljsjs/auth0-lock "11.16.2-0"]
                  [metosin/reitit "0.3.1"]
                  [kibu/pushy "0.3.8"]]
 

@@ -3,6 +3,7 @@
    [re-frame.core :as re-frame]
    [day8.re-frame.http-fx]
    [ajax.core :as ajax]
+   [archon.auth0 :as auth0]
    [archon.db :as db]
    [archon.routes :as routes]
    [archon.config :refer [debug-out login-url]]
@@ -55,25 +56,54 @@
                   :timeout 3000
                   :format (json-request-format)
                   :response-format (json-response-format)
-                  :on-success [::login-successful access-token]
+                  :on-success [::backend-login-successful access-token]
                   :on-failure [::bad-http-result]}}))
 
 
 (re-frame/reg-event-db
   ::bad-http-result
   (fn [db [_ {:keys [data errors] :as payload}]]
-    (debug-out (str "BAD data: " payload))
-    (js/alert "XHR FAIL")
+    (debug-out (str "ERROR sending access token to backend for validation: " payload))
     (dissoc db :access-token)))
 
 (re-frame/reg-event-db
-  ::login-successful
+  ::backend-login-successful
   (fn [db [_ access-token payload]]
     (let [user-info (clojure.walk/keywordize-keys payload)]
       (assoc db :user-info user-info :access-token access-token))))
 
-(re-frame/reg-event-db 
+(re-frame/reg-fx
+  :login
+  (fn [_]
+    (debug-out "reg-fx :login")
+    (auth0/login)))
+
+(re-frame/reg-fx
+  :silent-login
+  (fn [_]
+    (debug-out "reg-fx :silent-login")
+    (auth0/silent-login)))
+
+(re-frame/reg-event-fx
+  ::login-initiated
+  (fn [_ _]
+    {:login nil}))
+
+(re-frame/reg-event-fx
+  ::login-silent-initiated
+  (fn [_ _]
+    {:silent-login nil}))
+
+(re-frame/reg-fx
+  :logout
+  (fn []
+    (auth0/logout)))
+
+(re-frame/reg-event-fx
   ::sign-out
-  (fn [db _]
-    (assoc db :access-token nil :user-info nil)))
+  (fn [world _]
+    (let [new-db (dissoc (:db world) :access-token :user-info)]
+      {:logout nil
+       :db new-db})))
+
 
