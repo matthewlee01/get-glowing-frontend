@@ -10,6 +10,7 @@
     [archon.city.views :as city]
     [archon.calendar.views :as calendar]
     [archon.ven-details.views :as ven-details]
+    [archon.error.views :as error]
     [archon.routes :as routes]
     [archon.common-css :as css])
   (:require-macros [cljss.core]))
@@ -70,6 +71,7 @@
       ::routes/vendor-signup-panel [ven-reg/panel]
       ::routes/thanks-panel [thanks-panel]
       ::routes/calendar-panel [calendar/panel]
+      ::routes/error-panel [error/panel]
       nil)])  ;; normally the path should match one of the above, except at first startup.
 
 

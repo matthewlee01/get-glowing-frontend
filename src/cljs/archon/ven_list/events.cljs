@@ -5,7 +5,8 @@
     [day8.re-frame.http-fx]
     [archon.config :as config]
     [ajax.core :as ajax]
-    [archon.routes :as routes]))
+    [archon.routes :as routes]
+    [archon.events :as events]))
 
 
 (rf/reg-event-fx
@@ -35,8 +36,6 @@
       {:db (assoc db :vendor-details ven-details)
        :navigate url-string})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::bad-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (config/debug-out (str "BAD data: " payload))
-    (assoc db :active-panel :services-panel)))
+  events/show-error)

@@ -11,7 +11,8 @@
                     ["/vendor-list/:city" ::vendor-list-panel]
                     ["/vendor-details/:vendor-id" ::vendor-details-panel]
                     ["/calendar/:vendor-id/:date" ::calendar-panel]
-                    ["/vendor-signup"  ::vendor-signup-panel]])
+                    ["/vendor-signup"  ::vendor-signup-panel]
+                    ["/http-error" ::error-panel]])
 
 ;; this is the global router variable used by some of the following fns
 (def router (reitit/router client-routes))

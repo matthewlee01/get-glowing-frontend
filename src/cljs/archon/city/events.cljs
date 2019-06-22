@@ -3,7 +3,8 @@
             [day8.re-frame.http-fx]
             [archon.config :as config]
             [ajax.core :as ajax]
-            [archon.routes :as routes]))
+            [archon.routes :as routes]
+            [archon.events :as events]))
 
 ;; DO WE STILL NEED THIS???
 (rf/reg-event-db
@@ -41,8 +42,6 @@
       {:db (assoc db :vendor-list (:vendor_list data))
        :navigate url-string})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::bad-http-result
-  (fn [db [_ {:keys [data errors] :as payload}]]
-    (config/debug-out (str "BAD data: " payload))
-    (assoc db :active-panel :services-panel)))
+  events/show-error)

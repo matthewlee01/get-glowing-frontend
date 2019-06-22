@@ -51,3 +51,9 @@
   (fn [db _]
     (:vendor-calendar db)))
 
+(re-frame/reg-sub
+  ::last-error-payload
+  (fn [db _]
+    (:last-error-payload db)))
+
+
