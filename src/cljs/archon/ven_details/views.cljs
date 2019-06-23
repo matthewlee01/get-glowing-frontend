@@ -6,9 +6,11 @@
     [archon.subs :as subs]
     [archon.ven-details.events :as vde]
     [archon.ven-details.css :as vd-css]
-    [archon.common-css :as css]))
+    [archon.common-css :as css]
+    [archon.calendar.events :as cal-events]))
 
 
+ 
 (defn make-service-card-div [service-info]
   "makes a vector with a index number and the div for the service card;
    used with map-indexed to group services into columns"
@@ -20,9 +22,8 @@
              [:div s_duration]
              [:div s_price]
              [:div s_description]]]))
-    
 
-(defn panel[]
+(defn panel []
     (let [{:keys [vendor_id 
                   name
                   name_first
@@ -33,6 +34,7 @@
           @(rf/subscribe [::subs/vendor-details])
           first-last-name (str name_first " " name_last)
           fullname (if name name first-last-name)
+          date (cal-events/get-current-date)
           prof-pic (str "/" profile_pic)]    ;; TODO - this hack actually needs a fix 
                                              ;; on the server to send an absolute path
                                              ;; for now hack the path to be absolute
@@ -43,7 +45,6 @@
            [:br]
            [:div {:class (vd-css/service-card-array)}
              (map make-service-card-div services)]
-
-           (css/NavBarElement {:on-click #(rf/dispatch [::vde/get-calendar vendor_id "2019-07-18"])} ;;using a default date for now, should actually access db for date
+           (css/NavBarElement {:on-click #(rf/dispatch [::vde/get-calendar vendor_id date])}
                             "View Calendar")]))
   

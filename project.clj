@@ -8,6 +8,7 @@
                  [clj-commons/cljss "1.6.4"]
                  [cljsjs/auth0-lock "11.16.2-0"]
                  [metosin/reitit "0.3.1"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [kibu/pushy "0.3.8"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
