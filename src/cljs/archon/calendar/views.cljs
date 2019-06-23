@@ -2,7 +2,9 @@
   (:require 
     [re-frame.core :as rf]
     [archon.calendar.css :as cal-css]
-    [archon.subs :as subs]))
+    [archon.subs :as subs]
+    [archon.calendar.events :as cal-events]
+    [archon.events :as events]))
 
 (defn generate-displayed-times
   "generates an array of time-slots given a start time, slot count, and increment,
@@ -99,6 +101,12 @@
         (map (fn [[start-time _]] (time-label start-time)) DISPLAYED_TIMES)]
        (mapcat #(if (sequential? %) % [%])) ;; flattens the elements created in the map into the parent div
        (vec)))
+    
+(defn date-picker []
+  [:input
+   {:type "date"
+    :default-value (cal-events/get-current-date)
+    :on-change #(rf/dispatch [::cal-events/update-calendar (-> % .-target .-value)])}])
 
 ;;the prev day and next day cols will just hold sample data for now, need to and functionality for other days in the future
 (defn panel
@@ -117,5 +125,7 @@
 
      [:div {:class (cal-css/outer-day-box)}
       (calendar-day-column (get-in calendar [:day-after :calendar])
-                           (get-in calendar [:day-after :date]))]]))
+                           (get-in calendar [:day-after :date]))]
+     (date-picker)]))
+     
 

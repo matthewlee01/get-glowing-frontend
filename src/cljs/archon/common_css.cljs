@@ -44,7 +44,7 @@
 
 (defstyled BackButton :button
            {
-            background-color color-nav
+            :background-color color-nav
             :border           "1px"
             :border-radius    "4px"
             :box-sizing       "border-box"
