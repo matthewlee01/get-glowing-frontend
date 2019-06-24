@@ -45,6 +45,6 @@
            [:br]
            [:div {:class (vd-css/service-card-array)}
              (map make-service-card-div services)]
-           (css/NavBarElement {:on-click #(rf/dispatch [::vde/get-calendar vendor_id date])}
+           (css/NavBarElement {:on-click #(rf/dispatch [::vde/goto-calendar vendor_id date])}
                             "View Calendar")]))
   

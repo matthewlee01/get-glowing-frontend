@@ -11,7 +11,7 @@
     [cljs-time.format :as ct-format]))
 
 (rf/reg-event-fx
-  ::update-calendar
+  ::get-calendar
   (fn [world [_ date]]
     (let [vendor-id (get-in world [:db :vendor-details :vendor_id])
           uri (str calendar-url "/" vendor-id "/" date)]
@@ -28,7 +28,7 @@
     (let [db (:db world)]
       {:db (assoc db :vendor-calendar payload)})))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::bad-result
   events/show-error)
  

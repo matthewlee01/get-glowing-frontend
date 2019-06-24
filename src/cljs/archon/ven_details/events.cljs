@@ -10,10 +10,10 @@
                                 json-response-format]]))
 
 (rf/reg-event-fx
-  ::get-calendar
+  ::goto-calendar
   (fn [_world [_ vendor_id date]]
     (let [url-string (routes/name-to-url ::routes/calendar-panel {:vendor-id vendor_id
                                                                   :date date})]
-      {:dispatch [::cal-events/update-calendar date]
+      {:dispatch [::cal-events/get-calendar date]
        :navigate url-string})))
 
