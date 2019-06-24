@@ -6,6 +6,10 @@
 (defstyles calendar-day-box []
   {:display "flex"
    :padding "12px"
+   :justify-content "center"
+   :align-items "center"
+   :flex-direction "row"
+   :flex-wrap "wrap"
    :width "100%"})
 
 
@@ -32,11 +36,13 @@
 
 (defstyles centre-day-box []
   {:display "flex"
-   :height "100%"})
+   :height "100%"
+   :width "30%"})
 
 (defstyles outer-day-box []
   {:display "flex"
    :height "100%"
+   :width "30%"
    ::css/media {[:only :screen :and [:max-width "1050px"]] {:display "none"}}})
 
 (defstyles time-label-box []
@@ -50,4 +56,19 @@
    :height "50px"
    :display "inline-block"})
 
-  
+(defstyles date-picker-box []
+  {:width "100%"
+   :height "50px"
+   :display "flex"
+   :justify-content "center"
+   :align-items "center"})
+
+(defstyles date-picker []
+  {:width "150px"
+   :font-family "Arial"
+   :font-size "18px"})
+
+(defstyles date-picker-label []
+  {:font-family "Arial"
+   :padding "8px"
+   :font-size "18px"})

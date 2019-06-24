@@ -38,14 +38,6 @@
         " AM"))))
 
 (def DISPLAYED_TIMES (generate-displayed-times 0 13 60)) 
-(def sample-calendar1 {:available [[]]
-                       :booked [[]]
-                       :template [[]]
-                       :date "2019-07-17"})
-(def sample-calendar2 {:available [[]]
-                       :booked [[]]
-                       :template [[]]
-                       :date "2019-07-19"})
 
 (defn time-label
   [time-int]
@@ -103,16 +95,23 @@
        (vec)))
     
 (defn date-picker []
+  "creates an HTML input of type 'date' to select the date for display on the calendar.
+  currently doesn't work very well on desktop, as it doesn't work on Safari and bad
+  input can be manually inputted"
   [:input
    {:type "date"
+    :class (cal-css/date-picker)
+    :min (cal-events/get-current-date) ;;inputting dates before this breaks everything atm, only works on mobile
     :default-value (cal-events/get-current-date)
-    :on-change #(rf/dispatch [::cal-events/update-calendar (-> % .-target .-value)])}])
+    :on-change #(rf/dispatch [::cal-events/get-calendar (-> % .-target .-value)])}])
 
-;;the prev day and next day cols will just hold sample data for now, need to and functionality for other days in the future
 (defn panel
   []
   (let [calendar @(rf/subscribe [::subs/vendor-calendar])]
     [:div {:class (cal-css/calendar-day-box)}
+     [:div {:class (cal-css/date-picker-box)}
+      [:label {:class (cal-css/date-picker-label)} "Select a date:"] 
+      (date-picker)]
      [:div {:class (cal-css/time-label-box)} (time-label-column)]
 
      [:div {:class (cal-css/outer-day-box)}
@@ -125,7 +124,6 @@
 
      [:div {:class (cal-css/outer-day-box)}
       (calendar-day-column (get-in calendar [:day-after :calendar])
-                           (get-in calendar [:day-after :date]))]
-     (date-picker)]))
+                           (get-in calendar [:day-after :date]))]]))
      
 
