@@ -3,4 +3,5 @@
 
 (def default-db
   {:name "get glowing!"
-   :active-panel (routes/name-to-url :routes/city-panel)})
+   :active-panel (routes/name-to-url :routes/city-panel)
+   :city-name ""})
