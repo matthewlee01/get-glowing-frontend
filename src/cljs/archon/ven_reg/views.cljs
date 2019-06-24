@@ -42,7 +42,7 @@
                           :auto-focus true
                           :on-blur #(rf/dispatch [::es/vr-city-change (-> % .-target .-value)])})]
      [:div
-      (css/SelectInput{:value "British Columbia"
+      (css/SelectInput{:default-value "British Columbia"
                        :on-change #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])}
                      [:option "Alberta"]
                      [:option "British Columbia"]
