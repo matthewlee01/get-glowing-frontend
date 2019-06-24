@@ -94,8 +94,5 @@
 
 (defn panel []
   [:div
-   (let [vendors @(rf/subscribe [::subs/vendor-list])]
-    (if (empty? vendors)
-       [:p "Sorry, your search yielded no results in our database. Please try again!"]
-       [:div {:class (vendor-card-flex)} (map vendor-card vendors)]))
+   [:div {:class (vendor-card-flex)} (map vendor-card @(rf/subscribe [::subs/vendor-list]))]
    (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back (routes/name-to-url ::routes/city-panel)])} "Return")])

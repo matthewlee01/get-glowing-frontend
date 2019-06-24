@@ -6,11 +6,15 @@
             [archon.routes :as routes]
             [archon.events :as events]))
 
-;; DO WE STILL NEED THIS???
 (rf/reg-event-db
   ::city-name-change
   (fn [db [_ city-name]]
     (assoc db :city-name city-name)))
+
+(rf/reg-event-db
+  ::hide-empty-vendor-list-error
+  (fn [db _]
+    (assoc db :vendor-list-empty? false)))
 
 (rf/reg-event-fx
   ::get-vendor-list
@@ -37,9 +41,13 @@
   (fn [world [_ {:keys [data errors] :as payload}]]
     (let [db (:db world)
           city (:city-name db)
-          url-string (routes/name-to-url ::routes/vendor-list-panel {:city city})]
+          vendor-list (:vendor_list data)
+          vendor-list-empty? (empty? vendor-list)
+          url-string (if vendor-list-empty?
+                         (routes/name-to-url ::routes/city-panel)
+                         (routes/name-to-url ::routes/vendor-list-panel {:city city}))]
 
-      {:db (assoc db :vendor-list (:vendor_list data))
+      {:db (assoc db :vendor-list vendor-list :vendor-list-empty? vendor-list-empty?)
        :navigate url-string})))
 
 (rf/reg-event-fx
