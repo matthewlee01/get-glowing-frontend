@@ -26,14 +26,14 @@
                   vr-phone]} vendor-info
           user-id (get-in db [:user-info :user-id])
           vendor {:user-id user-id
-                  :name_first vr-first-name
-                  :name_last vr-last-name
+                  :name-first vr-first-name
+                  :name-last vr-last-name
                   :email vr-email
-                  :addr_str_num vr-addr-num
-                  :addr_str_name vr-addr-name
-                  :addr_city vr-addr-city
-                  :addr_state vr-addr-state
-                  :addr_postal vr-addr-postal-code
+                  :addr-str-num vr-addr-num
+                  :addr-str-name vr-addr-name
+                  :addr-city vr-addr-city
+                  :addr-state vr-addr-state
+                  :addr-postal vr-addr-postal-code
                   :phone vr-phone}]
       {:http-xhrio {:method  :post
                     :uri    config/ven-reg-url
