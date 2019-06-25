@@ -3,7 +3,7 @@
     [re-frame.core :as rf]
     [day8.re-frame.http-fx]
     [archon.routes :as routes]
-    [archon.config :refer [debug-out graphql-url calendar-url]]
+    [archon.config :refer [debug-out graphql-url calendar-url booking-url]]
     [ajax.core :as ajax :refer [json-request-format 
                                 json-response-format]]    
     [cljs-time.core :as ct-core]
@@ -19,11 +19,11 @@
                     :uri    uri
                     :timeout 3000
                     :response-format (json-response-format {:keywords? true})
-                    :on-success [::good-result]
+                    :on-success [::good-calendar-result]
                     :on-failure [::bad-result]}})))
 
 (rf/reg-event-fx
-  ::good-result
+  ::good-calendar-result
   (fn [world [_ {:keys [data errors] :as payload}]]
     (let [db (:db world)]
       {:db (assoc db :vendor-calendar payload)})))
@@ -32,6 +32,33 @@
   ::bad-result
   events/show-error)
  
+(rf/reg-event-fx
+  ::submit-booking
+  (fn [world [_ time-slot date]]
+    (let [db (:db world)
+          user-id (get-in db [:user-info :user-id])
+          vendor-id (get-in db [:vendor-details :vendor_id])
+          service-id 789 ;;sample id for now, get real id after service ids are implemented
+          booking  {:user-id user-id
+                    :vendor-id vendor-id
+                    :service service-id
+                    :time time-slot
+                    :date date}]
+          
+      {:http-xhrio {:method :post
+                    :uri booking-url
+                    :params booking
+                    :timeout 3000
+                    :format (json-request-format)
+                    :response-format (json-response-format {:keywords? true})
+                    :on-success [::good-booking-result]
+                    :on-failure [::bad-result]}})))
+
+(rf/reg-event-fx
+  ::good-booking-result
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    {:dispatch [::get-calendar (:date payload)]}))
+
 (defn get-current-date []
   "uses cljs-time to get the current date in yyyy-mm-dd format"
   (let [current-time (ct-core/now)

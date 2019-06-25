@@ -44,14 +44,15 @@
   [:label {:class (cal-css/side-time-label)} (minute-int-to-time-string time-int)])
   
 (defn available-slot
-  [[start-time end-time]]
-  [:div {:class (cal-css/time-slot-class "#FFB6C1")}
-   (str (minute-int-to-time-string start-time) " - Available")])
+  [time-slot date]
+  [:div {:class (cal-css/time-slot-class "#FFB6C1")
+         :on-click #(rf/dispatch [::cal-events/submit-booking time-slot date])}
+   (str (minute-int-to-time-string (first time-slot)) " - Available")])
    
 (defn unavailable-slot
-  [[start-time end-time]]
+  [time-slot _]
   [:div {:class (cal-css/time-slot-class "#7a7978")}
-   (str (minute-int-to-time-string start-time) " - Unavailable")])
+   (str (minute-int-to-time-string (first time-slot)) " - Unavailable")])
           
 (defn time-within-chunk?
   "checks whether a time-slot is contained within a time-chunk"
@@ -69,12 +70,12 @@
        (not)))
 
 (defn construct-time-slot
-  [available booked template time-slot]
+  [available booked template date time-slot]
   (if (and (or (time-within-coll? time-slot available)
                (time-within-coll? time-slot template))
            (not (time-within-coll? time-slot booked)))
-    (available-slot time-slot)
-    (unavailable-slot time-slot)))
+    (available-slot time-slot date)
+    (unavailable-slot time-slot date)))
   
 (defn calendar-day-column
   "creates a column of time slots based on the available times"
@@ -82,7 +83,7 @@
   (let [{:keys [available booked template]} vendor-calendar]
    (->> [:div {:class (cal-css/calendar-column)}
          [date]
-         (map (partial construct-time-slot available booked template) DISPLAYED_TIMES)]
+         (map (partial construct-time-slot available booked template date) DISPLAYED_TIMES)]
         (mapcat #(if (sequential? %) % [%])) ;; flattens the elements created in the map into the parent div
         (vec))))
 

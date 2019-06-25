@@ -17,6 +17,7 @@
 
 (def graphql-url (str root-url "graphql"))
 (def calendar-url (str root-url "calendar"))
+(def booking-url (str root-url "booking"))
 (def ven-reg-url (str root-url "vendor"))
 (def login-url (str root-url "login"))
 
