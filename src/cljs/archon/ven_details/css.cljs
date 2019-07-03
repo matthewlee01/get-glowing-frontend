@@ -13,6 +13,7 @@
 
 (defstyles service-card-title [top]
   {:position "relative"
+   :cursor "pointer"
    :top (str top "px")
    :padding "10px"
    :font-size "28px"})
@@ -40,6 +41,11 @@
    :text-align "center"
    :font-size "28px"})
 
-(defstyled profile-summary :label
+(defstyled profile-summary :div
   {:font-size "18px"
-   :padding "20px"})
+   :margin "16px 16px"})
+
+
+(defstyled service-select-label :div
+  {:font-size "16px"
+   :margin "16px"})
