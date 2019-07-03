@@ -17,13 +17,35 @@
 (defstyles huge-title []
            {:font-size "80px"
             :color color-glow-main
+            :width "fit-content"
+            :margin-top "80px"
+            :margin-left "10px"
+            :margin-bottom "10px"
             :cursor "pointer"})
+
+(defstyles header [sz]
+  {:width "100%"
+   :height "auto"
+   :position "fixed"
+   :top "0px"
+   :left "0px"
+   :background-color "#DBC"
+   :display "flex"
+   :justify-content "space-between"})
+
+(defstyles welcome-message []
+  {:float "right"
+   :display "flex"
+   :width "auto"
+   :margin-right "10px"
+   :height "auto"
+   :align-self "center"})
 
 ;; HEADER STYLES - END
 
 ;; LAYOUT/NAV STYLES - START
 (defstyles main-nav []
-           {:width "auto"})
+           {:width "60%"})
 
 (defstyled NavBarElement :button
            {:background-color color-nav
@@ -122,10 +144,4 @@
    :float "right"
    :width (str sz "px")
    :height (str sz "px")})
-
-(defstyles header [sz]
-  {:width "100%"
-   :height "50px"
-   :background-color "#DBC"
-   :display "block"})
 

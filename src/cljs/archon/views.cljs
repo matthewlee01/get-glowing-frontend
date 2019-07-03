@@ -30,7 +30,6 @@
 
 (defn nav-buttons []
   [:div {:class (css/main-nav)}
-   ;[:div {:class (main-nav)}
      (css/NavBarElement "Help")
      (if @(re-frame/subscribe [::subs/user-info])
        [:span
@@ -39,7 +38,7 @@
        (css/NavBarElement {:on-click #(re-frame/dispatch [::events/login-initiated])} "Login/Sign up"))])
 
 (defn logged-in-welcome [sz user]
-  [:span {:style {:float "right"}}
+  [:span {:class (css/welcome-message)}
     [css/label (str "Welcome back, " (:name-first user))]
     [:div {:style {:float "right"}}
       [:img {:src (:avatar user)
@@ -54,6 +53,7 @@
 (defn welcome-message [sz]
   (let [user @(re-frame/subscribe [::subs/user-info])]
     [:div {:class (css/header sz)}
+      [nav-buttons]
       (if user
         (logged-in-welcome sz user)
         (logged-out-welcome sz))]))
@@ -63,7 +63,6 @@
     [welcome-message 50]
     [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/navigate-to-url (routes/name-to-url ::routes/city-panel)])}
          @(re-frame/subscribe [::subs/app-name])]
-    [nav-buttons]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       ::routes/vendor-list-panel [ven-list/panel]
       ::routes/city-panel [city/panel]
