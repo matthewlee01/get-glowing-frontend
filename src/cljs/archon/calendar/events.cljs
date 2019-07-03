@@ -38,7 +38,7 @@
     (let [db (:db world)
           user-id (get-in db [:user-info :user-id])
           vendor-id (get-in db [:vendor-details :vendor_id])
-          service-id 789 ;;sample id for now, get real id after service ids are implemented
+          service-id (:selected-service db) 
           booking  {:user-id user-id
                     :vendor-id vendor-id
                     :service service-id

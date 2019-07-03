@@ -61,4 +61,7 @@
   (fn [db _]
     (:last-error-payload db)))
 
-
+(re-frame/reg-sub
+  ::selected-service
+  (fn [db _]
+    (:selected-service db)))
