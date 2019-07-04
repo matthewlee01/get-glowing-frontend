@@ -3,17 +3,9 @@
 (def debug?
   ^boolean goog.DEBUG)
 
-(defn globar-root []
-  (if debug?
-    "http://localhost:8888/"
-    "http://getglowing.ca:8888/"))
+(def archon-root js/window.location.origin)
 
-(defn archon-root []
-  (if debug?
-    "http://localhost:3449"
-    "http://getglowing.ca"))
-
-(def root-url (globar-root))
+(def root-url (str "http://" js/window.location.hostname ":8888/"))
 
 (def graphql-url (str root-url "graphql"))
 (def calendar-url (str root-url "calendar"))
