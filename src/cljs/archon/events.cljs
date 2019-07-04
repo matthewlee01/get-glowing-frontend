@@ -62,7 +62,7 @@
 (defn show-error [world [_ {:keys [data errors] :as payload}]]
     (config/debug-out (str "BAD data: " payload))
     {:db (assoc (:db world) :last-error-payload payload)
-    	:navigate (routes/name-to-url ::routes/error-panel)})
+     :navigate (routes/name-to-url ::routes/error-panel)})
 
 (re-frame/reg-event-fx
   ::bad-http-result

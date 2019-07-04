@@ -32,7 +32,7 @@
   (.show lock))
 
 (defn logout []
-  (.logout lock (clj->js {:returnTo (config/archon-root)})))
+  (.logout lock (clj->js {:returnTo config/archon-root})))
 
 (defn callback [error auth-result-js]
   (when error
