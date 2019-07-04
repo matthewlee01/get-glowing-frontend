@@ -44,7 +44,6 @@
                     :service service-id
                     :time time-slot
                     :date date}]
-          
       {:http-xhrio {:method :post
                     :uri booking-url
                     :params booking
@@ -57,6 +56,8 @@
 (rf/reg-event-fx
   ::good-booking-result
   (fn [world [_ {:keys [data errors] :as payload}]]
+    (if-let [error (:error payload)]
+      (js/alert (str "ERROR: " error)))
     {:dispatch [::get-calendar (:date payload)]}))
 
 (defn get-current-date []
