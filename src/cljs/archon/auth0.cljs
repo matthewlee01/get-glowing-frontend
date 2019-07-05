@@ -45,7 +45,7 @@
 
 (defn silent-login []
   (config/debug-out (str "login-silent"))
-  (.checkSession lock jwt-options  callback))
+  (.checkSession lock (clj->js {}) callback))
 
 
 
