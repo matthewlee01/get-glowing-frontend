@@ -9,12 +9,10 @@
     [archon.common-css :as css]
     [archon.calendar.events :as cal-events]))
 
-(defn make-service-card-div [service-info]
+(defn make-service-card-div [service-info current-vendor-id]
   "makes a vector with a index number and the div for the service card;
    used with map-indexed to group services into columns"
   (let [{:keys [s_description s_duration s_name s_price s_type s_id]} service-info
-        current-vendor-id (-> @(rf/subscribe [::subs/vendor-details])
-                              (:vendor_id))
         date (cal-events/get-current-date)]
     ^{:key service-info}
      [:div [:div {:class (vd-css/service-card-title 16)
@@ -47,5 +45,5 @@
            [:br]
            [vd-css/service-select-label "Select a service to view availability:"]
            [:div {:class (vd-css/service-card-array)}
-             (map make-service-card-div services)]]))
+             (map #(make-service-card-div % vendor_id) services)]]))
   
