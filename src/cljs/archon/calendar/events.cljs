@@ -43,7 +43,8 @@
                     :vendor-id vendor-id
                     :service service-id
                     :time time-slot
-                    :date date}]
+                    :date date
+                    :access-token (:access-token db)}]
       {:http-xhrio {:method :post
                     :uri booking-url
                     :params booking

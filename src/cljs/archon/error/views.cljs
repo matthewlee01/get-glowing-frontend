@@ -10,9 +10,9 @@
       [:div (str "Error status: " status)]
       [:div (str status-text)]
       [:div (cond
-               (= status 0) "try again lol"
-               (>= status 500) "something's wrong with the server"
-               (>= status 400) "bad request!"
-               :else "")]
-    ]
-    ))
+               (= status 0) "Connection error.  The server may be down or there may be a network problem.  If the problem persists please contact support."
+               (>= status 500) "Server error. The request couldn't be processed or the server is down.  If the problem persists, please contact support."
+               (>= status 400) "Permission denied.  Are you logged in?"
+               :else "")]]))
+    
+    
