@@ -63,10 +63,14 @@
    :justify-content "center"
    :align-items "center"})
 
-(defstyles date-picker []
+(defstyles html-date-picker []
   {:width "150px"
    :font-family "Arial"
+   ::css/media {[:only :screen :and [:min-width "414px"]] {:display "none"}}
    :font-size "18px"})
+
+(defstyles pika-date-picker []
+  {::css/media {[:only :screen :and [:max-width "414px"]] {:display "none"}}})
 
 (defstyles date-picker-label []
   {:font-family "Arial"

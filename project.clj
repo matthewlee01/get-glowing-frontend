@@ -9,7 +9,8 @@
                  [cljsjs/auth0-lock "11.16.2-0"]
                  [metosin/reitit "0.3.1"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [kibu/pushy "0.3.8"]]
+                 [kibu/pushy "0.3.8"]
+                 [cljs-pikaday "0.1.4"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 
