@@ -4,7 +4,9 @@
     [archon.calendar.css :as cal-css]
     [archon.subs :as subs]
     [archon.calendar.events :as cal-events]
-    [archon.events :as events]))
+    [archon.events :as events]
+    [reagent.core :as r]
+    [cljs-pikaday.reagent :as pikaday]))
 
 (defn generate-displayed-times
   "generates an array of time-slots given a start time, slot count, and increment,
@@ -95,24 +97,38 @@
        (mapcat #(if (sequential? %) % [%])) ;; flattens the elements created in the map into the parent div
        (vec)))
     
-(defn date-picker []
+(defn html-date-picker []
   "creates an HTML input of type 'date' to select the date for display on the calendar.
   currently doesn't work very well on desktop, as it doesn't work on Safari and bad
   input can be manually inputted"
   [:input
    {:type "date"
-    :class (cal-css/date-picker)
+    :class (cal-css/html-date-picker)
     :min (cal-events/get-current-date) ;;inputting dates before this breaks everything atm, only works on mobile
     :default-value (cal-events/get-current-date)
     :on-change #(rf/dispatch [::cal-events/get-calendar (-> % .-target .-value)])}])
 
+(defn pika-date-picker []
+  [:div {:class (cal-css/pika-date-picker)}
+   [pikaday/date-selector 
+    {:date-atom (r/atom (js/Date.))
+     :pikaday-attrs {:onSelect #(rf/dispatch [::cal-events/get-calendar
+                                              (cal-events/js-date-to-string %)])}}]])
+                                          
+(defn date-picker []
+  "a component containing both the desktop and mobile date pickers, but only one will display
+  based on the media query"
+  [:div
+   (html-date-picker)
+   (pika-date-picker)])
+   
 (defn panel
   []
   (let [calendar @(rf/subscribe [::subs/vendor-calendar])]
     [:div {:class (cal-css/calendar-day-box)}
      [:div {:class (cal-css/date-picker-box)}
-      [:label {:class (cal-css/date-picker-label)} "Select a date:"] 
-      (date-picker)]
+      [:label {:class (cal-css/date-picker-label)} "Select a date:"
+       (date-picker)]]
      [:div {:class (cal-css/time-label-box)} (time-label-column)]
 
      [:div {:class (cal-css/outer-day-box)}

@@ -67,4 +67,10 @@
         formatter (ct-format/formatter "yyyy-MM-dd")]
     (ct-format/unparse formatter current-time)))
  
+(defn js-date-to-string
+  [js-date]
+  "takes a js date object and converts it to a yyyy-mm-dd string"
+  (-> (.toISOString js-date)
+      (.split "T")
+      (get 0)))
 
