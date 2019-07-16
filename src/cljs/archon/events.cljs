@@ -111,9 +111,14 @@
       {:logout nil
        :db new-db})))
 
+(re-frame/reg-event-fx
+  ::vendor-logon
+  (fn [world _]
+    (re-frame/dispatch [::access-token-received (get-in world [:db :access-token])])    
+    (re-frame/dispatch [::take-me-back]))) 
+
 (re-frame/reg-event-db
   ::set-error-msg
   (fn [db [_ error-msg]]
     (assoc db :error-msg error-msg)))
-
 

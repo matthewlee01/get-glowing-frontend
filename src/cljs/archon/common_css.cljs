@@ -23,13 +23,13 @@
             :margin-bottom "10px"
             :cursor "pointer"})
 
-(defstyles header [sz]
+(defstyles header [sz vendor?]
   {:width "100%"
    :height "auto"
    :position "fixed"
    :top "0px"
    :left "0px"
-   :background-color "#DBC"
+   :background-color (if vendor? "#CBD""#DBC")
    :display "flex"
    :justify-content "space-between"})
 
