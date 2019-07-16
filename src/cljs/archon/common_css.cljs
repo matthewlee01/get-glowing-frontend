@@ -145,3 +145,30 @@
    :width (str sz "px")
    :height (str sz "px")})
 
+(defstyles error-modal-bg []
+  {:position "fixed"
+   :z-index 1
+   :left 0
+   :top 0
+   :width "100%"
+   :height "100%"
+   :background-color "rgba(0,0,0,0.4)"})
+
+(defstyles error-modal-box []
+  {:background-color "#d9d9d9"
+   :margin "15% auto"
+   :border "1px solid #888"
+   :width "55%"})
+  
+(defstyles error-modal-close []
+  {:color "#4d4e4f"
+   :float "right"
+   :margin "2px 10px"
+   :font-size "35px"
+   :font-weight "bold"
+   :&:hover {:color "black"
+             :cursor "pointer"
+             :text-decoration "none"}})
+
+(defstyles error-msg []
+  {:margin "14px 14px"})

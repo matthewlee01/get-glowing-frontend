@@ -58,8 +58,18 @@
         (logged-in-welcome sz user)
         (logged-out-welcome sz))]))
 
+(defn error-modal []
+  (if-let [error-msg @(re-frame/subscribe [::subs/error-msg])]
+    [:div {:class (css/error-modal-bg)}
+      [:div {:class (css/error-modal-box)}
+        [:span {:class (css/error-modal-close)
+                :on-click #(re-frame/dispatch [::events/set-error-msg nil])} 
+         (goog.string/unescapeEntities "&times")] ;;this returns a unicode "x" symbol string     
+        [:p {:class (css/error-msg)} error-msg]]]))
+  
 (defn main-panel []
   [:div
+    (error-modal)
     [welcome-message 50]
     [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/navigate-to-url (routes/name-to-url ::routes/city-panel)])}
          @(re-frame/subscribe [::subs/app-name])]

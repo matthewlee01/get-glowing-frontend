@@ -65,3 +65,8 @@
   ::selected-service
   (fn [db _]
     (:selected-service db)))
+
+(re-frame/reg-sub
+  ::error-msg
+  (fn [db _]
+    (:error-msg db)))

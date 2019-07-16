@@ -111,4 +111,9 @@
       {:logout nil
        :db new-db})))
 
+(re-frame/reg-event-db
+  ::set-error-msg
+  (fn [db [_ error-msg]]
+    (assoc db :error-msg error-msg)))
+
 
