@@ -106,13 +106,13 @@
     :class (cal-css/html-date-picker)
     :min (cal-events/get-current-date) ;;inputting dates before this breaks everything atm, only works on mobile
     :default-value (cal-events/get-current-date)
-    :on-change #(rf/dispatch [::cal-events/get-calendar (-> % .-target .-value)])}])
+    :on-change #(rf/dispatch [::cal-events/set-date (-> % .-target .-value)])}])
 
 (defn pika-date-picker []
   [:div {:class (cal-css/pika-date-picker)}
    [pikaday/date-selector 
     {:date-atom (r/atom (js/Date.))
-     :pikaday-attrs {:onSelect #(rf/dispatch [::cal-events/get-calendar
+     :pikaday-attrs {:onSelect #(rf/dispatch [::cal-events/set-date
                                               (cal-events/js-date-to-string %)])}}]])
                                           
 (defn date-picker []
