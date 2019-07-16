@@ -29,10 +29,6 @@
       {:db (assoc db :vendor-calendar payload)})))
 
 (rf/reg-event-fx
-  ::bad-result
-  events/show-error)
- 
-(rf/reg-event-fx
   ::submit-booking
   (fn [world [_ time-slot date]]
     (let [db (:db world)
@@ -59,7 +55,17 @@
   (fn [world [_ {:keys [data errors] :as payload}]]
     (if-let [error (:error payload)]
       (js/alert (str "ERROR: " error)))
-    {:dispatch [::get-calendar (:date payload)]}))
+    {:dispatch [::get-calendar (get-in world [:db :date])]}))
+
+(rf/reg-event-fx
+  ::bad-result
+  events/show-error)
+ 
+(rf/reg-event-fx
+  ::set-date
+  (fn [world [_ date]]
+    {:db (assoc (:db world) :date date)
+     :dispatch [::get-calendar date]}))
 
 (defn get-current-date []
   "uses cljs-time to get the current date in yyyy-mm-dd format"
