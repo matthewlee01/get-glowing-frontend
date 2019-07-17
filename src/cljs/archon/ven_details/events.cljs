@@ -16,7 +16,7 @@
     (let [url-string (routes/name-to-url ::routes/calendar-panel {:vendor-id vendor_id
                                                                   :date date
                                                                   :selected-service selected-service})]
-      {:dispatch [::cal-events/get-calendar date]
+      {:dispatch [::cal-events/set-date date]
        :navigate url-string})))
 
 (rf/reg-event-db
