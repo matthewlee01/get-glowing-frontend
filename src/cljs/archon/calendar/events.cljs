@@ -53,7 +53,7 @@
 (rf/reg-event-fx
   ::good-booking-result
   (fn [world [_ {:keys [data errors] :as payload}]]
-    {:db (assoc (:db world) :error-msg (:error payload))
+    {:db (assoc (:db world) :error (:error payload))
      :dispatch [::get-calendar (get-in world [:db :date])]}))
 
 (rf/reg-event-fx
