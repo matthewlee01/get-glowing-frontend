@@ -118,7 +118,7 @@
     (re-frame/dispatch [::take-me-back]))) 
 
 (re-frame/reg-event-db
-  ::set-error-msg
-  (fn [db [_ error-msg]]
-    (assoc db :error-msg error-msg)))
+  ::set-error
+  (fn [db [_ error]]
+    (assoc db :error error)))
 
