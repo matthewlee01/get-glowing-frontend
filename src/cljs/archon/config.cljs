@@ -7,11 +7,14 @@
 
 (def root-url (str "http://" js/window.location.hostname ":8888/"))
 
+;; a list of backend API endpoints this application uses
 (def graphql-url (str root-url "graphql"))
 (def calendar-url (str root-url "calendar"))
 (def booking-url (str root-url "booking"))
 (def ven-reg-url (str root-url "vendor"))
 (def login-url (str root-url "login"))
+(def v-services-url (str root-url "services"))
+(def edit-service-url (str root-url "service"))
 
 (defn debug-out [params]
   (when debug?

@@ -70,3 +70,13 @@
   ::error
   (fn [db _]
     (:error db)))
+
+(re-frame/reg-sub
+  ::services-list
+  (fn [db _]
+    (:services-list db)))
+
+(re-frame/reg-sub
+  ::active-service
+  (fn [db _]
+    (:active-service db)))
