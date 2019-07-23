@@ -80,18 +80,6 @@
       (do (js/alert "good address number!")
         checked-num))))
 
-(rf/reg-event-fx
-  ::show-vendor-signup-form
-  (fn [world _]
-    ;; this is where we push the new URL onto the browser history 
-    ;; to start the navigation to the registration form
-    (let [db (:db world)
-          clean-prev-state (dissoc db :prev-state) ; don't want nested prev states
-          url-string (routes/name-to-url ::routes/vendor-signup-panel)]
-
-      {:db (assoc db :prev-state clean-prev-state)
-       :navigate url-string})))
-
 (rf/reg-event-db
   ::vr-email-change
   (fn [db [_ vendor-email]]

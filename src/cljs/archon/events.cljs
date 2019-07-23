@@ -22,9 +22,14 @@
     (assoc db :active-panel value)))
 
 (re-frame/reg-event-fx
-  ::navigate-to-url
-  (fn [_ [_ url]]
-    {:navigate url}))
+  ::navigate-to
+  (fn [world [_ path]]
+    ;; this is where we push the new URL onto the browser history
+    (let [db (:db world)
+          prev-state (dissoc db :prev-state) ; don't want nested prev states
+          url-string (routes/name-to-url path)]
+      {:db (assoc db :prev-state prev-state)
+       :navigate url-string})))
 
 ;; this is our custom effect handler to handle the :navigate effect
 ;; passed from -fx event handlers

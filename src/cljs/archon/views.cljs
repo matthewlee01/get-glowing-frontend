@@ -12,7 +12,9 @@
     [archon.ven-details.views :as ven-details]
     [archon.error.views :as error]
     [archon.routes :as routes]
-    [archon.common-css :as css])
+    [archon.common-css :as css]
+    [archon.v-services.views :as v-services]
+    [archon.v-services.events :as vse])
   (:require-macros [cljss.core]))
      
 (inject-global {:body {:font-family "Arial, Verdana, sans-serif"}})
@@ -28,16 +30,32 @@
     [:p "Thanks for registering."]
     [:button {:on-click #(re-frame/dispatch [::events/vendor-logon])} "Return"]])
 
+(defn signout-button []
+  (css/NavBarElement {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out"))
+
+(defn vendor-nav []
+  "A component that contains the buttons that are relevant when a vendor is logged in"
+  [:span
+    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::vse/get-v-services-list])} "My Services")
+;;    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::events/navigate-to ::routes/v-services-panel])} "Edit Services")
+    [signout-button]])
+
+(defn user-nav []
+  "A component that contains the buttons that are relevant when a user (non-vendor) is logged in"
+  [:span
+    (css/NavBarElement {:id "two" :on-click #(re-frame/dispatch [::events/navigate-to ::routes/vendor-signup-panel])}"Become a vendor")
+    [signout-button]])
+
+
 (defn nav-buttons []
   (let [user @(re-frame/subscribe [::subs/user-info])
         vendor? (:is-vendor user)]
     [:div {:class (css/main-nav)}
       (css/NavBarElement "Help")
-      (if user 
-        [:span
-          (when-not vendor?  ;; only show option to become a vendor when not already a vendor
-            (css/NavBarElement {:id "two" :on-click #(re-frame/dispatch [::vre/show-vendor-signup-form])}"Become a vendor"))
-          (css/NavBarElement {:id "one" :on-click #(re-frame/dispatch [::events/sign-out])} "Sign out")]
+      (if user ;; check if logged in 
+        (if vendor?
+          [vendor-nav]
+          [user-nav])
         (css/NavBarElement {:on-click #(re-frame/dispatch [::events/login-initiated])} "Login/Sign up"))]))
 
 (defn logged-in-welcome [sz user]
@@ -76,7 +94,7 @@
   [:div
     (error-modal)
     [header 50]
-    [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/navigate-to-url (routes/name-to-url ::routes/city-panel)])}
+    [:h1 {:class (css/huge-title) :on-click #(re-frame/dispatch [::events/navigate-to ::routes/city-panel])}
          @(re-frame/subscribe [::subs/app-name])]
     (condp = @(re-frame/subscribe [::subs/active-panel])
       ::routes/vendor-list-panel [ven-list/panel]
@@ -86,6 +104,7 @@
       ::routes/thanks-panel [thanks-panel]
       ::routes/calendar-panel [calendar/panel]
       ::routes/error-panel [error/panel]
+      ::routes/v-services-panel [v-services/panel]
       nil)])  ;; normally the path should match one of the above, except at first startup.
 
 
