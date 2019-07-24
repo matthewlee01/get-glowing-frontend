@@ -3,6 +3,7 @@
     [re-frame.core :as rf]
     [archon.calendar.css :as cal-css]
     [archon.subs :as subs]
+    [archon.common-css :as css]
     [archon.calendar.events :as cal-events]
     [archon.events :as events]
     [reagent.core :as r]
@@ -47,13 +48,20 @@
   
 (defn available-slot
   [time-slot date]
-  [:div {:class (cal-css/time-slot-class "#FFB6C1")
-         :on-click #(rf/dispatch [::cal-events/submit-booking time-slot date])}
-   (str (minute-int-to-time-string (first time-slot)) " - Available")])
+  (let [active-panel @(rf/subscribe [::subs/active-panel])
+        bookings-allowed? (not= active-panel :archon.routes/vendor-appointments-panel)]
+    [:div {:class (cal-css/time-slot-class css/color-glow-main)
+           :on-click #(when bookings-allowed? (rf/dispatch [::cal-events/submit-booking time-slot date]))}
+     (str (minute-int-to-time-string (first time-slot)) " - Available")]))
    
+(defn booked-slot
+  [time-slot _]
+  [:div {:class (cal-css/time-slot-class css/color-booked)}
+   (str (minute-int-to-time-string (first time-slot)) " - Booked")])
+
 (defn unavailable-slot
   [time-slot _]
-  [:div {:class (cal-css/time-slot-class "#7a7978")}
+  [:div {:class (cal-css/time-slot-class css/color-nav)}
    (str (minute-int-to-time-string (first time-slot)) " - Unavailable")])
           
 (defn time-within-chunk?
@@ -73,11 +81,13 @@
 
 (defn construct-time-slot
   [available booked template date time-slot]
-  (if (and (or (time-within-coll? time-slot available)
-               (time-within-coll? time-slot template))
-           (not (time-within-coll? time-slot booked)))
-    (available-slot time-slot date)
-    (unavailable-slot time-slot date)))
+  "takes some calendar data and constructs the correct component depending on the status of the time slot"
+  (if (or (time-within-coll? time-slot available) ;;is this time slot available?
+          (time-within-coll? time-slot template)) ;;or within the template?
+    (if (time-within-coll? time-slot booked)      ;;furthermore, is it booked?
+      (booked-slot time-slot date)                ;;if so, construct a booked slot
+      (available-slot time-slot date))            ;;else construct an available slot
+    (unavailable-slot time-slot date)))           ;;if it's not within template or available, construct an unavailable slot
   
 (defn calendar-day-column
   "creates a column of time slots based on the available times"

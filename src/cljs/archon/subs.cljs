@@ -80,3 +80,8 @@
   ::active-service
   (fn [db _]
     (:active-service db)))
+
+(re-frame/reg-sub
+  ::v-bookings-list
+  (fn [db _]
+    (:v-bookings-list db)))

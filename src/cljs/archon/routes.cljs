@@ -10,6 +10,7 @@
                     ["/thanks" ::thanks-panel]
                     ["/vendor-list/:city" ::vendor-list-panel]
                     ["/vendor-details/:vendor-id" ::vendor-details-panel]
+                    ["/vendor-appointments" ::vendor-appointments-panel]
                     ["/calendar/:vendor-id/:date/:selected-service" ::calendar-panel]
                     ["/vendor-signup"  ::vendor-signup-panel]
                     ["/http-error" ::error-panel]

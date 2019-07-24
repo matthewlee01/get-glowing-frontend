@@ -8,8 +8,10 @@
     [archon.ven-reg.events :as vre]
     [archon.ven-list.views :as ven-list]
     [archon.city.views :as city]
+    [archon.ven-appts.events :as va-events]
     [archon.calendar.views :as calendar]
     [archon.ven-details.views :as ven-details]
+    [archon.ven-appts.views :as ven-appts]
     [archon.error.views :as error]
     [archon.routes :as routes]
     [archon.common-css :as css]
@@ -36,7 +38,8 @@
 (defn vendor-nav []
   "A component that contains the buttons that are relevant when a vendor is logged in"
   [:span
-    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::vse/get-v-services-list])} "My Services")
+    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::vse/show-v-services])} "My Services")
+    (css/NavBarElement {:on-click #(re-frame/dispatch [::va-events/show-ven-appts])} "My Appts.") 
 ;;    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::events/navigate-to ::routes/v-services-panel])} "Edit Services")
     [signout-button]])
 
@@ -104,6 +107,7 @@
       ::routes/thanks-panel [thanks-panel]
       ::routes/calendar-panel [calendar/panel]
       ::routes/error-panel [error/panel]
+      ::routes/vendor-appointments-panel [ven-appts/panel]
       ::routes/v-services-panel [v-services/panel]
       nil)])  ;; normally the path should match one of the above, except at first startup.
 

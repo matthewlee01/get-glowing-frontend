@@ -6,8 +6,9 @@
 ;; VARIABLE DEFS - START
 
 (def input-font-size "18px")
-(def color-glow-main "#FFB6C1")                             ;; pink
-(def color-nav "#7A7978")                                   ;; grey
+(def color-glow-main "#FFB6C1")   ;; pink
+(def color-nav "#7A7978")         ;; grey
+(def color-booked "#7b49b6")      ;; purple   
 (def anim-timing "0.3s")
 
 ;; VARIABLE DEFS - END

@@ -6,6 +6,11 @@
             [archon.routes :as routes]
             [archon.events :as events]))
 
+(rf/reg-event-fx
+  ::show-v-services
+  (fn [world _]
+    (rf/dispatch [::get-v-services-list])
+    {:dispatch [::events/navigate-to ::routes/v-services-panel]}))
 
 (rf/reg-event-fx
   ::get-v-services-list
@@ -23,8 +28,7 @@
   ::good-http-result
   (fn [world [_ {:keys [data errors] :as payload}]]
     (let [db (:db world)]
-      {:db (assoc db :services-list payload)
-       :dispatch [::events/navigate-to ::routes/v-services-panel]})))
+      {:db (assoc db :services-list payload)})))
 
 (rf/reg-event-fx
   ::bad-http-result
