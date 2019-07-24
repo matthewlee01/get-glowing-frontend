@@ -13,6 +13,8 @@
 (def booking-url (str root-url "booking"))
 (def ven-reg-url (str root-url "vendor"))
 (def login-url (str root-url "login"))
+(def v-calendar-url (str root-url "v_calendar"))
+(def v-bookings-url (str root-url "v_bookings"))
 (def v-services-url (str root-url "services"))
 (def edit-service-url (str root-url "service"))
 

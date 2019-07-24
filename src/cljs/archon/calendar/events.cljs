@@ -59,7 +59,7 @@
 (rf/reg-event-fx
   ::bad-result
   events/show-error)
- 
+
 (rf/reg-event-fx
   ::set-date
   (fn [world [_ date]]

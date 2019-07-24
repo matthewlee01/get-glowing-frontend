@@ -12,11 +12,11 @@
 (defn make-service-card-div [service-info current-vendor-id]
   "makes a vector with a index number and the div for the service card;
    used with map-indexed to group services into columns"
-  (let [{:keys [s_description s_duration s_name s_price s_type s_id]} service-info
+  (let [{:keys [s_description s_duration s_name s_price s_type service_id]} service-info
         date (cal-events/get-current-date)]
     ^{:key service-info}
      [:div [:div {:class (vd-css/service-card-title 16)
-                  :on-click #(rf/dispatch [::vde/goto-ven-calendar current-vendor-id date s_id])} s_name]
+                  :on-click #(rf/dispatch [::vde/goto-ven-calendar current-vendor-id date service_id])} s_name]
            [:div {:class (vd-css/service-card-box)}
              [:div s_type]
              [:div s_duration]

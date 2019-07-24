@@ -64,31 +64,31 @@
    [:h1 "Post a new service"]
    [:div
     (css/TextInputField{:type "text"
-                        :value (:s-name active-service)
+                        :default-value (:s-name active-service)
                         :placeholder "Service Name"
                         :auto-focus true
                         :on-change #(rf/dispatch [::vse/name-change (-> % .-target .-value)])})]
    [:div
     (css/TextInputField{:type "text"
-                        :value (:s-description active-service)
+                        :default-value (:s-description active-service)
                         :placeholder "Description"
                         :auto-focus true
                         :on-blur #(rf/dispatch [::vse/description-change (-> % .-target .-value)])})]
    [:div
     (css/TextInputField{:type "text"
-                        :value (:s-price active-service)
+                        :default-value (:s-price active-service)
                         :placeholder "Price"
                         :auto-focus true
                         :on-blur #(rf/dispatch [::vse/price-change (-> % .-target .-value)])})]
    [:div
     (css/TextInputField{:type "text"
-                        :value (:s-duration active-service)
+                        :default-value (:s-duration active-service)
                         :placeholder "Time for Service in Minutes"
                         :auto-focus true
                         :on-blur #(rf/dispatch [::vse/duration-change (-> % .-target .-value)])})]
    [:div
     (css/TextInputField{:type "text"
-                        :value (:s-type active-service)
+                        :default-value (:s-type active-service)
                         :placeholder "Type"
                         :auto-focus true
                         :on-blur #(rf/dispatch [::vse/type-change (-> % .-target .-value)])})]
