@@ -11,6 +11,7 @@
     [archon.common-css :as css]))
 
 (defn service-id-to-name
+  "retrieves a service's name using its service-id"
   [service-id]
   (let [services-list @(rf/subscribe [::subs/services-list])]
     (->> (map (fn [service] (if (= service-id (str (:service-id service)))
@@ -18,7 +19,21 @@
                               nil)) services-list)
          (some identity))))
    
+(defn group-booking
+  "takes a map of grouped bookings and slots the new one in"
+  [grouped-bookings booking]
+  (let [date (:date booking)]
+    (->> [booking]
+         (concat (get grouped-bookings date))
+         (assoc grouped-bookings date))))
+
+(defn group-booking-coll
+  [booking-list]
+  "takes a list of bookings and converts it into a map of collections of bookings, with each entry in the map representing a day"
+  (reduce group-booking {} booking-list))
+
 (defn appointment-list-card
+  "a component representing a booking, navigates calendar to its date when clicked"
   [booking]
   (let [{:keys [user-id service time date booking-id]} booking]
     ^{:key booking-id}
@@ -29,12 +44,20 @@
           (cal-views/minute-int-to-time-string (last time)) ", "
           date)]))
 
+(defn appointment-list-day
+  "a component containing all the appointment cards for 1 day"
+  [[date booking-list]]
+  ^{:key date}
+  [:div date
+   (map appointment-list-card booking-list)])
+
 (defn appointment-list-column
+  "displays a list of bookings in a column, sorted by days"
   [booking-list]
-  "displays a list of bookings in a column"
   [:div {:class (appt-css/appt-list-column)}
    "Your Appointments:"
-   (map appointment-list-card booking-list)])
+   (->> (group-booking-coll booking-list)
+        (map appointment-list-day))])
 
 (defn panel []
   [:div {:class (appt-css/appt-view-box)}

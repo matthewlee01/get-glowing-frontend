@@ -10,6 +10,8 @@
 (defstyles appt-list-column []
   {:display "flex"
    :width "30%"
+   :height "70vh"
+   :overflow "auto"
    :flex-direction "column"})
 
 (defstyles appt-card []
