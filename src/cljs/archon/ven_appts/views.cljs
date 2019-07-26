@@ -20,14 +20,13 @@
    
 (defn appointment-list-card
   [booking]
-  (let [{:keys [user-id service time date booking-id]} booking
-        time-slot (cr/read-string time)]
+  (let [{:keys [user-id service time date booking-id]} booking]
     ^{:key booking-id}
     [:div {:class (appt-css/appt-card)
            :on-click #(rf/dispatch [::cal-events/set-date date])} 
      (str (service-id-to-name service) ", " 
-          (cal-views/minute-int-to-time-string (first time-slot)) "-"
-          (cal-views/minute-int-to-time-string (second time-slot)) ", "
+          (cal-views/minute-int-to-time-string (first time)) "-"
+          (cal-views/minute-int-to-time-string (last time)) ", "
           date)]))
 
 (defn appointment-list-column
@@ -38,7 +37,6 @@
    (map appointment-list-card booking-list)])
 
 (defn panel []
-  (let [filler "this is the vendor appt page. you have arrived, good job matthew"]
-    [:div {:class (appt-css/appt-view-box)}
-     (appointment-list-column @(rf/subscribe [::subs/v-bookings-list]))
-     (cal-views/panel)]))
+  [:div {:class (appt-css/appt-view-box)}
+   (appointment-list-column @(rf/subscribe [::subs/v-bookings-list]))
+   (cal-views/panel)])
