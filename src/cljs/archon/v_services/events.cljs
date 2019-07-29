@@ -47,12 +47,12 @@
 (rf/reg-event-db
   ::price-change
   (fn [db [_ price]]
-    (assoc-in db [:active-service :s-price] price)))
+    (assoc-in db [:active-service :s-price] (js/parseInt price))))
 
 (rf/reg-event-db
   ::duration-change
   (fn [db [_ duration]]
-    (assoc-in db [:active-service :s-duration] duration)))
+    (assoc-in db [:active-service :s-duration] (js/parseInt duration))))
 
 (rf/reg-event-db
   ::type-change
@@ -75,9 +75,10 @@
                     :on-failure [::bad-result]}})))
 (rf/reg-event-fx
   ::good-result
-  (fn [_  _]
-    {:dispatch [::get-v-services-list]}))
-
+  (fn [world [_ {:keys [data errors] :as payload}]]
+    {:dispatch [::get-v-services-list]
+     :db (assoc (:db world) :error (:error payload))}))
+     
 (rf/reg-event-fx
   ::bad-result
   events/show-error)
