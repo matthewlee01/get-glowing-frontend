@@ -46,9 +46,11 @@
 
 (rf/reg-event-fx
   ::good-result
-  (fn [_  _]
+  (fn [world [_ {:keys [error] :as payload}]]
     (let [url-string (routes/name-to-url ::routes/thanks-panel)]
-      {:navigate url-string})))
+      (if (nil? error)
+        {:navigate url-string}
+        {:db (assoc (:db world) :error (:error payload))}))))
 
 (rf/reg-event-fx
   ::bad-result
@@ -100,7 +102,7 @@
   (fn [db [_ vendor-address]]
     (let [[num name] (str/split vendor-address #" " 2)]
       (-> db
-        (assoc-in [:vendor-reg :vr-addr-num] num)
+        (assoc-in [:vendor-reg :vr-addr-num] (js/parseInt num))
         (assoc-in [:vendor-reg :vr-addr-name] name)))))
 
 (rf/reg-event-db
