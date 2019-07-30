@@ -66,7 +66,7 @@
       (css/TextInputField{:type "text"
                           :placeholder "Phone number"
                           :auto-focus true
-                          :on-blur #(rf/dispatch [::es/vr-phone-change (-> % .-target .-value)])})]
+                          :on-blur #(rf/dispatch [::es/vr-phone-change (-> % .-target .-value js/parseInt)])})]
 
      [css/SubmitButton {:on-click #(rf/dispatch [::es/submit-vendor-registration])} "Enter"]]))
 
