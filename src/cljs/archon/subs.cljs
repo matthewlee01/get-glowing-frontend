@@ -52,9 +52,9 @@
     (:vendor-calendar db)))
 
 (re-frame/reg-sub
-  ::vendor-list-empty?
+  ::vendor-page-empty?
   (fn [db _]
-    (:vendor-list-empty? db)))
+    (:vendor-page-empty? db)))
 
 (re-frame/reg-sub
   ::last-error-payload
@@ -85,3 +85,18 @@
   ::v-bookings-list
   (fn [db _]
     (:v-bookings-list db)))
+
+(re-frame/reg-sub
+  ::last-page
+  (fn [db _]
+    (:last-page db)))
+
+(re-frame/reg-sub
+  ::page-index
+  (fn [db _]
+    (:page-index db)))
+
+(re-frame/reg-sub
+  ::vendor-list-display
+  (fn [db _]
+    (:vendor-list-display db)))
