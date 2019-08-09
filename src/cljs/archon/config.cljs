@@ -16,6 +16,7 @@
 (def v-calendar-url (str root-url "v_calendar"))
 (def v-bookings-url (str root-url "v_bookings"))
 (def v-services-url (str root-url "services"))
+(def v-list-url (str root-url "v_list"))
 (def edit-service-url (str root-url "service"))
 
 (defn debug-out [params]
