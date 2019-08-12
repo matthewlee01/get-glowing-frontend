@@ -35,24 +35,26 @@
   ::good-page-request
   ;adds the next page to the vendor list
   ;handles navigation to vendor-list-panel
-  (fn [world [_ reset-vendor-list? navigate? {:keys [data] :as payload}]]
-    (let [{:keys [page-index city-name] :as db} (:db world)
-          clean-prev-state (dissoc db :prev-state)
-          {:keys [page last-page?]} data
-          last-page (if last-page? ;sets value of last-page to current page index if page returned by the backend is the last
-                      page-index)  ;assumes that the page index matches the newly loaded page
-          vendor-page-empty? (empty? page)
-          updated-db {:db (-> db
-                              (update :vendor-list conj page)
-                              (assoc :last-page last-page
-                                     :vendor-page-empty? vendor-page-empty?))}
-          updated-effects-for-nav (if (and navigate?
-                                           (not vendor-page-empty?))
-                                    (-> updated-db
-                                        (assoc-in [:db :prev-state] clean-prev-state)
-                                        (assoc :navigate (routes/name-to-url ::routes/vendor-list-panel {:city city-name})))
-                                    updated-db)]
-      updated-effects-for-nav)))
+  (fn [world [_ reset-vendor-list? navigate? {:keys [data error] :as payload}]]
+    (if error
+      {:db (assoc (:db world) :error error)}
+      (let [{:keys [page-index city-name] :as db} (:db world)
+            clean-prev-state (dissoc db :prev-state)
+            {:keys [page last-page?]} data
+            last-page (if last-page? ;sets value of last-page to current page index if page returned by the backend is the last
+                        page-index)  ;assumes that the page index matches the newly loaded page
+            vendor-page-empty? (empty? page)
+            updated-db {:db (-> db
+                                (update :vendor-list conj page)
+                                (assoc :last-page last-page
+                                       :vendor-page-empty? vendor-page-empty?))}
+            updated-effects-for-nav (if (and navigate?
+                                             (not vendor-page-empty?))
+                                      (-> updated-db
+                                          (assoc-in [:db :prev-state] clean-prev-state)
+                                          (assoc :navigate (routes/name-to-url ::routes/vendor-list-panel {:city city-name})))
+                                      updated-db)]
+        updated-effects-for-nav))))
 
 (rf/reg-event-fx
   ::load-new-vendor-page
