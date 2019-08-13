@@ -100,3 +100,8 @@
   ::vendor-list-display
   (fn [db _]
     (:vendor-list-display db)))
+
+(re-frame/reg-sub
+  ::filename
+  (fn [db _]
+    (:filename db)))

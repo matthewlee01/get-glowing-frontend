@@ -18,6 +18,7 @@
 (def v-services-url (str root-url "services"))
 (def v-list-url (str root-url "v_list"))
 (def edit-service-url (str root-url "service"))
+(def v-upload-url (str root-url "upload"))
 
 (defn debug-out [params]
   (when debug?
