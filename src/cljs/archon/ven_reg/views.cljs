@@ -5,6 +5,11 @@
             [archon.ven-reg.events :as es]
             [cljss.reagent :refer-macros [defstyled]]))
 
+(def STATES ["Alberta" "British Columbia" "Manitoba" "New Brunswick" "Newfoundland and Labrador" "Northwest Territories" "Nova Scotia" "Nunavut" "Ontario" "PEI" "Quebec" "Saskatchewan" "Yukon"])
+
+(defn create-state-select-option [state]
+  [:option {:style {:color "black"}} state])
+
 (defn panel []
   (let [{:keys [name-first name-last email] :or {name-first "" name-last "" email ""}} @(rf/subscribe [::subs/user-info])]
     [:div {:class (css/input-class)}
@@ -42,18 +47,11 @@
                           :auto-focus true
                           :on-blur #(rf/dispatch [::es/vr-city-change (-> % .-target .-value)])})]
      [:div
-      (css/SelectInput{:default-value "British Columbia"
+      (css/SelectInput{:required true
+                       :default-value ""
                        :on-change #(rf/dispatch [::es/vr-state-change (-> % .-target .-value)])}
-                     [:option "Alberta"]
-                     [:option "British Columbia"]
-                     [:option "Manitoba"]
-                     [:option "New Brunswick"]
-                     [:option "Newfoundland and Labrador"]
-                     [:option "Nova Scotia"]
-                     [:option "Ontario"]
-                     [:option "PEI"]
-                     [:option "Quebec"]
-                     [:option "Saskatchewan"])]
+                     [:option {:value "" :hidden true :disabled true} "Province"]
+                     (map create-state-select-option STATES))]
 
 
 
