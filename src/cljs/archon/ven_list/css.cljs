@@ -3,6 +3,10 @@
             [cljss.reagent :refer-macros [defstyled]]
             [archon.common-css :as css]))
 
+(def button-active-color "#FFB6C1")
+
+(def button-inactive-color "#9A9998")
+
 (defstyled vendor-card-div :div
   {:background-color "#e2c7d1"
    :display "inline-block"
@@ -68,3 +72,55 @@
    :height "100px"
    :transition css/anim-timing
    :&:hover {:opacity "0.9"}})
+
+(defstyles cost-filter-screen-container []
+  {:position "relative"
+   :display "flex"
+   :justify-content "center"
+   :align-items "center"})
+
+(defstyled CostFilterButton :button
+  {:border "1px"
+   :border-radius "10px"
+   :box-sizing "border-box"
+   :margin "10px 10px"
+   :padding "10px 30px"
+   :font-size "16px"
+   :font-weight "bold"
+   :cursor "pointer"
+   :color "white"
+   :z-index 2
+   :&:hover {:opacity "0.9"}})
+
+(defstyled cost-filter-screen-bg :div
+  {:position "fixed"
+   :bottom "0"
+   :top "0"
+   :right "0"
+   :left "0"
+   :background-color "white"
+   :opacity 0.70
+   :z-index 1})
+
+(defstyled cost-filter-box :div
+  {:margin "5px"
+   :width "300px"
+   :height "300px"
+   :border-radius "5px"
+   :z-index 2
+   :background-color "pink"
+   :position "absolute"
+   :bottom "-287px"})
+
+(defstyled FilterLabel :label
+           {:font-family "Arial"
+            :margin "15px"
+            :color "#7a7978"
+            :font-size "15px"})
+
+(defstyled FilterInputField :input
+           {:padding "5px"
+            :margin "10px 0"
+            :font-size css/input-font-size
+            :width "60px"
+            :height "40px"})

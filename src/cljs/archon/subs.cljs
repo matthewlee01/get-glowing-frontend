@@ -100,3 +100,8 @@
   ::vendor-list-display
   (fn [db _]
     (:vendor-list-display db)))
+
+(re-frame/reg-sub
+  ::cost-filter-box-hidden?
+  (fn [db _]
+    (:cost-filter-box-hidden? db)))
