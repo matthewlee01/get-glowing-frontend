@@ -8,6 +8,7 @@
 
 (defstyles flex-container []
            {:display "flex"
+            :justify-content "space-between"
             :flex-wrap "wrap"
             ::&:after {:clear "both"}
             ::cljss/media {[:only :screen :and [:min-width "800px"]] {:width "700px"}
@@ -15,16 +16,16 @@
 
 (defstyled service-card-div :div
            ;;           {:background-color "#efa2bf"
-           {:background-color "#e2c7d1"
+           {:background-color css/color-card-background
             :display "inline-block"
             :width "600px"
-            :height "680px"
+            :height "400px"
             :margin "10px"
             :text-align "left"
             :box-shadow "4px 4px 8px 0 #686868"})
 
 (defstyled CardButton :button
-           {:background-color "#00FF77"
+           {:background-color css/color-card-background
             :border "1px"
             :border-radius "10px"
             :border-color "#FFFFFF"
@@ -43,69 +44,53 @@
           {:background-color "#333300"
            :text-align "right"})
 
-(defn service-card [service]
-  (let [{:keys [s-description s-duration s-name s-price s-type]} service]
-    ^{:key service}
+(defn input-field [label editable? default-value type edit-event service-id]
+  (let [border (if editable? "1px solid red" "0px solid red")
+        background (if editable? "#FFFFFF" css/color-glow-main)]
+    [:div
+      [css/InputLabel label]
+      [:input {:class (css/CardInputField border background)
+               :disabled (not editable?)
+               :type type
+               :default-value default-value
+               :auto-focus true
+               :on-change (when editable?
+                            #(rf/dispatch [edit-event service-id (-> % .-target .-value)]))}]]))
+
+(defn service-card [service-vector currently-active-id]
+  (let [service-id (first service-vector)
+        service (second service-vector)
+        {:keys [s-description s-duration s-name s-price s-type]} service
+        editable? (= service-id currently-active-id)]
+    ^{:key service-id}
     (service-card-div
-      [:div
-       [:p "Name: " s-name]
-       [:p "Type:  " s-type]
-       [:p "Duration: " s-duration]
-       [:p "Cost:  $" (/ s-price 100)]
-       [:p "Description:  "s-description]
-       (BottomMenu
-        [CardButton {:on-click #(rf/dispatch [::vse/edit-service-selected service])}
-         "edit"]
-        [CardButton "activate"]
-        [css/SubmitButton "delete"])])))
-
-(defn edit-service [active-service]
-  [:div
-   [:h1 "Post a new service"]
-   [:div
-    (css/TextInputField{:type "text"
-                        :default-value (:s-name active-service)
-                        :placeholder "Service Name"
-                        :auto-focus true
-                        :on-change #(rf/dispatch [::vse/name-change (-> % .-target .-value)])})]
-   [:div
-    (css/TextInputField{:type "text"
-                        :default-value (:s-description active-service)
-                        :placeholder "Description"
-                        :auto-focus true
-                        :on-blur #(rf/dispatch [::vse/description-change (-> % .-target .-value)])})]
-   [:div
-    (css/TextInputField{:type "text"
-                        :default-value (:s-price active-service)
-                        :placeholder "Price"
-                        :auto-focus true
-                        :on-blur #(rf/dispatch [::vse/price-change (-> % .-target .-value)])})]
-   [:div
-    (css/TextInputField{:type "text"
-                        :default-value (:s-duration active-service)
-                        :placeholder "Time for Service in Minutes"
-                        :auto-focus true
-                        :on-blur #(rf/dispatch [::vse/duration-change (-> % .-target .-value)])})]
-   [:div
-    (css/TextInputField{:type "text"
-                        :default-value (:s-type active-service)
-                        :placeholder "Type"
-                        :auto-focus true
-                        :on-blur #(rf/dispatch [::vse/type-change (-> % .-target .-value)])})]
-
-   [css/SubmitButton {:on-click #(rf/dispatch [::vse/submit-service])} "Submit"]])
+      [input-field "Name:" editable? s-name "text" ::vse/name-change service-id]
+      [input-field "Type:" editable? s-type "text" ::vse/type-change service-id]
+      [input-field "Duration:" editable? s-duration "number" ::vse/duration-change service-id]
+      [input-field "Price:" editable? (/ s-price 100) "number" ::vse/price-change service-id]
+      [input-field "Description:" editable? s-description "text" ::vse/description-change service-id]
+      (BottomMenu
+        (if editable?
+          [:div
+            [css/SubmitButton {:on-click #(rf/dispatch [::vse/submit-selected])} "Submit"]
+            [css/SubmitButton {:on-click #(rf/dispatch [::vse/cancel-selected])} "Cancel"]]
+          [:div
+            [CardButton {:on-click #(rf/dispatch [::vse/edit-selected service-id])}
+             "edit"]
+            [CardButton "activate"]
+            [css/SubmitButton "delete"]])))))
 
 (defn panel []
-  (let [services-list @(rf/subscribe [::subs/services-list])
-        active-service @(rf/subscribe [::subs/active-service])]
-    [:div {:class (flex-container)}
-     [:div {:style {:justify-content "space-between"
-                    :display "flex"}}
-      [:h1
-       "Existing Services"]]
-
-     [:div
-       (map service-card services-list)
-
-       [edit-service active-service]]]))
+  (let [services-map @(rf/subscribe [::subs/services-map])
+        active-service-id @(rf/subscribe [::subs/active-service-id])]
+    [:div 
+     [css/SubmitButton {:on-click #(rf/dispatch [::vse/add-new-selected])} "Add new service"]
+     [:div [:h1 "Existing Services"]]
+     [:div {:class flex-container}
+      (if (= services-map {})
+          [:div {:style {:background-color "#DFDFAA"
+                         :display "block"}} 
+             [:h2 "No Services Currently Defined"]]
+          [:div
+            (map #(service-card % active-service-id) services-map)])]]))
 

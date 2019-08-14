@@ -1,5 +1,6 @@
 (ns archon.common-css
   (:require
+    [reagent.core]  ;; manually requiring this namespace - otherwise getting compile warning.  not sure why all of a sudden :(
     [cljss.core :refer-macros [defstyles]]
     [cljss.reagent :refer-macros [defstyled]]))
 
@@ -10,7 +11,8 @@
 (def color-nav "#7A7978")         ;; grey
 (def color-booked "#7b49b6")      ;; purple   
 (def anim-timing "0.3s")
-
+(def color-glow-edit-text-background "#000000")
+(def color-card-background "#E2C7D1")
 ;; VARIABLE DEFS - END
 
 ;; HEADER STYLES - START
@@ -98,6 +100,14 @@
 
 (defstyled TextInputField :input
            {:padding "5px"
+            :margin "10px 0"
+            :font-size input-font-size
+            :width "67%"})
+
+(defstyles CardInputField [border background]
+           {:border border
+            :background-color color-card-background
+            :padding "5px"
             :margin "10px 0"
             :font-size input-font-size
             :width "67%"})
