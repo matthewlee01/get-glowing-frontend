@@ -1,6 +1,7 @@
 (ns archon.ven-details.css
   (:require
     [cljss.core :as css :refer-macros [defstyles]]
+    [archon.common-css :as com-css]
     [cljss.reagent :refer-macros [defstyled]]))
 
 
@@ -37,7 +38,6 @@
 
 (defstyled profile-title :label
   {:display "block"
-;   :background-color "#ABC"
    :text-align "center"
    :font-size "28px"})
 
@@ -49,3 +49,54 @@
 (defstyled service-select-label :div
   {:font-size "16px"
    :margin "16px"})
+
+(defstyles photo-modal-box []
+  {:width "70%"
+   :height "90%"
+   :display "flex"
+   :flex-flow "column"
+   :justify-content "flex-start"
+   :background-color "#d9d9d9"
+   :margin "5% auto"})
+
+(defstyles photo-modal-content []
+  {:display "flex"
+   :flex-wrap "wrap"
+   :flex-grow "2"
+   :flex-flow "column"
+   :justify-content "space-evenly"})
+
+(defstyles photo-display []
+  {:display "flex"
+   :flex-wrap "wrap"
+   :justify-content "flex-start"
+   :padding "0px"
+   :width "100%"})
+
+(defstyles photo-thumbnail [published?]
+  {:display "flex"
+   :object-fit "cover"
+   :margin "3px"
+   :height "300px"
+   :border-style "dashed"
+   :border-width "5px"
+   :border-color (if published?
+                   "white"
+                   com-css/color-glow-main)                
+   :width "300px"})
+
+(defstyles photo-description []
+  {:padding "10px 10px"
+   :margin "5px 5px"
+   :background-color "white"
+   :border-style "solid"
+   :border-color "black"
+   :border-width "1px"})
+
+(defstyles photo-image []
+  {:width "90%"
+   :object-fit "contain"
+   :margin "0% auto"
+   :max-height "75%"})
+
+

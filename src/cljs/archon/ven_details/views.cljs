@@ -4,8 +4,11 @@
     [cljss.core :refer-macros [defstyles]]
     [cljss.reagent :refer-macros [defstyled]]
     [archon.subs :as subs]
+    [archon.config :as config]
     [archon.ven-details.events :as vde]
     [archon.ven-details.css :as vd-css]
+    [archon.ven-upload.views :as vu-views]
+    [archon.events :as events]
     [archon.common-css :as css]
     [archon.calendar.events :as cal-events]))
 
@@ -23,12 +26,60 @@
              [:div s_price]
              [:div s_description]]]))
 
+(defn photo-thumbnail
+  [photo]
+  (let [{:keys [description filename service-id published]} photo]
+    ^{:key filename}
+    [:div {:on-click #(rf/dispatch [::events/set-selected-photo photo])}
+     [:img {:class (vd-css/photo-thumbnail published)
+            :src (str config/image-url filename) 
+            :alt description}]]))
+  
+(defn photo-image
+  [filename]
+  [:img {:class (vd-css/photo-image)
+         :src (str config/image-url filename)
+         :alt "ERROR: Image not found"}])
+
+(defn photo-modal-content
+  [photo]
+  [:div {:class (vd-css/photo-modal-content)}
+   [:img {:src (str config/image-url (:filename photo))
+          :alt "ERROR: Image not found"
+          :class (vd-css/photo-image)}]
+   [:div {:class (vd-css/photo-description)} (:description photo)]])
+  
+(defn photo-modal
+  []
+  (if-let [photo @(rf/subscribe [::subs/selected-photo])]
+    [:div {:class (css/modal-bg)}
+     [:div {:class (vd-css/photo-modal-box)}
+      (if (= @(rf/subscribe [::subs/active-panel]) :archon.routes/vendor-upload-panel)
+        (vu-views/photo-modal-buttons photo))
+      (photo-modal-content photo)]]))
+
+(defn photo-display
+  [photos]
+  [:div {:class (vd-css/photo-display)}
+   (map photo-thumbnail photos)])
+
+(defn photo-panel
+  [empty-text photos]
+  "constructs the panel that holds the photo thumbnails, displaying a fallback string if empty"
+  (if photos
+    [:div 
+     [:h5 "Photo Gallery:"]
+     (photo-display photos)]
+    [:div
+     [:h5 empty-text]]))
+
 (defn panel []
     (let [{:keys [vendor_id 
                   name
                   name_first
                   name_last
                   summary
+                  photos
                   services 
                   profile_pic]} 
           @(rf/subscribe [::subs/vendor-details])
@@ -45,5 +96,8 @@
            [:br]
            [vd-css/service-select-label "Select a service to view availability:"]
            [:div {:class (vd-css/service-card-array)}
-             (map #(make-service-card-div % vendor_id) services)]]))
+             (map #(make-service-card-div % vendor_id) services)]
+           (photo-panel "This vendor hasn't uploaded any photos yet." photos)]))
+             
+            
   
