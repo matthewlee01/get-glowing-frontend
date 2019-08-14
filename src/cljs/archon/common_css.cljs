@@ -105,7 +105,9 @@
 (defstyled SelectInput :select
            {
             :height "35px"
-            :font-size input-font-size})
+            :font-size input-font-size
+            :&:invalid {:color color-nav}
+            :&:valid {:color "black"}})
 
 
 (defstyled SubmitButton :button

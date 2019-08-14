@@ -125,3 +125,8 @@
   ::selected-photo
   (fn [db _]
     (:selected-photo db)))
+
+(re-frame/reg-sub
+  ::cost-filter-box-hidden?
+  (fn [db _]
+    (:cost-filter-box-hidden? db)))

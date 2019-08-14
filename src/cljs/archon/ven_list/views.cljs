@@ -8,6 +8,7 @@
     [archon.common-css :as css]
     [re-frame.core :as rf]))
      
+(def MAX-RATING 5)
 
 (defn percentage [rating]
   (->> (/ rating 5.0)
@@ -38,21 +39,45 @@
             [:div {:class (vl-css/filled-stars rating%)}])
           [:div [:div addr-city]]])]))
 
+(defn get-cost-button-color []
+  (if (and @(rf/subscribe [::subs/cost-filter-box-hidden?])
+           (= (@(rf/subscribe [::subs/vendor-list-display]) :min-cost) "")
+           (= (@(rf/subscribe [::subs/vendor-list-display]) :max-cost) ""))
+    vl-css/button-inactive-color
+    vl-css/button-active-color))
+
+(defn cost-filters
+ []
+ [:div {:class (vl-css/cost-filter-screen-container)}
+   (vl-css/CostFilterButton {:on-click #(rf/dispatch [::vle/toggle-cost-filter-box]) :style {:background-color (get-cost-button-color)}} "Cost")
+   (vl-css/cost-filter-screen-bg {:on-click #(rf/dispatch [::vle/toggle-cost-filter-box]) :hidden @(rf/subscribe [::subs/cost-filter-box-hidden?])})
+   (vl-css/cost-filter-box {:hidden @(rf/subscribe [::subs/cost-filter-box-hidden?])}
+     (vl-css/FilterLabel "Min Cost")
+     (vl-css/FilterInputField {:value (@(rf/subscribe [::subs/vendor-list-display]) :min-cost) :min 0 :type "number" :on-change #(rf/dispatch [::vle/min-cost-change (-> % .-target .-value)]) :on-blur #(rf/dispatch [::vle/adjust-min-cost])})
+     [:br]
+     (vl-css/FilterLabel "Max Cost")
+     (vl-css/FilterInputField {:value (@(rf/subscribe [::subs/vendor-list-display]) :max-cost) :min 0 :type "number" :on-change #(rf/dispatch [::vle/max-cost-change (-> % .-target .-value)]) :on-blur #(rf/dispatch [::vle/adjust-max-cost])})
+   )])
+
 (defn vendor-page
   []
   (get @(rf/subscribe [::subs/vendor-list]) @(rf/subscribe [::subs/page-index])))
 
 (defn panel []
   [:div
-    (css/SelectInput {:value (@(rf/subscribe [::subs/vendor-list-display]) :sort-by) :on-change #(rf/dispatch [::vle/sort-by-change (-> % .-target .-value)])}
-      [:option {:value "v.updated_at"} "Recently Updated"]
-      [:option {:value "name_first"} "First Name"]
-      [:option {:value "name_last"} "Last Name"] 
-    )
-    (css/SelectInput {:value (@(rf/subscribe [::subs/vendor-list-display]) :sort-order) :on-change #(rf/dispatch [::vle/sort-order-change (-> % .-target .-value)])}
-      [:option {:value "asc"} "Ascending"]
-      [:option {:value "desc"} "Descending"]
-    )
+    [:div {:style {:display "flex" :flex-wrap "wrap"}}
+      (css/SelectInput {:value (@(rf/subscribe [::subs/vendor-list-display]) :sort-by) :on-change #(rf/dispatch [::vle/sort-by-change (-> % .-target .-value)])}
+        [:option {:value "v.updated_at"} "Recently Updated"]
+        [:option {:value "name_first"} "First Name"]
+        [:option {:value "name_last"} "Last Name"] 
+      )
+      (css/SelectInput {:value (@(rf/subscribe [::subs/vendor-list-display]) :sort-order) :on-change #(rf/dispatch [::vle/sort-order-change (-> % .-target .-value)])}
+        [:option {:value "asc"} "Ascending"]
+        [:option {:value "desc"} "Descending"]
+      )
+      (vl-css/FilterLabel "Min Rating")
+      (vl-css/FilterInputField {:value (@(rf/subscribe [::subs/vendor-list-display]) :min-rating) :min 0 :max MAX-RATING :type "number" :on-change #(rf/dispatch [::vle/min-rating-change (-> % .-target .-value)])})
+      (cost-filters)]
     [:div {:class (vl-css/vendor-card-flex)} (map vendor-card (vendor-page))]
     (vl-css/nav-button {:on-click #(rf/dispatch [::vle/nav-prev-page])
                         :hidden (= 0 @(rf/subscribe [::subs/page-index]))} "Previous Page")

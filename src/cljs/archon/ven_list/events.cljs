@@ -15,6 +15,8 @@
    "name_last" :name-last
    })
 
+(def COST-BUFFER 5) ;the amount above min cost or below max cost when a value of min cost higher than max cost is entered or vice versa
+
 (rf/reg-event-fx
   ::get-page
   ;requests new page of vendors from the backend
@@ -56,22 +58,34 @@
                                       updated-db)]
         updated-effects-for-nav))))
 
+(defn assemble-filters
+  [city {:keys [min-rating min-cost max-cost]}]
+    (cond-> [["city" city]]
+            (and min-rating
+                 (not= "" min-rating)) (conj ["min-rating" min-rating])
+            (and min-cost
+                 (not= "" min-cost)) (conj ["min-cost" (* min-cost 100)]) ;converts from dollars to cents
+            (and max-cost
+                 (not= "" max-cost)) (conj ["max-cost" (* max-cost 100)]))
+  )
+
 (rf/reg-event-fx
   ::load-new-vendor-page
   ;assembles the token in order to dispatch get-page to get new page of vendors from backend
   (fn [world [_ reset-vendor-list? navigate?]]
     (let [city-name (-> (:db world)
                         :city-name)
-          {:keys [sort-by sort-order]} (-> (:db world)
-                                           :vendor-list-display)
-          sort-arg-key (get-sort-arg sort-by)                                                     ;uses a map to get the name of the key of the value sorted by in the vendor map
+          {:keys [sort-by sort-order] :as vendor-list-display} (-> (:db world)
+                                                                   :vendor-list-display)
+          filter-by (assemble-filters city-name vendor-list-display)
+          sort-arg-key (get-sort-arg sort-by)                                        ;uses a map to get the name of the key of the value sorted by in the vendor map
           {:keys [vendor-id] sort-arg sort-arg-key} (if-not reset-vendor-list? (-> (:db world)    ;gets the token from the last vendor requested
                                                                                    :vendor-list   ;will be nil if it's the first request
                                                                                    (last)
                                                                                    (last)))]
       (rf/dispatch [::get-page {:vendor-id vendor-id
                                 :sort-by [sort-by sort-arg sort-order]
-                                :filter-by [["city" city-name]]
+                                :filter-by filter-by
                                 :page-size 2} reset-vendor-list? navigate?]))))
 
 (rf/reg-event-fx
@@ -139,3 +153,59 @@
                              :sort-order)]
     {:db (assoc-in (:db world) [:vendor-list-display :sort-order] new-sort-order)
      :dispatch [::load-new-vendor-page true false]})))
+
+(rf/reg-event-fx
+  ::min-rating-change
+  (fn [world [_ new-min-rating]]
+    (let [new-min-rating (if (> new-min-rating 5)
+                           5
+                           (if (<= new-min-rating 0)
+                             ""
+                             new-min-rating))]
+    {:db (assoc-in (:db world) [:vendor-list-display :min-rating] new-min-rating)
+           :dispatch [::load-new-vendor-page true false]})))
+
+(rf/reg-event-fx
+  ::min-cost-change
+  (fn [world [_ new-min-cost]]
+    (let [new-min-cost (if (< new-min-cost 0)
+                         0
+                         new-min-cost)]
+      {:db (assoc-in (:db world) [:vendor-list-display :min-cost] new-min-cost)})))
+
+(rf/reg-event-fx
+  ::adjust-min-cost
+  (fn [world _]
+    (let [{:keys [min-cost max-cost]} (-> (:db world)
+                                          :vendor-list-display)
+          new-min-cost (if (< (js/parseInt max-cost) (js/parseInt min-cost)) ;will return false when either max or min cost is "" because parseInt will evaluate to NaN
+                         (- (js/parseInt max-cost) COST-BUFFER)
+                         min-cost)]
+      {:db (assoc-in (:db world) [:vendor-list-display :min-cost] new-min-cost)})))
+
+(rf/reg-event-fx
+  ::max-cost-change
+  (fn [world [_ new-max-cost]]
+    (let [new-max-cost (if (< new-max-cost 0)
+                         0
+                         new-max-cost)]
+      {:db (assoc-in (:db world) [:vendor-list-display :max-cost] new-max-cost)})))
+
+(rf/reg-event-fx
+  ::adjust-max-cost
+  (fn [world _]
+    (let [{:keys [min-cost max-cost]} (-> (:db world)
+                                          :vendor-list-display)
+          new-max-cost (if (< (js/parseInt max-cost) (js/parseInt min-cost))
+                         (+ (js/parseInt min-cost) COST-BUFFER)
+                         max-cost)]
+      {:db (assoc-in (:db world) [:vendor-list-display :max-cost] new-max-cost)})))
+
+(rf/reg-event-fx
+  ::toggle-cost-filter-box
+  (fn [world _]
+    (let [box-hidden? (-> (:db world)
+                          :cost-filter-box-hidden?)]
+      (if-not box-hidden? (rf/dispatch [::load-new-vendor-page true false]))
+      {:db (update (:db world) :cost-filter-box-hidden? not)})
+    ))

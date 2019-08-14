@@ -8,5 +8,9 @@
    :photo-description ""
    :vendor-list []
    :page-index 0
+   :cost-filter-box-hidden? true
    :vendor-list-display {:sort-by "v.updated_at" 
-                         :sort-order "asc"}})
+                         :sort-order "asc"
+                         :min-rating ""
+                         :min-cost ""
+                         :max-cost ""}})
