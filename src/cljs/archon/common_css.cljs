@@ -30,7 +30,7 @@
    :position "fixed"
    :top "0px"
    :left "0px"
-   :background-color (if vendor? "#CBD""#DBC")
+   :background-color (if vendor? "#CBD" "#DBC")
    :display "flex"
    :justify-content "space-between"})
 
@@ -146,7 +146,7 @@
    :width (str sz "px")
    :height (str sz "px")})
 
-(defstyles error-modal-bg []
+(defstyles modal-bg []
   {:position "fixed"
    :z-index 1
    :left 0
@@ -161,9 +161,10 @@
    :border "1px solid #888"
    :width "55%"})
   
-(defstyles error-modal-close []
+(defstyles modal-close []
   {:color "#4d4e4f"
    :float "right"
+   :text-align "right"
    :margin "2px 10px"
    :font-size "35px"
    :font-weight "bold"

@@ -6,6 +6,7 @@
 (def archon-root js/window.location.origin)
 
 (def root-url (str "http://" js/window.location.hostname ":8888/"))
+(def image-url (str root-url "images/"))
 
 ;; a list of backend API endpoints this application uses
 (def graphql-url (str root-url "graphql"))
@@ -17,7 +18,10 @@
 (def v-bookings-url (str root-url "v_bookings"))
 (def v-services-url (str root-url "services"))
 (def v-list-url (str root-url "v_list"))
+(def v-photos-url (str root-url "v_photos"))
+(def v-publish-url (str root-url "v_publish_photo"))
 (def edit-service-url (str root-url "service"))
+(def v-delete-photo-url (str root-url "v_delete_photo"))
 (def v-upload-url (str root-url "upload"))
 
 (defn debug-out [params]

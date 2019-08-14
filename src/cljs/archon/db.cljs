@@ -5,6 +5,7 @@
   {:name "get glowing!"
    :active-panel (routes/name-to-url :routes/city-panel)
    :city-name ""
+   :photo-description ""
    :vendor-list []
    :page-index 0
    :vendor-list-display {:sort-by "v.updated_at" 

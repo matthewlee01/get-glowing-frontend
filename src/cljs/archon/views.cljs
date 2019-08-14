@@ -88,9 +88,9 @@
 
 (defn error-modal []
   (if-let [error @(re-frame/subscribe [::subs/error])]
-    [:div {:class (css/error-modal-bg)}
+    [:div {:class (css/modal-bg)}
       [:div {:class (css/error-modal-box)}
-        [:span {:class (css/error-modal-close)
+        [:span {:class (css/modal-close)
                 :on-click #(re-frame/dispatch [::events/set-error nil])} 
          (goog.string/unescapeEntities "&times")] ;;this returns a unicode "x" symbol string     
         [:p {:class (css/error-msg)} (:message error)]

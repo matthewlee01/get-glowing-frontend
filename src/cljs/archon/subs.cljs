@@ -105,3 +105,23 @@
   ::filename
   (fn [db _]
     (:filename db)))
+
+(re-frame/reg-sub
+  ::photo-list
+  (fn [db _]
+    (:photo-list db)))
+
+(re-frame/reg-sub
+  ::photo-description
+  (fn [db _]
+    (:photo-description db)))
+
+(re-frame/reg-sub
+  ::all-published?
+  (fn [db _]
+    (:all-published? db)))
+
+(re-frame/reg-sub
+  ::selected-photo
+  (fn [db _]
+    (:selected-photo db)))
