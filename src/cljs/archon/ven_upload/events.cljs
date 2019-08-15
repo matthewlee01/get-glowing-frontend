@@ -11,70 +11,57 @@
                                 POST]]))
 
 (defn all-published?
-  [photos]
-  (->> (map :published photos)
+  [images]
+  (->> (map :published images)
        (every? true?)))
 
 (rf/reg-event-fx
-  ::publish-photo
-  (fn [world [_ filename]]
+  ::update-image
+  (fn [world [_ image]]
     {:http-xhrio {:method  :post
-                  :uri    config/v-publish-url
+                  :uri    config/v-images-url
                   :params {:access-token (get-in world [:db :access-token])
-                           :filename filename}
+                           :image image}
                   :timeout 3000
                   :format (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success [::good-photo-result]
+                  :on-success [::good-image-result]
                   :on-failure [::bad-result]}}))
 
 (rf/reg-event-fx
-  ::delete-photo
-  (fn [world [_ filename]]
-    {:http-xhrio {:method  :post
-                  :uri    config/v-delete-photo-url
-                  :params {:access-token (get-in world [:db :access-token])
-                           :filename filename}
-                  :timeout 3000
-                  :format (json-request-format)
-                  :response-format (json-response-format {:keywords? true})
-                  :on-success [::good-photo-result]
-                  :on-failure [::bad-result]}}))
-
-(rf/reg-event-fx
-  ::ven-get-photos
+  ::ven-get-images
   (fn [world _]      
     {:http-xhrio {:method  :post
-                  :uri    config/v-photos-url
+                  :uri    config/v-image-list-url
                   :params {:access-token (get-in world [:db :access-token])}
                   :timeout 3000
                   :format (json-request-format)
                   :response-format (json-response-format {:keywords? true})
-                  :on-success [::good-photo-result]
+                  :on-success [::good-image-result]
                   :on-failure [::bad-result]}}))
 
 (rf/reg-event-fx
-  ::good-photo-result
+  ::good-image-result
   (fn [world [_ payload]]
-    (let [photos (:photos payload)]
+    (let [images (:images payload)]
       {:dispatch [::clear-files]
-       :db (assoc (:db world) :photo-list photos
-                              :all-published? (all-published? photos))})))
+       :db (assoc (:db world) :image-list images
+                              :all-published? (all-published? images))})))
 
 (rf/reg-event-fx
   ::show-ven-upload
   (fn [world _]
-    (rf/dispatch [::ven-get-photos])
+    (rf/dispatch [::ven-get-images])
     {:dispatch [::events/navigate-to ::routes/vendor-upload-panel]}))
 
 (rf/reg-event-fx
-  ::upload-photo
+  ::upload-image
   (fn [world _]
     (let [image (:file (:db world))
           service-id 5
-          desc (if (empty? (:photo-description (:db world)))
+          desc (if (empty? (:image-description (:db world)))
                  "No description"
-                 (:photo-description (:db world)))
+                 (:image-description (:db world)))
           access-token (:access-token (:db world))
           form-data (doto
                       (js/FormData.)
@@ -91,7 +78,7 @@
 (rf/reg-event-fx 
   ::good-upload-result
   (fn [world [_ payload]]
-    {:dispatch [::ven-get-photos]}))
+    {:dispatch [::ven-get-images]}))
 
 (rf/reg-event-fx
   ::bad-result
@@ -108,10 +95,10 @@
   (fn [world _]
     {:db (assoc (:db world) :file nil
                             :filename ""
-                            :selected-photo nil
-                            :photo-description "")}))
+                            :selected-image nil
+                            :image-description "")}))
 
 (rf/reg-event-fx
   ::set-description
   (fn [world [_ txt]]
-    {:db (assoc (:db world) :photo-description txt)}))
+    {:db (assoc (:db world) :image-description txt)}))

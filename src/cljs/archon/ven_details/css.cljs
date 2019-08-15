@@ -50,7 +50,7 @@
   {:font-size "16px"
    :margin "16px"})
 
-(defstyles photo-modal-box []
+(defstyles image-modal-box []
   {:width "70%"
    :height "90%"
    :display "flex"
@@ -59,27 +59,27 @@
    :background-color "#d9d9d9"
    :margin "5% auto"})
 
-(defstyles photo-modal-buttons []
+(defstyles image-modal-buttons []
   {:display "flex"
    :flex-direction "row-reverse"
    :justify-content "space-between"
    :flex-wrap "wrap"})
 
-(defstyles photo-modal-content []
+(defstyles image-modal-content []
   {:display "flex"
    :flex-wrap "wrap"
    :flex-grow "2"
    :flex-flow "column"
    :justify-content "space-evenly"})
 
-(defstyles photo-display []
+(defstyles image-display []
   {:display "flex"
    :flex-wrap "wrap"
    :justify-content "flex-start"
    :padding "0px"
    :width "100%"})
 
-(defstyles photo-thumbnail [published?]
+(defstyles image-thumbnail [published?]
   {:display "flex"
    :object-fit "cover"
    :margin "3px"
@@ -91,7 +91,7 @@
                    com-css/color-glow-main)                
    :width "300px"})
 
-(defstyles photo-description []
+(defstyles image-description []
   {:padding "10px 10px"
    :margin "5px 5px"
    :background-color "white"
@@ -99,7 +99,7 @@
    :border-color "black"
    :border-width "1px"})
 
-(defstyles photo-image []
+(defstyles image-image []
   {:width "90%"
    :object-fit "contain"
    :margin "0% auto"

@@ -128,8 +128,8 @@
     (assoc db :error error)))
 
 (re-frame/reg-event-fx
-  ::set-selected-photo
-  (fn [world [_ photo]]
-    {:db (assoc (:db world) :selected-photo photo)}))
+  ::set-selected-image
+  (fn [world [_ image]]
+    {:db (assoc (:db world) :selected-image image)}))
 
 

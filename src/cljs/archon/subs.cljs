@@ -107,14 +107,14 @@
     (:filename db)))
 
 (re-frame/reg-sub
-  ::photo-list
+  ::image-list
   (fn [db _]
-    (:photo-list db)))
+    (:image-list db)))
 
 (re-frame/reg-sub
-  ::photo-description
+  ::image-description
   (fn [db _]
-    (:photo-description db)))
+    (:image-description db)))
 
 (re-frame/reg-sub
   ::all-published?
@@ -122,9 +122,9 @@
     (:all-published? db)))
 
 (re-frame/reg-sub
-  ::selected-photo
+  ::selected-image
   (fn [db _]
-    (:selected-photo db)))
+    (:selected-image db)))
 
 (re-frame/reg-sub
   ::cost-filter-box-hidden?

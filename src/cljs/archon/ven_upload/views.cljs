@@ -8,7 +8,7 @@
             [archon.ven-details.views :as vd-views]
             [archon.ven-upload.events :as vu-events])) 
 
-(defn photo-selector
+(defn image-selector
   []
   [:input {:type "file"
            :accept "image/png, image/jpeg"
@@ -20,36 +20,36 @@
   []
   [:input {:type "text"
            :placeholder "Add a description for this picture..."
-           :value @(rf/subscribe [::subs/photo-description])
+           :value @(rf/subscribe [::subs/image-description])
            :class (vu-css/text-field-input)
            :on-change #(rf/dispatch [::vu-events/set-description (-> % .-target .-value)])}])
 
 (defn submit-button
   []
-  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/upload-photo])
-                     :disabled (or (empty? @(rf/subscribe [::subs/photo-description]))
+  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/upload-image])
+                     :disabled (or (empty? @(rf/subscribe [::subs/image-description]))
                                    (empty? @(rf/subscribe [::subs/filename])))} "Submit"))
 
 (defn publish-all-button
   []
-  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/publish-photo "all"])
+  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/update-image {:published "ALL"}])
                      :disabled @(rf/subscribe [::subs/all-published?])} "Publish All"))
 
 (defn publish-warning
   []
   [:h4 {:hidden @(rf/subscribe [::subs/all-published?])
-        :class (vu-css/publish-warning)} "Highlighted photos have been uploaded, but not yet published to your public page. Click 'Publish All' to publish them all at once."])
+        :class (vu-css/publish-warning)} "Highlighted images have been uploaded, but not yet published to your public page. Click 'Publish All' to publish them all at once."])
 
 (defn panel
   []
-  (let [photos @(rf/subscribe [::subs/photo-list])]
+  (let [images @(rf/subscribe [::subs/image-list])]
     [:div 
-     (vd-views/photo-modal)
+     (vd-views/image-modal)
      [:div {:class (vu-css/upload-box)}
-      (photo-selector)
+      (image-selector)
       (description-input)
       (submit-button)
       (publish-all-button)]
      (publish-warning)
-     (vd-views/photo-panel "You haven't uploaded any photos yet." photos)]))
+     (vd-views/image-panel "You haven't uploaded any images yet." images)]))
      

@@ -19,10 +19,9 @@
 (def v-services-url (str root-url "services"))
 (def ven-details-url (str root-url "vendor_details"))
 (def v-list-url (str root-url "v_list"))
-(def v-photos-url (str root-url "v_photos"))
-(def v-publish-url (str root-url "v_publish_photo"))
+(def v-image-list-url (str root-url "v_image_list"))
+(def v-images-url (str root-url "v_images"))
 (def edit-service-url (str root-url "service"))
-(def v-delete-photo-url (str root-url "v_delete_photo"))
 (def v-upload-url (str root-url "upload"))
 
 (defn debug-out [params]
