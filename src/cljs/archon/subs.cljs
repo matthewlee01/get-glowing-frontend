@@ -72,14 +72,14 @@
     (:error db)))
 
 (re-frame/reg-sub
-  ::services-list
+  ::services-map
   (fn [db _]
-    (:services-list db)))
+    (:services-map db)))
 
 (re-frame/reg-sub
-  ::active-service
+  ::active-service-id
   (fn [db _]
-    (:active-service db)))
+    (:active-service-id db)))
 
 (re-frame/reg-sub
   ::v-bookings-list
