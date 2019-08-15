@@ -14,12 +14,6 @@
   {:width "40%"
    :height "30%"})
 
-(defstyles photo-modal-buttons []
-  {:display "flex"
-   :flex-direction "row-reverse"
-   :justify-content "space-between"
-   :flex-wrap "wrap"})
-
 (defstyles publish-warning []
   {:border-width "5px"
    :border-style "dashed"

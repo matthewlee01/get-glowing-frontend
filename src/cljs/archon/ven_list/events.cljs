@@ -124,6 +124,7 @@
 (rf/reg-event-fx
   ::good-vendor-details-request
   (fn [world [_ {:keys [data errors] :as payload}]]
+    (cljs.pprint/pprint payload)
     (let [db (:db world)
           ven-details (:vendor_by_id data)
           ven-id (:vendor_id ven-details)

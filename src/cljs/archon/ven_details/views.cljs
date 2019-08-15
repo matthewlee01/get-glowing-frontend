@@ -7,8 +7,8 @@
     [archon.config :as config]
     [archon.ven-details.events :as vde]
     [archon.ven-details.css :as vd-css]
-    [archon.ven-upload.views :as vu-views]
     [archon.events :as events]
+    [archon.ven-upload.events :as vu-events]
     [archon.common-css :as css]
     [archon.calendar.events :as cal-events]))
 
@@ -33,13 +33,25 @@
     [:div {:on-click #(rf/dispatch [::events/set-selected-photo photo])}
      [:img {:class (vd-css/photo-thumbnail published)
             :src (str config/image-url filename) 
-            :alt description}]]))
+            :alt description}]
+     (if (not published)
+       "UNPUBLISHED")]))
   
 (defn photo-image
   [filename]
   [:img {:class (vd-css/photo-image)
          :src (str config/image-url filename)
          :alt "ERROR: Image not found"}])
+
+(defn photo-modal-buttons
+  [photo]
+  [:div {:class (vd-css/photo-modal-buttons)}
+   [:span {:class (css/modal-close)
+           :on-click #(rf/dispatch [::events/set-selected-photo nil])}
+    (goog.string/unescapeEntities "&times")]
+   (if (not (:published photo))
+     (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/publish-photo (:filename photo)])} "Publish"))
+   (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/delete-photo (:filename photo)])} "Delete")])
 
 (defn photo-modal-content
   [photo]
@@ -55,7 +67,7 @@
     [:div {:class (css/modal-bg)}
      [:div {:class (vd-css/photo-modal-box)}
       (if (= @(rf/subscribe [::subs/active-panel]) :archon.routes/vendor-upload-panel)
-        (vu-views/photo-modal-buttons photo))
+        (photo-modal-buttons photo))
       (photo-modal-content photo)]]))
 
 (defn photo-display

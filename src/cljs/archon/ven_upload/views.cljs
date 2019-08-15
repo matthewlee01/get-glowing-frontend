@@ -40,16 +40,6 @@
   [:h4 {:hidden @(rf/subscribe [::subs/all-published?])
         :class (vu-css/publish-warning)} "Highlighted photos have been uploaded, but not yet published to your public page. Click 'Publish All' to publish them all at once."])
 
-(defn photo-modal-buttons
-  [photo]
-  [:div {:class (vu-css/photo-modal-buttons)}
-   [:span {:class (css/modal-close)
-           :on-click #(rf/dispatch [::events/set-selected-photo nil])}
-    (goog.string/unescapeEntities "&times")]
-   (if (not (:published photo))
-     (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/publish-photo (:filename photo)])} "Publish"))
-   (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/delete-photo (:filename photo)])} "Delete")])
-
 (defn panel
   []
   (let [photos @(rf/subscribe [::subs/photo-list])]
