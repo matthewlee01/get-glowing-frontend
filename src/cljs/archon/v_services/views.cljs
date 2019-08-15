@@ -86,7 +86,7 @@
     [:div 
      [css/SubmitButton {:on-click #(rf/dispatch [::vse/add-new-selected])} "Add new service"]
      [:div [:h1 "Existing Services"]]
-     [:div {:class flex-container}
+     [:div {:class (flex-container)}
       (if (= services-map {})
           [:div {:style {:background-color "#DFDFAA"
                          :display "block"}} 

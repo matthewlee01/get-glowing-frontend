@@ -17,6 +17,7 @@
 (def v-calendar-url (str root-url "v_calendar"))
 (def v-bookings-url (str root-url "v_bookings"))
 (def v-services-url (str root-url "services"))
+(def ven-details-url (str root-url "vendor_details"))
 (def v-list-url (str root-url "v_list"))
 (def v-photos-url (str root-url "v_photos"))
 (def v-publish-url (str root-url "v_publish_photo"))

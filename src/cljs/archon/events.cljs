@@ -131,3 +131,5 @@
   ::set-selected-photo
   (fn [world [_ photo]]
     {:db (assoc (:db world) :selected-photo photo)}))
+
+
