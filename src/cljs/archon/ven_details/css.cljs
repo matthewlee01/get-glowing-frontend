@@ -99,7 +99,7 @@
    :border-color "black"
    :border-width "1px"})
 
-(defstyles image-image []
+(defstyles full-image []
   {:width "90%"
    :object-fit "contain"
    :margin "0% auto"

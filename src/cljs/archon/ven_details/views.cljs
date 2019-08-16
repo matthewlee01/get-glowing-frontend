@@ -36,12 +36,6 @@
             :alt description}]
      (if (not published)
        "UNPUBLISHED")]))
-  
-(defn image-image
-  [filename]
-  [:img {:class (vd-css/image-image)
-         :src (str config/image-url filename)
-         :alt "ERROR: Image not found"}])
 
 (defn publish-image-button
   [image]
@@ -70,7 +64,7 @@
   [:div {:class (vd-css/image-modal-content)}
    [:img {:src (str config/image-url (:filename image))
           :alt "ERROR: Image not found"
-          :class (vd-css/image-image)}]
+          :class (vd-css/full-image)}]
    [:div
     [:div {:class (vd-css/image-description)} (str "Uploaded on " (:upload-date image))]
     [:div {:class (vd-css/image-description)} (:description image)]]])
