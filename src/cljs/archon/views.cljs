@@ -42,7 +42,7 @@
   [:span
     (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::vse/show-v-services])} "My Services")
     (css/NavBarElement {:on-click #(re-frame/dispatch [::va-events/show-ven-appts])} "My Appts.") 
-    (css/NavBarElement {:on-click #(re-frame/dispatch [::vu-events/show-ven-upload])} "My Photos")
+    (css/NavBarElement {:on-click #(re-frame/dispatch [::vu-events/show-ven-upload])} "Upload Photos")
 ;;    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::events/navigate-to ::routes/v-services-panel])} "Edit Services")
     [signout-button]])
 
