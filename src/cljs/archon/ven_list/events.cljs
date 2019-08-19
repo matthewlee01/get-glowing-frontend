@@ -107,14 +107,10 @@
 
 (rf/reg-event-fx
   ::request-vendor-details
-  (fn [_world [_ vendor_id]]
+  (fn [_world [_ vendor-id]]
     {:http-xhrio {:method  :post
-                  :uri    config/graphql-url
-                  :params {:query (str "query vendor_by_id($id:Int!)"
-                                       "{vendor_by_id (id: $id)"
-                                       "{vendor_id name name_first name_last summary profile_pic"
-                                       " services{s_description s_duration s_name s_price s_type service_id}}}")
-                           :variables {:id vendor_id}}
+                  :uri    config/ven-details-url 
+                  :params {:vendor-id vendor-id} 
                   :timeout 3000
                   :format (ajax/json-request-format)
                   :response-format (ajax/json-response-format {:keywords? true})
@@ -125,11 +121,10 @@
   ::good-vendor-details-request
   (fn [world [_ {:keys [data errors] :as payload}]]
     (let [db (:db world)
-          ven-details (:vendor_by_id data)
-          ven-id (:vendor_id ven-details)
+          ven-id (:vendor-id payload)
           url-string (routes/name-to-url ::routes/vendor-details-panel {:vendor-id ven-id})]
 
-      {:db (assoc db :vendor-details ven-details)
+      {:db (assoc db :vendor-details payload)
        :navigate url-string})))
 
 (rf/reg-event-fx

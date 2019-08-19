@@ -7,6 +7,8 @@
     [archon.ven-reg.views :as ven-reg]
     [archon.ven-reg.events :as vre]
     [archon.ven-list.views :as ven-list]
+    [archon.ven-upload.views :as ven-upload]
+    [archon.ven-upload.events :as vu-events]
     [archon.city.views :as city]
     [archon.ven-appts.events :as va-events]
     [archon.calendar.views :as calendar]
@@ -40,6 +42,7 @@
   [:span
     (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::vse/show-v-services])} "My Services")
     (css/NavBarElement {:on-click #(re-frame/dispatch [::va-events/show-ven-appts])} "My Appts.") 
+    (css/NavBarElement {:on-click #(re-frame/dispatch [::vu-events/show-ven-upload])} "My Photos")
 ;;    (css/NavBarElement {:id "three" :on-click #(re-frame/dispatch [::events/navigate-to ::routes/v-services-panel])} "Edit Services")
     [signout-button]])
 
@@ -85,9 +88,9 @@
 
 (defn error-modal []
   (if-let [error @(re-frame/subscribe [::subs/error])]
-    [:div {:class (css/error-modal-bg)}
+    [:div {:class (css/modal-bg)}
       [:div {:class (css/error-modal-box)}
-        [:span {:class (css/error-modal-close)
+        [:span {:class (css/modal-close)
                 :on-click #(re-frame/dispatch [::events/set-error nil])} 
          (goog.string/unescapeEntities "&times")] ;;this returns a unicode "x" symbol string     
         [:p {:class (css/error-msg)} (:message error)]
@@ -109,6 +112,7 @@
       ::routes/error-panel [error/panel]
       ::routes/vendor-appointments-panel [ven-appts/panel]
       ::routes/v-services-panel [v-services/panel]
+      ::routes/vendor-upload-panel [ven-upload/panel]
       nil)])  ;; normally the path should match one of the above, except at first startup.
 
 

@@ -13,7 +13,7 @@
 (rf/reg-event-fx
   ::get-calendar
   (fn [world [_ date]]
-    (let [vendor-id (get-in world [:db :vendor-details :vendor_id])
+    (let [vendor-id (get-in world [:db :vendor-details :vendor-id])
           uri (str calendar-url "/" vendor-id "/" date)]
       {:http-xhrio {:method :get
                     :uri    uri
@@ -33,7 +33,7 @@
   (fn [world [_ time-slot date]]
     (let [db (:db world)
           user-id (get-in db [:user-info :user-id])
-          vendor-id (get-in db [:vendor-details :vendor_id])
+          vendor-id (get-in db [:vendor-details :vendor-id])
           service-id (:selected-service db) 
           booking  {:user-id user-id
                     :vendor-id vendor-id
