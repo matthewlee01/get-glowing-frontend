@@ -14,6 +14,7 @@
                     ["/calendar/:vendor-id/:date/:selected-service" ::calendar-panel]
                     ["/vendor-signup"  ::vendor-signup-panel]
                     ["/http-error" ::error-panel]
+                    ["/vendor-upload" ::vendor-upload-panel]
                     ["/v-services" ::v-services-panel]])
 
 ;; this is the global router variable used by some of the following fns

@@ -11,9 +11,9 @@
 
 (rf/reg-event-fx
   ::goto-ven-calendar
-  (fn [_world [_ vendor_id date selected-service]]
+  (fn [_world [_ vendor-id date selected-service]]
     (rf/dispatch [::set-service selected-service])
-    (let [url-string (routes/name-to-url ::routes/calendar-panel {:vendor-id vendor_id
+    (let [url-string (routes/name-to-url ::routes/calendar-panel {:vendor-id vendor-id
                                                                   :date date
                                                                   :selected-service selected-service})]
       {:dispatch [::cal-events/set-date date]

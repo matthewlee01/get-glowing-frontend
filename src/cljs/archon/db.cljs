@@ -5,6 +5,7 @@
   {:name "get glowing!"
    :active-panel (routes/name-to-url :routes/city-panel)
    :city-name ""
+   :image-description ""
    :vendor-list []
    :page-index 0
    :cost-filter-box-hidden? true

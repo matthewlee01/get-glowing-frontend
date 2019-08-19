@@ -102,6 +102,31 @@
     (:vendor-list-display db)))
 
 (re-frame/reg-sub
+  ::filename
+  (fn [db _]
+    (:filename db)))
+
+(re-frame/reg-sub
+  ::image-list
+  (fn [db _]
+    (:image-list db)))
+
+(re-frame/reg-sub
+  ::image-description
+  (fn [db _]
+    (:image-description db)))
+
+(re-frame/reg-sub
+  ::all-published?
+  (fn [db _]
+    (:all-published? db)))
+
+(re-frame/reg-sub
+  ::selected-image
+  (fn [db _]
+    (:selected-image db)))
+
+(re-frame/reg-sub
   ::cost-filter-box-hidden?
   (fn [db _]
     (:cost-filter-box-hidden? db)))

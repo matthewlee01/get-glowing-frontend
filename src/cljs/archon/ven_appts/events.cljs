@@ -35,7 +35,7 @@
   ::good-cal-result
   (fn [world [_ {:keys [data errors] :as payload}]]
     (let [db (:db world)]
-      {:db (-> (assoc-in db [:vendor-details :vendor_id] (:vendor-id payload))
+      {:db (-> (assoc-in db [:vendor-details :vendor-id] (:vendor-id payload))
                (assoc :vendor-calendar payload))})))
 
 (rf/reg-event-fx
