@@ -104,9 +104,11 @@
             :font-size input-font-size
             :width "67%"})
 
-(defstyles CardInputField [border background]
-           {:border border
-            :background-color color-card-background
+(defstyles CardInputField [border-color background]
+           {:border-style "solid"
+            :border-width "2px"
+            :border-color border-color
+            :background-color background
             :padding "5px"
             :margin "10px 0"
             :font-size input-font-size
