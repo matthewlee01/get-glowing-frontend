@@ -105,9 +105,7 @@
           first-last-name (str name-first " " name-last)
           fullname (if name name first-last-name)
           date (cal-events/get-current-date)
-          prof-pic (str "/" profile-pic)]    ;; TODO - this hack actually needs a fix 
-                                             ;; on the server to send an absolute path
-                                             ;; for now hack the path to be absolute
+          prof-pic (str config/image-url profile-pic)]
      [:div (image-modal)
            [vd-css/profile-img {:src prof-pic
                                 :alt prof-pic}]

@@ -56,7 +56,7 @@
 
 (rf/reg-event-fx
   ::upload-image
-  (fn [world _]
+  (fn [world [_ handler-event]]
     (let [image (:file (:db world))
           service-id 5
           desc (if (empty? (:image-description (:db world)))
@@ -71,7 +71,7 @@
       (POST config/v-upload-url {:body form-data
                                  :response-format :json
                                  :keywords? true
-                                 :handler #(rf/dispatch [::good-upload-result %])
+                                 :handler #(rf/dispatch [handler-event %])
                                  :error-handler #(rf/dispatch [::bad-result %])}))
     {:dispatch [::clear-files]}))
       
