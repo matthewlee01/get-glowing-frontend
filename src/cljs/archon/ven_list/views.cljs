@@ -61,7 +61,8 @@
 
 (defn vendor-page
   []
-  (get @(rf/subscribe [::subs/vendor-list]) @(rf/subscribe [::subs/page-index])))
+  (flatten @(rf/subscribe [::subs/vendor-list]) ;@(rf/subscribe [::subs/page-index])
+  ))
 
 (defn panel []
   [:div
@@ -79,9 +80,10 @@
       (vl-css/FilterInputField {:value (@(rf/subscribe [::subs/vendor-list-display]) :min-rating) :min 0 :max MAX-RATING :type "number" :on-change #(rf/dispatch [::vle/min-rating-change (-> % .-target .-value)])})
       (cost-filters)]
     [:div {:class (vl-css/vendor-card-flex)} (map vendor-card (vendor-page))]
-    (vl-css/nav-button {:on-click #(rf/dispatch [::vle/nav-prev-page])
-                        :hidden (= 0 @(rf/subscribe [::subs/page-index]))} "Previous Page")
-    (vl-css/nav-button {:on-click #(rf/dispatch [::vle/nav-next-page])
-                        :hidden (= @(rf/subscribe [::subs/last-page]) @(rf/subscribe [::subs/page-index]))} "Next Page")
+    ;nav buttons from before, could make it toggled between scrolling and buttons in the future?
+    ;(vl-css/nav-button {:on-click #(rf/dispatch [::vle/nav-prev-page])
+    ;                    :hidden (= 0 @(rf/subscribe [::subs/page-index]))} "Previous Page")
+    ;(vl-css/nav-button {:on-click #(rf/dispatch [::vle/nav-next-page])
+    ;                    :hidden (= @(rf/subscribe [::subs/last-page]) @(rf/subscribe [::subs/page-index]))} "Next Page")
     [:br]   
     (css/BackButton {:on-click #(rf/dispatch [::events/take-me-back (routes/name-to-url ::routes/city-panel)])} "Return")])

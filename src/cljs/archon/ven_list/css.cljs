@@ -7,12 +7,18 @@
 
 (def button-inactive-color "#9A9998")
 
+(def vendor-card-height 340)
+
+(def vendor-card-margin 10)
+
+(def vendor-column-thresholds [1000 720 0])
+
 (defstyled vendor-card-div :div
   {:background-color "#e2c7d1"
    :display "inline-block"
    :width "300px"
-   :height "340px"
-   :margin "10px"
+   :height (str vendor-card-height "px")
+   :margin (str vendor-card-margin "px")
    :text-align "center"
    :box-shadow "4px 4px 8px 0 #686868"})
 
@@ -55,7 +61,8 @@
   {:display "flex"
    :flex-wrap "wrap"
    ::&:after {:clear "both"}
-   ::cljss/media {[:only :screen :and [:min-width "800px"]] {:width "700px"}
+   ::cljss/media {[:only :screen :and [:max-width "720px"]] {:width "400px"}
+                  [:only :screen :and [:min-width "720px"]] {:width "700px"}    ;the media query doesn't seem to work with inserting in values as arguments or evaluating functions
                   [:only :screen :and [:min-width "1000px"]] {:width "990px"}}})
 
 (defstyled nav-button :button
