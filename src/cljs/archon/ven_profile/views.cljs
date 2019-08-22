@@ -63,9 +63,10 @@
      [:h1 "Your Profile"]
      [vd-css/profile-img {:src (str config/image-url (:profile-pic profile))
                           :alt "Profile Picture"}]
-     [:label "Upload a profile picture: "]
-     [vu-views/image-selector]
-     [css/SubmitButton {:on-click #(rf/dispatch [::vp-events/upload-profile-image])} "Upload"]
+     [:div {:class (vp-css/pfp-upload-box)}
+      [:label "Upload a profile picture: "]
+      [vu-views/image-selector]
+      [css/SubmitButton {:on-click #(rf/dispatch [::vp-events/upload-profile-image])} "Upload"]]
      [profile-update-panel profile]
      [profile-update-edit-button]
      [profile-update-submit-button]

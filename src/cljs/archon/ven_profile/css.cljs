@@ -26,3 +26,10 @@
    :border-color border
    :font-size css/input-font-size
    :width "90%"})
+
+(defstyles pfp-upload-box []
+  {:display "flex"
+   :background-color css/color-nav
+   :justify-content "space-around"
+   :align-items "center"
+   :margin "auto 5px"})

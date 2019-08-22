@@ -90,7 +90,7 @@
      [:h5 "Photo Gallery:"]
      (image-display images)]
     [:div
-     [:h5 empty-text]]))
+     [vd-css/ven-details-label empty-text]]))
 
 (defn panel []
     (let [{:keys [vendor-id 
@@ -110,9 +110,13 @@
            [vd-css/profile-img {:src prof-pic
                                 :alt prof-pic}]
            [vd-css/profile-title fullname]
-           [vd-css/profile-summary summary]
+           [vd-css/ven-details-label (if (empty? summary) 
+                                       "No summary available."
+                                       summary)]
            [:br]
-           [vd-css/service-select-label "Select a service to view availability:"]
+           [vd-css/ven-details-label (if (empty? services)
+                                       "This vendor does not offer any services yet."
+                                       "Select a service to view availability:")]
            [:div {:class (vd-css/service-card-array)}
              (map #(make-service-card-div % vendor-id) services)]
            (image-panel "This vendor hasn't uploaded any images yet." images)]))
