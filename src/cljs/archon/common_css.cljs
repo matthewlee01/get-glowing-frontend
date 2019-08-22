@@ -48,7 +48,7 @@
 
 ;; LAYOUT/NAV STYLES - START
 (defstyles main-nav []
-           {:width "60%"})
+           {:width "75%"})
 
 (defstyled NavBarElement :button
            {:background-color color-nav

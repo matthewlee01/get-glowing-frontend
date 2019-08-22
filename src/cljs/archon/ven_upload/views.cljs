@@ -26,7 +26,7 @@
 
 (defn submit-button
   []
-  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/upload-image])
+  (css/SubmitButton {:on-click #(rf/dispatch [::vu-events/upload-image ::vu-events/good-upload-result])
                      :disabled (or (empty? @(rf/subscribe [::subs/image-description]))
                                    (empty? @(rf/subscribe [::subs/filename])))} "Submit"))
 
