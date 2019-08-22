@@ -135,3 +135,13 @@
   ::cost-filter-box-hidden?
   (fn [db _]
     (:cost-filter-box-hidden? db)))
+
+(re-frame/reg-sub
+  ::vendor-profile
+  (fn [db _]
+    (:vendor-profile db)))
+
+(re-frame/reg-sub
+  ::editing-profile?
+  (fn [db _]
+    (:editing-profile? db)))

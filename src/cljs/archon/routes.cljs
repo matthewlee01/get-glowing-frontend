@@ -12,6 +12,7 @@
                     ["/vendor-details/:vendor-id" ::vendor-details-panel]
                     ["/vendor-appointments" ::vendor-appointments-panel]
                     ["/calendar/:vendor-id/:date/:selected-service" ::calendar-panel]
+                    ["/vendor-profile" ::vendor-profile-panel]
                     ["/vendor-signup"  ::vendor-signup-panel]
                     ["/http-error" ::error-panel]
                     ["/vendor-upload" ::vendor-upload-panel]

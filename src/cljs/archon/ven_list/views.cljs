@@ -5,6 +5,7 @@
     [archon.events :as events]
     [archon.subs :as subs]
     [archon.routes :as routes]
+    [archon.config :as config]
     [archon.common-css :as css]
     [re-frame.core :as rf]))
      
@@ -24,7 +25,7 @@
         rating% (percentage average)
         min$ (/ min 100)
         max$ (/ max 100)
-        prof_pic (str "/" profile-pic)]  ;; TODO - this hack actually needs a fix
+        prof_pic (str config/image-url profile-pic)]  ;; TODO - this hack actually needs a fix
                                          ;; on the server to send an absolute path
                                          ;; for now hack the path to be absolute
     ^{:key vendor-id}

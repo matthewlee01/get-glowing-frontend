@@ -41,12 +41,7 @@
    :text-align "center"
    :font-size "28px"})
 
-(defstyled profile-summary :div
-  {:font-size "18px"
-   :margin "16px 16px"})
-
-
-(defstyled service-select-label :div
+(defstyled ven-details-label :div
   {:font-size "16px"
    :margin "16px"})
 

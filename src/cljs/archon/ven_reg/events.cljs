@@ -18,8 +18,7 @@
           {:keys [vr-email
                   vr-first-name
                   vr-last-name
-                  vr-addr-num
-                  vr-addr-name
+                  vr-addr-street
                   vr-addr-city
                   vr-addr-state
                   vr-addr-postal-code
@@ -29,8 +28,7 @@
                   :name-first vr-first-name
                   :name-last vr-last-name
                   :email vr-email
-                  :addr-str-num vr-addr-num
-                  :addr-str-name vr-addr-name
+                  :addr-street vr-addr-street
                   :addr-city vr-addr-city
                   :addr-state vr-addr-state
                   :addr-postal vr-addr-postal-code
@@ -100,10 +98,7 @@
 (rf/reg-event-db
   ::vr-address-change
   (fn [db [_ vendor-address]]
-    (let [[num name] (str/split vendor-address #" " 2)]
-      (-> db
-        (assoc-in [:vendor-reg :vr-addr-num] (js/parseInt num))
-        (assoc-in [:vendor-reg :vr-addr-name] name)))))
+    (assoc-in db [:vendor-reg :vr-addr-street] vendor-address)))
 
 (rf/reg-event-db
   ::vr-city-change
@@ -128,6 +123,4 @@
 (rf/reg-event-db
   ::submit-vendor-form
   (fn [db _]
-    (if (-> db :vendor-reg :vr-addr-num (valid-num))
-      (assoc db :active-panel :thanks-for-registering-panel)
-      db)))
+    (assoc db :active-panel :thanks-for-registering-panel)))

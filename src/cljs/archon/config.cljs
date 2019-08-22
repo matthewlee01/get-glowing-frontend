@@ -15,6 +15,8 @@
 (def ven-reg-url (str root-url "vendor"))
 (def login-url (str root-url "login"))
 (def v-calendar-url (str root-url "v_calendar"))
+(def v-profile-details-url (str root-url "v_profile_details"))
+(def v-profile-url (str root-url "v_profile"))
 (def v-bookings-url (str root-url "v_bookings"))
 (def v-services-url (str root-url "services"))
 (def ven-details-url (str root-url "vendor_details"))
