@@ -29,7 +29,6 @@
 (rf/reg-event-fx
   ::good-ven-result
   (fn [world [_ payload]]
-    (cljs.pprint/pprint payload)
     {:db (assoc (:db world) :vendor-profile payload)}))
 
 (rf/reg-event-fx

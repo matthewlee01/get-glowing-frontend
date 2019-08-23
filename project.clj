@@ -10,7 +10,8 @@
                  [metosin/reitit "0.3.1"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [kibu/pushy "0.3.8"]
-                 [cljs-pikaday "0.1.4"]]
+                 [cljs-pikaday "0.1.4"]
+                 [cljsjs/jquery "3.4.0-0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]]
 

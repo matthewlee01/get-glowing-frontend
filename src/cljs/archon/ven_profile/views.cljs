@@ -41,20 +41,29 @@
     (css/SubmitButton {:on-click #(rf/dispatch [::vp-events/cancel-editing])}
                       "Cancel")))
 
+(defn profile-update-buttons []
+  (let [editing? @(rf/subscribe [::subs/editing-profile?])]
+    (if editing?
+      [:div
+       [profile-cancel-editing-button]
+       [profile-update-submit-button]]
+      [:div
+       [profile-update-edit-button]])))
+
 (defn profile-update-panel
   []
-  [:div {:class (vp-css/input-panel)}
-   [profile-update-input "First Name" "text" :name-first]
-   [profile-update-input "Last Name" "text" :name-last]
-   [profile-update-input "Summary" "text" :summary]
-   [profile-update-input "Phone Number" "tel" :phone]
-   [profile-update-input "Email" "email" :email]
-   [profile-update-input "City" "text" :addr-city]
-   [profile-update-input "Postal Code" "text" :addr-postal]
-   [profile-update-input "Province/State" "text" :addr-state]
-   [profile-update-input "Address Number" "number" :addr-str-num]
-   [profile-update-input "Address Street" "text" :addr-str-name]])
-     
+  [:div
+   [:div {:class (vp-css/input-panel)}
+    [profile-update-input "First Name" "text" :name-first]
+    [profile-update-input "Last Name" "text" :name-last]
+    [profile-update-input "Summary" "text" :summary]
+    [profile-update-input "Phone Number" "tel" :phone]
+    [profile-update-input "Email" "email" :email]
+    [profile-update-input "City" "text" :addr-city]
+    [profile-update-input "Postal Code" "text" :addr-postal]
+    [profile-update-input "Province/State" "text" :addr-state]
+    [profile-update-input "Address" "text" :addr-street]]
+   [profile-update-buttons]])
 
 (defn panel
   []
@@ -67,8 +76,5 @@
       [:label "Upload a profile picture: "]
       [vu-views/image-selector]
       [css/SubmitButton {:on-click #(rf/dispatch [::vp-events/upload-profile-image])} "Upload"]]
-     [profile-update-panel profile]
-     [profile-update-edit-button]
-     [profile-update-submit-button]
-     [profile-cancel-editing-button]]))
+     [profile-update-panel profile]]))
      

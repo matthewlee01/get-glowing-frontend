@@ -92,6 +92,11 @@
     (:last-page db)))
 
 (re-frame/reg-sub
+  ::last-vendor-loaded?
+  (fn [db _]
+    (:last-vendor-loaded? db)))
+
+(re-frame/reg-sub
   ::page-index
   (fn [db _]
     (:page-index db)))
