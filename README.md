@@ -1,6 +1,6 @@
 # archon
 
-A [re-frame](https://github.com/Day8/re-frame) application designed to ... well, that part is up to you.
+This is a snapshot of the code for the web client of the get-glowing web app.
 
 ## Development Mode
 
